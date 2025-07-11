@@ -2,10 +2,6 @@ import React, { useState } from "react";
 import "../App.css";
 
 export default function Topic1Subtopic3Content() {
-  const [showA1, setShowA1] = useState(false);
-  const [showA2, setShowA2] = useState(false);
-  const [showA3, setShowA3] = useState(false);
-  const [showA4, setShowA4] = useState(false);
   const [copiedCommands, setCopiedCommands] = useState({});
 
   const copyToClipboard = async (text, commandId) => {
@@ -22,20 +18,19 @@ export default function Topic1Subtopic3Content() {
 
   return (
     <div className="topic-animated-content">
-      <h3>🏗️ Overview: What's Inside a Spring Boot Project?</h3>
-      <p>
-        Ever opened a Spring Boot project and thought,{" "}
-        <i>"Whoa... so many folders! Where do I even begin?"</i> 😵‍💫
-      </p>
-      <p>
-        Don't worry — this section is your map. Here, you'll explore{" "}
-        <b>what goes where, why it's structured that way</b>, and how to keep
-        your project <b>clean and scalable</b> from day one.
-      </p>
-      <p>
-        Think of your project like a building — the <b>structure</b> determines
-        how easily you can move, expand, or fix things.
-      </p>
+      <div className="key-idea-box">
+        <h3>🏗️ Overview: Project Structure at a Glance</h3>
+        <p>
+          Before you start coding, it’s important to know where everything
+          lives. A well-structured project is like a well-organized workshop —
+          you’ll always know where to find your tools!
+        </p>
+        <p>
+          In this section, you’ll learn how a typical Spring Boot project is
+          organized, what each folder means, and why this structure matters for
+          maintainability and teamwork.
+        </p>
+      </div>
 
       <h3>🎯 Learning Outcomes</h3>
       <ul className="topic-checklist">
@@ -287,112 +282,45 @@ public String hello() {
         </div>
       </div>
 
-      <h3>💬 Discussion Points</h3>
-      <div className="topic-faq">
-        <div className="topic-faq-q">
-          <b>
-            Q: Why do we separate code into different packages like controller,
-            service, etc.?
-          </b>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        💬 Discussion Points
+      </h3>
+      <div
+        style={{
+          background: "linear-gradient(135deg, #e3f0fd 0%, #f8fbff 100%)",
+          border: "2px solid #4fc3f7",
+          borderRadius: "14px",
+          boxShadow: "0 4px 20px rgba(33, 150, 243, 0.08)",
+          padding: "1.5rem 2rem 1.5rem 2rem",
+          margin: "2rem 0 2.5rem 0",
+          position: "relative",
+          animation: "fadeInSlideUp 0.8s ease-out forwards",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "1.1rem",
+          }}
+        >
+          <span
+            style={{
+              fontSize: "1.6rem",
+              color: "#43a047",
+              marginRight: "0.7rem",
+            }}
+          >
+            💬
+          </span>
+          <span
+            style={{ fontWeight: 600, color: "#2196f3", fontSize: "1.18rem" }}
+          >
+            Discussion
+          </span>
         </div>
-        <button className="reveal-btn" onClick={() => setShowA1((v) => !v)}>
-          {showA1 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA1 && (
-          <div className="topic-faq-a">
-            <strong>A:</strong> It promotes <b>separation of concerns</b>:
-            <ul>
-              <li>Easier to debug (you know where to look)</li>
-              <li>Easier to maintain and scale</li>
-              <li>
-                Different team members can work on different layers
-                independently
-              </li>
-            </ul>
-          </div>
-        )}
-
-        <div className="topic-faq-q">
-          <b>
-            Q: What happens if I skip this structure and write everything in one
-            file/class?
-          </b>
-        </div>
-        <button className="reveal-btn" onClick={() => setShowA2((v) => !v)}>
-          {showA2 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA2 && (
-          <div className="topic-faq-a">
-            <strong>A:</strong> You create a <b>God Class</b> – a messy,
-            unmaintainable file where everything is mixed:
-            <ul>
-              <li>Hard to test</li>
-              <li>Risk of breaking multiple things with one small change</li>
-              <li>Poor collaboration and readability</li>
-            </ul>
-          </div>
-        )}
-
-        <div className="topic-faq-q">
-          <b>Q: What is the role of application.properties?</b>
-        </div>
-        <button className="reveal-btn" onClick={() => setShowA3((v) => !v)}>
-          {showA3 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA3 && (
-          <div className="topic-faq-a">
-            <strong>A:</strong> It holds <b>key configuration settings</b>, such
-            as:
-            <ul>
-              <li>
-                Port number (<code>server.port=8081</code>)
-              </li>
-              <li>
-                DB connection (<code>spring.datasource.url</code>)
-              </li>
-              <li>Logging level, JWT secrets, mail settings, etc.</li>
-            </ul>
-          </div>
-        )}
-
-        <div className="topic-faq-q">
-          <b>Q: What's the difference between an Entity and a DTO?</b>
-        </div>
-        <button className="reveal-btn" onClick={() => setShowA4((v) => !v)}>
-          {showA4 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA4 && (
-          <div className="topic-faq-a">
-            <strong>A:</strong>
-            <table className="topic-table">
-              <thead>
-                <tr>
-                  <th>Entity</th>
-                  <th>DTO</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Maps directly to a database table</td>
-                  <td>Used to transfer data between layers</td>
-                </tr>
-                <tr>
-                  <td>
-                    Contains annotations like <code>@Entity</code>,{" "}
-                    <code>@Id</code>
-                  </td>
-                  <td>Doesn't need database annotations</td>
-                </tr>
-                <tr>
-                  <td>Usually has full data</td>
-                  <td>
-                    Often has <b>only required</b> fields (secure)
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        )}
+        {/* Place your Q&A with reveal/hide logic here, styled as in Topic2Subtopic5Content.js */}
       </div>
 
       <h3>🌟 Best Practices</h3>

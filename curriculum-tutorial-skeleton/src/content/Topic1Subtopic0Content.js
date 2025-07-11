@@ -8,18 +8,20 @@ export default function Topic1Subtopic0Content() {
 
   return (
     <div className="topic-content">
-      <h3>🚀 Overview: Let’s Get Your Project Off the Ground!</h3>
-      <p>
-        Starting a project is like setting the foundation of a house — it needs
-        to be strong, clean, and clear. In this lesson, we’ll walk you through
-        how to create a Spring Boot application using Maven, understand the
-        purpose of each part of the generated project, and get it up and running
-        in your IDE.
-      </p>
-      <p>
-        By the end, you won’t just have a running project — you’ll understand
-        every part of it and why it matters.
-      </p>
+      <div className="key-idea-box">
+        <h3>🚀 Overview: Let’s Get Your Project Off the Ground!</h3>
+        <p>
+          Starting a project is like setting the foundation of a house — it
+          needs to be strong, clean, and clear. In this lesson, we’ll walk you
+          through how to create a Spring Boot application using Maven,
+          understand the purpose of each part of the generated project, and get
+          it up and running in your IDE.
+        </p>
+        <p>
+          By the end, you won’t just have a running project — you’ll understand
+          every part of it and why it matters.
+        </p>
+      </div>
       <h3>🎯 Learning Outcomes</h3>
       <ul className="topic-checklist">
         <li>

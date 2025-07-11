@@ -672,6 +672,14 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+/* Add word wrap for code blocks */
+pre,
+code {
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  overflow-x: auto;
+}
+
 @media (max-width: 900px) {
   .topbar-stack,
   .content-card {

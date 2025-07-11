@@ -6,34 +6,21 @@ export default function Topic1Subtopic5Content() {
   const [showA2, setShowA2] = useState(false);
   const [showA3, setShowA3] = useState(false);
   const [showA4, setShowA4] = useState(false);
-  const [copiedCommands, setCopiedCommands] = useState({});
-
-  const copyToClipboard = async (text, commandId) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedCommands((prev) => ({ ...prev, [commandId]: true }));
-      setTimeout(() => {
-        setCopiedCommands((prev) => ({ ...prev, [commandId]: false }));
-      }, 2000);
-    } catch (err) {
-      console.error("Failed to copy: ", err);
-    }
-  };
 
   return (
     <div className="topic-animated-content">
-      <h3>🧠 Overview: Your IDE Is Your Smartest Teammate</h3>
-      <p>
-        Think of your <b>IDE (Integrated Development Environment)</b> as your
-        command center — it's where you'll write, run, debug, and even test your
-        Spring Boot application.
-      </p>
-      <p>
-        Whether you're using <b>IntelliJ IDEA</b>, <b>Eclipse</b>, or{" "}
-        <b>VS Code</b>, your IDE should feel like home. In this section, we'll{" "}
-        <b>configure your IDE to boost productivity</b>, eliminate errors early,
-        and unlock developer superpowers.
-      </p>
+      <div className="key-idea-box">
+        <h3>🛠️ Overview: Setting Up Your IDE for Success</h3>
+        <p>
+          Your IDE (like IntelliJ, Eclipse, or VS Code) is your main tool for
+          writing, running, and debugging code. A good setup saves you hours and
+          helps you catch mistakes early.
+        </p>
+        <p>
+          In this section, you’ll configure your IDE for Java, install helpful
+          plugins, and learn shortcuts to boost your productivity.
+        </p>
+      </div>
 
       <h3>🎯 Learning Outcomes</h3>
       <ul className="topic-checklist">
@@ -189,34 +176,106 @@ export default function Topic1Subtopic5Content() {
         </div>
       </div>
 
-      <h3>🧪 Try It Yourself</h3>
-      <div className="topic-funfact example-block">
-        <b>💻 Hands-On IDE Practice</b>
-        <div className="topic-funfact-block">
-          <div>
-            <strong>Import your Spring Boot project into your IDE</strong>
-          </div>
-          <div>
-            <strong>Install Lombok and enable annotation processing</strong>
-          </div>
-          <div>
-            <strong>
-              Create a breakpoint in a controller method and debug it
-            </strong>
-          </div>
-          <div>
-            <strong>Format your code using shortcut:</strong>
-          </div>
-          <ul>
-            <li>
-              <b>IntelliJ:</b> <code>Cmd + Option + L</code> (Mac) /{" "}
-              <code>Ctrl + Alt + L</code> (Windows)
-            </li>
-            <li>
-              <b>Eclipse:</b> <code>Ctrl + Shift + F</code>
-            </li>
-          </ul>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🧪 Try It Yourself: Step-by-step
+      </h3>
+      <div
+        style={{
+          background: "linear-gradient(135deg, #e3f0fd 0%, #f8fbff 100%)",
+          border: "2px solid #4fc3f7",
+          borderRadius: "14px",
+          boxShadow: "0 4px 20px rgba(33, 150, 243, 0.08)",
+          padding: "1.5rem 2rem 1.5rem 2rem",
+          margin: "2rem 0 2.5rem 0",
+          position: "relative",
+          animation: "fadeInSlideUp 0.8s ease-out forwards",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "1.1rem",
+          }}
+        >
+          <span
+            style={{
+              fontSize: "1.6rem",
+              color: "#43a047",
+              marginRight: "0.7rem",
+            }}
+          >
+            ✅
+          </span>
+          <span
+            style={{ fontWeight: 600, color: "#2196f3", fontSize: "1.18rem" }}
+          >
+            Step-by-step Practice
+          </span>
         </div>
+        <ol
+          style={{
+            color: "#1769aa",
+            fontSize: "1.08rem",
+            margin: 0,
+            paddingLeft: "1.2rem",
+          }}
+        >
+          <li style={{ marginBottom: "1.1rem" }}>
+            Create a package:{" "}
+            <code
+              style={{
+                background: "#e3eefd",
+                color: "#1769aa",
+                borderRadius: "6px",
+                padding: "0.2rem 0.6rem",
+                fontWeight: 500,
+              }}
+            >
+              com.example.urlshortener.dto
+            </code>
+          </li>
+          <li style={{ marginBottom: "1.1rem" }}>
+            Add:
+            <br />
+            <span style={{ display: "inline-block", marginTop: "0.5rem" }}>
+              <code
+                style={{
+                  background: "#e3eefd",
+                  color: "#1769aa",
+                  borderRadius: "6px",
+                  padding: "0.2rem 0.6rem",
+                  fontWeight: 500,
+                  display: "block",
+                  marginBottom: "0.3rem",
+                  width: "fit-content",
+                }}
+              >
+                UrlRequestDto.java
+              </code>
+              <code
+                style={{
+                  background: "#e3eefd",
+                  color: "#1769aa",
+                  borderRadius: "6px",
+                  padding: "0.2rem 0.6rem",
+                  fontWeight: 500,
+                  display: "block",
+                  width: "fit-content",
+                }}
+              >
+                UrlResponseDto.java
+              </code>
+            </span>
+          </li>
+          <li style={{ marginBottom: "1.1rem" }}>
+            In your service layer, implement conversion logic
+          </li>
+          <li style={{ marginBottom: "0.5rem" }}>
+            In controller, return DTOs instead of entities
+          </li>
+        </ol>
       </div>
 
       <h3>💬 Discussion Points</h3>

@@ -18,6 +18,9 @@ import Topic1Subtopic6Content from "./content/Topic1Subtopic6Content";
 import Topic2Content from "./content/Topic2Content";
 import Topic2Subtopic1Content from "./content/Topic2Subtopic1Content";
 import Topic2Subtopic2Content from "./content/Topic2Subtopic2Content";
+import Topic2Subtopic3Content from "./content/Topic2Subtopic3Content";
+import Topic2Subtopic4Content from "./content/Topic2Subtopic4Content";
+import Topic2Subtopic5Content from "./content/Topic2Subtopic5Content";
 
 const curriculum = [
   {
@@ -485,6 +488,12 @@ function SubtopicPage() {
           <Topic2Subtopic1Content />
         ) : validTIdx === 1 && validSIdx === 1 ? (
           <Topic2Subtopic2Content />
+        ) : validTIdx === 1 && validSIdx === 2 ? (
+          <Topic2Subtopic3Content />
+        ) : validTIdx === 1 && validSIdx === 3 ? (
+          <Topic2Subtopic4Content />
+        ) : validTIdx === 1 && validSIdx === 4 ? (
+          <Topic2Subtopic5Content />
         ) : (
           <>
             <div

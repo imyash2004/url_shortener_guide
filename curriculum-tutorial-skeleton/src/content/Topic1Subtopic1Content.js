@@ -22,23 +22,34 @@ export default function Topic1Subtopic1Content() {
 
   return (
     <div className="topic-animated-content">
-      <h3>🚀 Overview: Why Version Control is Your Superpower</h3>
-      <p>
-        Imagine writing an essay and making 100 edits over a week — but you
-        can’t undo a change or see what you changed yesterday. Scary, right? 😬
-        <br />
-        That’s what coding without <b>version control</b> feels like.
-      </p>
-      <p>
-        With <b>Git</b>, you can:
-      </p>
-      <ul className="topic-checklist">
-        <li>🕓 Travel back in time (revert to a working version)</li>
-        <li>
-          🧪 Experiment fearlessly (try new features without breaking anything)
-        </li>
-        <li>🤝 Work with your team (without stepping on each other’s toes)</li>
-      </ul>
+      <div className="key-idea-box">
+        <h3 style={{ marginTop: "0", color: "#1769aa" }}>
+          🚀{" "}
+          <span style={{ color: "#1769aa" }}>
+            Overview: Why Version Control is Your Superpower
+          </span>
+        </h3>
+        <p>
+          Imagine writing an essay and making 100 edits over a week — but you
+          can’t undo a change or see what you changed yesterday. Scary, right?
+          😬
+          <br />
+          That’s what coding without <b>version control</b> feels like.
+        </p>
+        <p>
+          With <b>Git</b>, you can:
+        </p>
+        <ul className="topic-checklist">
+          <li>🕓 Travel back in time (revert to a working version)</li>
+          <li>
+            🧪 Experiment fearlessly (try new features without breaking
+            anything)
+          </li>
+          <li>
+            🤝 Work with your team (without stepping on each other’s toes)
+          </li>
+        </ul>
+      </div>
       <h3>💡 Real-World Examples</h3>
       <div className="topic-funfact example-block">
         <b>🧱 Example 1: Undo Mistakes</b>
@@ -440,90 +451,131 @@ git push -u origin main`,
         <li>✅ Push to GitHub</li>
         <li>✅ Create a branch for your next task</li>
       </ul>
-      <h3>💬 Discussion Points</h3>
-      <div className="topic-faq">
-        <div className="topic-faq-q">
-          <b>Q: Why do developers say "commit early, commit often"?</b>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        💬 Discussion Points
+      </h3>
+      <div
+        style={{
+          background: "linear-gradient(135deg, #e3f0fd 0%, #f8fbff 100%)",
+          border: "2px solid #4fc3f7",
+          borderRadius: "14px",
+          boxShadow: "0 4px 20px rgba(33, 150, 243, 0.08)",
+          padding: "1.5rem 2rem 1.5rem 2rem",
+          margin: "2rem 0 2.5rem 0",
+          position: "relative",
+          animation: "fadeInSlideUp 0.8s ease-out forwards",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "1.1rem",
+          }}
+        >
+          <span
+            style={{
+              fontSize: "1.6rem",
+              color: "#43a047",
+              marginRight: "0.7rem",
+            }}
+          >
+            💬
+          </span>
+          <span
+            style={{ fontWeight: 600, color: "#2196f3", fontSize: "1.18rem" }}
+          >
+            Discussion
+          </span>
         </div>
-        <button className="reveal-btn" onClick={() => setShowA1((v) => !v)}>
-          {showA1 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA1 && (
-          <div className="topic-faq-a">
-            Frequent commits help:
-            <ul>
-              <li>Track small changes</li>
-              <li>Make debugging easier</li>
-              <li>Safely roll back without losing hours of work</li>
-            </ul>
+        <div className="topic-faq">
+          <div className="topic-faq-q">
+            <b>Q: Why do developers say "commit early, commit often"?</b>
           </div>
-        )}
-        <div className="topic-faq-q">
-          <b>
-            Q: What happens if I forget <code>.gitignore</code>?
-          </b>
+          <button className="reveal-btn" onClick={() => setShowA1((v) => !v)}>
+            {showA1 ? "Hide Answer" : "Reveal Answer"}
+          </button>
+          {showA1 && (
+            <div className="topic-faq-a">
+              Frequent commits help:
+              <ul>
+                <li>Track small changes</li>
+                <li>Make debugging easier</li>
+                <li>Safely roll back without losing hours of work</li>
+              </ul>
+            </div>
+          )}
+          <div className="topic-faq-q">
+            <b>
+              Q: What happens if I forget <code>.gitignore</code>?
+            </b>
+          </div>
+          <button className="reveal-btn" onClick={() => setShowA2((v) => !v)}>
+            {showA2 ? "Hide Answer" : "Reveal Answer"}
+          </button>
+          {showA2 && (
+            <div className="topic-faq-a">
+              You might accidentally push:
+              <ul>
+                <li>
+                  Your compiled files (<code>target/</code>)
+                </li>
+                <li>
+                  IDE settings (<code>.idea/</code>)
+                </li>
+                <li>Credentials (❌ dangerous!)</li>
+              </ul>
+              Which can clutter your repo or leak sensitive info.
+            </div>
+          )}
+          <div className="topic-faq-q">
+            <b>Q: What’s the purpose of branching in Git?</b>
+          </div>
+          <button className="reveal-btn" onClick={() => setShowA3((v) => !v)}>
+            {showA3 ? "Hide Answer" : "Reveal Answer"}
+          </button>
+          {showA3 && (
+            <div className="topic-faq-a">
+              <ul>
+                <li>
+                  Develop features in isolation (<code>feature/add-search</code>
+                  )
+                </li>
+                <li>
+                  Fix bugs safely without affecting production code (
+                  <code>bugfix/url-404</code>)
+                </li>
+                <li>
+                  Test things freely without fear of breaking the main app
+                </li>
+              </ul>
+            </div>
+          )}
+          <div className="topic-faq-q">
+            <b>Q: Can Git help in debugging?</b>
+          </div>
+          <button className="reveal-btn" onClick={() => setShowA4((v) => !v)}>
+            {showA4 ? "Hide Answer" : "Reveal Answer"}
+          </button>
+          {showA4 && (
+            <div className="topic-faq-a">
+              Yes!
+              <ul>
+                <li>
+                  Use <code>git log</code> to see the history of changes
+                </li>
+                <li>
+                  Use <code>git diff</code> to see <i>what exactly</i> changed
+                  between versions
+                </li>
+                <li>
+                  Use <code>git revert</code> to undo a commit safely
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
-        <button className="reveal-btn" onClick={() => setShowA2((v) => !v)}>
-          {showA2 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA2 && (
-          <div className="topic-faq-a">
-            You might accidentally push:
-            <ul>
-              <li>
-                Your compiled files (<code>target/</code>)
-              </li>
-              <li>
-                IDE settings (<code>.idea/</code>)
-              </li>
-              <li>Credentials (❌ dangerous!)</li>
-            </ul>
-            Which can clutter your repo or leak sensitive info.
-          </div>
-        )}
-        <div className="topic-faq-q">
-          <b>Q: What’s the purpose of branching in Git?</b>
-        </div>
-        <button className="reveal-btn" onClick={() => setShowA3((v) => !v)}>
-          {showA3 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA3 && (
-          <div className="topic-faq-a">
-            <ul>
-              <li>
-                Develop features in isolation (<code>feature/add-search</code>)
-              </li>
-              <li>
-                Fix bugs safely without affecting production code (
-                <code>bugfix/url-404</code>)
-              </li>
-              <li>Test things freely without fear of breaking the main app</li>
-            </ul>
-          </div>
-        )}
-        <div className="topic-faq-q">
-          <b>Q: Can Git help in debugging?</b>
-        </div>
-        <button className="reveal-btn" onClick={() => setShowA4((v) => !v)}>
-          {showA4 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA4 && (
-          <div className="topic-faq-a">
-            Yes!
-            <ul>
-              <li>
-                Use <code>git log</code> to see the history of changes
-              </li>
-              <li>
-                Use <code>git diff</code> to see <i>what exactly</i> changed
-                between versions
-              </li>
-              <li>
-                Use <code>git revert</code> to undo a commit safely
-              </li>
-            </ul>
-          </div>
-        )}
       </div>
       <h3>🎁 Fun Fact</h3>
       <div

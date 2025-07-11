@@ -21,12 +21,18 @@ export default function Topic1Subtopic6Content() {
 
   return (
     <div className="topic-animated-content">
-      <h3>🧪✨ Step 1: Hands-On Assignment – Project Setup & Foundation</h3>
-      <p>
-        Let's put everything you've learned to the test! These three hands-on
-        tasks will help you <b>apply</b> your knowledge and ensure your
-        environment is fully ready for development.
-      </p>
+      <div className="key-idea-box">
+        <h3>🏆 Overview: Hands-On Assignment & Challenges</h3>
+        <p>
+          Now it’s your turn! Apply what you’ve learned by completing hands-on
+          tasks and challenges. This is where you solidify your understanding
+          and build real confidence.
+        </p>
+        <p>
+          In this section, you’ll find guided assignments, bonus challenges, and
+          tips for getting unstuck if you hit a roadblock.
+        </p>
+      </div>
 
       <h3>✅ Challenge 1: Create and Run Your Spring Boot Project</h3>
       <div className="topic-funfact example-block">

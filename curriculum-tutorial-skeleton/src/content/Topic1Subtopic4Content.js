@@ -1,19 +1,40 @@
 import React, { useState } from "react";
 import "../App.css";
 
+const codeBlocks = {
+  dependencies: `<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt</artifactId>
+    <version>0.9.1</version>
+</dependency>
+
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <scope>runtime</scope>
+</dependency>`,
+  mvnClean: "mvn clean install",
+  mvnCompile: "mvn clean compile",
+};
+
 export default function Topic1Subtopic4Content() {
+  const [copied, setCopied] = useState({});
   const [showA1, setShowA1] = useState(false);
   const [showA2, setShowA2] = useState(false);
   const [showA3, setShowA3] = useState(false);
   const [showA4, setShowA4] = useState(false);
-  const [copiedCommands, setCopiedCommands] = useState({});
 
-  const copyToClipboard = async (text, commandId) => {
+  const copyToClipboard = async (text, codeId) => {
     try {
       await navigator.clipboard.writeText(text);
-      setCopiedCommands((prev) => ({ ...prev, [commandId]: true }));
+      setCopied((prev) => ({ ...prev, [codeId]: true }));
       setTimeout(() => {
-        setCopiedCommands((prev) => ({ ...prev, [commandId]: false }));
+        setCopied((prev) => ({ ...prev, [codeId]: false }));
       }, 2000);
     } catch (err) {
       console.error("Failed to copy: ", err);
@@ -22,23 +43,25 @@ export default function Topic1Subtopic4Content() {
 
   return (
     <div className="topic-animated-content">
-      <h3>🧰 Overview: Powering Your Project with the Right Tools</h3>
-      <p>
-        Imagine building a robot, but you forget the battery. Or worse — you
-        accidentally give it two conflicting power sources. ⚡💥
-      </p>
-      <p>
-        In the same way, your Spring Boot application needs the{" "}
-        <b>right set of dependencies</b> to function properly — and that's
-        exactly what <b>Maven</b> helps you manage!
-      </p>
-      <p>
-        In this section, you'll learn how to{" "}
-        <b>add, manage, and troubleshoot project dependencies</b> using Maven's
-        magical configuration file: <code>pom.xml</code>.
-      </p>
+      <div className="key-idea-box">
+        <h3 style={{ marginTop: 0, color: "#1769aa" }}>
+          📦 Overview: Managing Dependencies with Maven
+        </h3>
+        <p>
+          Dependencies are like ingredients in a recipe — you need the right
+          ones, in the right versions, for your app to work! Maven makes it easy
+          to add, update, and manage these dependencies.
+        </p>
+        <p>
+          In this section, you’ll learn how to configure your{" "}
+          <code>pom.xml</code>, add essential dependencies, and understand what
+          each one does.
+        </p>
+      </div>
 
-      <h3>🎯 Learning Outcomes</h3>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🎯 Learning Outcomes
+      </h3>
       <ul className="topic-checklist">
         <li>✅ Understand what dependencies are and how Maven manages them</li>
         <li>
@@ -54,7 +77,9 @@ export default function Topic1Subtopic4Content() {
         </li>
       </ul>
 
-      <h3>📦 What is Maven? Why Should You Care?</h3>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        📦 What is Maven? Why Should You Care?
+      </h3>
       <div className="topic-funfact example-block">
         <b>🔧 Maven is Your Project's Best Friend</b>
         <div className="topic-funfact-block">
@@ -72,7 +97,9 @@ export default function Topic1Subtopic4Content() {
         </div>
       </div>
 
-      <h3>🔍 Key Terms You'll See in pom.xml</h3>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🔍 Key Terms You'll See in pom.xml
+      </h3>
       <table className="key-concepts-table">
         <thead>
           <tr>
@@ -110,7 +137,9 @@ export default function Topic1Subtopic4Content() {
         </tbody>
       </table>
 
-      <h3>🛠️ Step-by-Step: Add and Manage Dependencies</h3>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🛠️ Step-by-Step: Add and Manage Dependencies
+      </h3>
       <div className="topic-funfact example-block">
         <b>📄 Open and Configure Your pom.xml</b>
         <div className="topic-funfact-block">
@@ -120,375 +149,285 @@ export default function Topic1Subtopic4Content() {
           <div>
             <strong>2.</strong> Add common dependencies:
           </div>
-          <div className="code-with-copy">
-            <pre className="topic-codeblock">
-              <code>{`<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-security</artifactId>
-</dependency>
-
-<dependency>
-    <groupId>io.jsonwebtoken</groupId>
-    <artifactId>jjwt</artifactId>
-    <version>0.9.1</version>
-</dependency>
-
-<dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <scope>runtime</scope>
-</dependency>`}</code>
-            </pre>
+          <div className="topic-codeblock code-with-copy">
             <button
-              className={`copy-button ${
-                copiedCommands.dependencies ? "copied" : ""
-              }`}
+              className={`copy-button ${copied.dependencies ? "copied" : ""}`}
               onClick={() =>
-                copyToClipboard(
-                  `<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-security</artifactId>
-</dependency>
-
-<dependency>
-    <groupId>io.jsonwebtoken</groupId>
-    <artifactId>jjwt</artifactId>
-    <version>0.9.1</version>
-</dependency>
-
-<dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <scope>runtime</scope>
-</dependency>`,
-                  "dependencies"
-                )
+                copyToClipboard(codeBlocks.dependencies, "dependencies")
               }
             >
-              {copiedCommands.dependencies ? (
-                <>
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                  </svg>
-                  Copied!
-                </>
-              ) : (
-                <>
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
-                  </svg>
-                  Copy
-                </>
-              )}
+              {copied.dependencies ? "Copied!" : "Copy"}
             </button>
+            <pre>
+              <code>{codeBlocks.dependencies}</code>
+            </pre>
           </div>
           <div>
             <strong>3.</strong> Run this to refresh:
           </div>
-          <div className="code-with-copy">
-            <pre className="topic-codeblock">
-              <code>mvn clean install</code>
-            </pre>
+          <div className="topic-codeblock code-with-copy">
             <button
-              className={`copy-button ${
-                copiedCommands.mvnClean ? "copied" : ""
-              }`}
-              onClick={() => copyToClipboard("mvn clean install", "mvnClean")}
+              className={`copy-button ${copied.mvnClean ? "copied" : ""}`}
+              onClick={() => copyToClipboard(codeBlocks.mvnClean, "mvnClean")}
             >
-              {copiedCommands.mvnClean ? (
-                <>
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                  </svg>
-                  Copied!
-                </>
-              ) : (
-                <>
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
-                  </svg>
-                  Copy
-                </>
-              )}
+              {copied.mvnClean ? "Copied!" : "Copy"}
             </button>
+            <pre>
+              <code>{codeBlocks.mvnClean}</code>
+            </pre>
           </div>
         </div>
       </div>
 
-      <h3>🧪 Try It Yourself</h3>
-      <div className="topic-funfact example-block">
-        <b>💻 Hands-On Maven Practice</b>
-        <div className="topic-funfact-block">
-          <div>
-            <strong>Add the following:</strong>
-          </div>
-          <ul>
-            <li>✅ Spring Security</li>
-            <li>✅ JWT</li>
-            <li>✅ MySQL driver</li>
-          </ul>
-          <div>
-            <strong>Create a new Maven profile for production</strong>
-          </div>
-          <div>
-            <strong>Build the project using:</strong>
-          </div>
-          <div className="code-with-copy">
-            <pre className="topic-codeblock">
-              <code>mvn clean compile</code>
-            </pre>
-            <button
-              className={`copy-button ${
-                copiedCommands.mvnCompile ? "copied" : ""
-              }`}
-              onClick={() => copyToClipboard("mvn clean compile", "mvnCompile")}
-            >
-              {copiedCommands.mvnCompile ? (
-                <>
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                  </svg>
-                  Copied!
-                </>
-              ) : (
-                <>
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
-                  </svg>
-                  Copy
-                </>
-              )}
-            </button>
-          </div>
-          <div>
-            <strong>
-              Open the target/ folder and verify the .jar file was created
-            </strong>
-          </div>
-        </div>
-      </div>
-
-      <h3>💬 Discussion Points</h3>
-      <div className="topic-faq">
-        <div className="topic-faq-q">
-          <b>Q: What happens if I forget to add a required dependency?</b>
-        </div>
-        <button className="reveal-btn" onClick={() => setShowA1((v) => !v)}>
-          {showA1 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA1 && (
-          <div className="topic-faq-a">
-            <strong>A:</strong> You'll likely see errors like:
-            <pre className="topic-codeblock">
-              <code>
-                ClassNotFoundException:
-                org.springframework.security.config.annotation...
-              </code>
-            </pre>
-            Maven won't be able to compile or run your app because it's missing
-            a needed class/library.
-          </div>
-        )}
-
-        <div className="topic-faq-q">
-          <b>Q: Can two dependencies conflict with each other?</b>
-        </div>
-        <button className="reveal-btn" onClick={() => setShowA2((v) => !v)}>
-          {showA2 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA2 && (
-          <div className="topic-faq-a">
-            <strong>A:</strong> Yes — this is called a <b>version conflict</b>.
-            <br />
-            For example, if two libraries require different versions of Jackson,
-            Maven may pick one that breaks the other.
-            <br />
-            Use:
-            <pre className="topic-codeblock">
-              <code>mvn dependency:tree</code>
-            </pre>
-            To visualize and resolve conflicts.
-          </div>
-        )}
-
-        <div className="topic-faq-q">
-          <b>
-            Q: What's the purpose of dependency scopes like compile, runtime,
-            test?
-          </b>
-        </div>
-        <button className="reveal-btn" onClick={() => setShowA3((v) => !v)}>
-          {showA3 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA3 && (
-          <div className="topic-faq-a">
-            <strong>A:</strong>
-            <table className="topic-table">
-              <thead>
-                <tr>
-                  <th>Scope</th>
-                  <th>When It's Used</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <code>compile</code>
-                  </td>
-                  <td>Available everywhere (default)</td>
-                </tr>
-                <tr>
-                  <td>
-                    <code>runtime</code>
-                  </td>
-                  <td>Needed only when running (e.g., DB drivers)</td>
-                </tr>
-                <tr>
-                  <td>
-                    <code>test</code>
-                  </td>
-                  <td>Used only during tests (e.g., JUnit, Mockito)</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        <div className="topic-faq-q">
-          <b>Q: What's the difference between Maven and Gradle?</b>
-        </div>
-        <button className="reveal-btn" onClick={() => setShowA4((v) => !v)}>
-          {showA4 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA4 && (
-          <div className="topic-faq-a">
-            <strong>A:</strong>
-            <table className="topic-table">
-              <thead>
-                <tr>
-                  <th>Maven</th>
-                  <th>Gradle</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    XML-based (<code>pom.xml</code>)
-                  </td>
-                  <td>Uses Groovy/Kotlin DSL</td>
-                </tr>
-                <tr>
-                  <td>Easier for beginners</td>
-                  <td>More flexible/customizable</td>
-                </tr>
-                <tr>
-                  <td>Slower build times</td>
-                  <td>Faster with incremental builds</td>
-                </tr>
-                <tr>
-                  <td>Large community support</td>
-                  <td>Preferred in Android</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-
-      <h3>📘 Pro Tips</h3>
-      <ul className="topic-checklist">
-        <li>
-          Always <b>update to the latest compatible version</b> of libraries to
-          avoid security risks
-        </li>
-        <li>
-          Use{" "}
-          <a
-            href="https://mvnrepository.com"
-            target="_blank"
-            rel="noopener noreferrer"
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🧪 Try It Yourself
+      </h3>
+      <div
+        style={{
+          background: "linear-gradient(135deg, #e3f0fd 0%, #f8fbff 100%)",
+          border: "2px solid #4fc3f7",
+          borderRadius: "14px",
+          boxShadow: "0 4px 20px rgba(33, 150, 243, 0.08)",
+          padding: "1.5rem 2rem 1.5rem 2rem",
+          margin: "2rem 0 2.5rem 0",
+          position: "relative",
+          animation: "fadeInSlideUp 0.8s ease-out forwards",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "1.1rem",
+          }}
+        >
+          <span
+            style={{
+              fontSize: "1.6rem",
+              color: "#43a047",
+              marginRight: "0.7rem",
+            }}
           >
-            mvnrepository.com
-          </a>{" "}
-          to find and copy-paste any Maven dependency
+            ✅
+          </span>
+          <span
+            style={{ fontWeight: 600, color: "#2196f3", fontSize: "1.18rem" }}
+          >
+            Step-by-step Practice
+          </span>
+        </div>
+        <ol
+          style={{
+            color: "#1769aa",
+            fontSize: "1.08rem",
+            margin: 0,
+            paddingLeft: "1.2rem",
+          }}
+        >
+          <li style={{ marginBottom: "1.1rem" }}>
+            Add the following dependencies to your{" "}
+            <code
+              style={{
+                background: "#e3eefd",
+                color: "#1769aa",
+                borderRadius: "6px",
+                padding: "0.2rem 0.6rem",
+                fontWeight: 500,
+              }}
+            >
+              pom.xml
+            </code>{" "}
+            file.
+          </li>
+          <li style={{ marginBottom: "1.1rem" }}>
+            Create a new Maven profile for production.
+          </li>
+          <li style={{ marginBottom: "1.1rem" }}>
+            Build the project using:
+            <div
+              className="topic-codeblock code-with-copy"
+              style={{ marginTop: "0.7rem" }}
+            >
+              <button
+                className={`copy-button ${copied.mvnCompile ? "copied" : ""}`}
+                onClick={() =>
+                  copyToClipboard(codeBlocks.mvnCompile, "mvnCompile")
+                }
+              >
+                {copied.mvnCompile ? "Copied!" : "Copy"}
+              </button>
+              <pre>
+                <code>{codeBlocks.mvnCompile}</code>
+              </pre>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        💬 Discussion Points
+      </h3>
+      <div className="topic-funfact example-block">
+        <b>Q: Why should you enable annotation processing in your IDE?</b>
+        <div className="topic-funfact-block">
+          <button
+            className="reveal-btn"
+            onClick={() => setShowA1(!showA1)}
+            style={{ marginBottom: "1rem" }}
+          >
+            {showA1 ? "Hide Answer" : "Reveal Answer"}
+          </button>
+          {showA1 && (
+            <div
+              style={{
+                background: "#f8f9fa",
+                padding: "1rem",
+                borderRadius: "6px",
+                border: "1px solid #dee2e6",
+              }}
+            >
+              <strong>A:</strong> Tools like <b>Lombok</b> use annotations like{" "}
+              <code>@Getter</code>, <code>@Setter</code>, <code>@Builder</code>,
+              etc.
+              <br />
+              These generate code <b>at compile time</b>, and enabling
+              annotation processing ensures your IDE understands and displays
+              this code correctly. Without it, you may see false errors or red
+              lines.
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="topic-funfact example-block">
+        <b>Q: How does using an IDE improve your development speed?</b>
+        <div className="topic-funfact-block">
+          <button
+            className="reveal-btn"
+            onClick={() => setShowA2(!showA2)}
+            style={{ marginBottom: "1rem" }}
+          >
+            {showA2 ? "Hide Answer" : "Reveal Answer"}
+          </button>
+          {showA2 && (
+            <div
+              style={{
+                background: "#f8f9fa",
+                padding: "1rem",
+                borderRadius: "6px",
+                border: "1px solid #dee2e6",
+              }}
+            >
+              <strong>A:</strong> IDEs provide:
+              <ul>
+                <li>
+                  <b>Intelligent suggestions (code completion)</b> 💡
+                </li>
+                <li>
+                  <b>Live error highlighting</b>
+                </li>
+                <li>
+                  <b>Real-time debugging tools</b>
+                </li>
+                <li>
+                  <b>Integrated terminal, version control, and Maven</b>
+                </li>
+              </ul>
+              You write faster, make fewer mistakes, and see results instantly.
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="topic-funfact example-block">
+        <b>Q: What's the difference between 'Run' and 'Debug' in IDEs?</b>
+        <div className="topic-funfact-block">
+          <button
+            className="reveal-btn"
+            onClick={() => setShowA3(!showA3)}
+            style={{ marginBottom: "1rem" }}
+          >
+            {showA3 ? "Hide Answer" : "Reveal Answer"}
+          </button>
+          {showA3 && (
+            <div
+              style={{
+                background: "#f8f9fa",
+                padding: "1rem",
+                borderRadius: "6px",
+                border: "1px solid #dee2e6",
+              }}
+            >
+              <strong>A:</strong>
+              <table className="topic-table">
+                <thead>
+                  <tr>
+                    <th>Run</th>
+                    <th>Debug</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Starts the app normally</td>
+                    <td>Starts with debugging tools enabled</td>
+                  </tr>
+                  <tr>
+                    <td>No breakpoints</td>
+                    <td>Stops at breakpoints and lets you inspect variables</td>
+                  </tr>
+                  <tr>
+                    <td>Ideal for final testing</td>
+                    <td>Ideal for finding and fixing bugs</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="topic-funfact example-block">
+        <b>
+          Q: Why should you install plugins like Lombok, Spring Assistant, etc.?
+        </b>
+        <div className="topic-funfact-block">
+          <button
+            className="reveal-btn"
+            onClick={() => setShowA4(!showA4)}
+            style={{ marginBottom: "1rem" }}
+          >
+            {showA4 ? "Hide Answer" : "Reveal Answer"}
+          </button>
+          {showA4 && (
+            <div
+              style={{
+                background: "#f8f9fa",
+                padding: "1rem",
+                borderRadius: "6px",
+                border: "1px solid #dee2e6",
+              }}
+            >
+              <strong>A:</strong> These plugins enhance your IDE with:
+              <ul>
+                <li>Live previews for Spring annotations</li>
+                <li>Easy navigation to beans/controllers</li>
+                <li>Cleaner code through Lombok</li>
+                <li>Faster dependency analysis with Maven Helper</li>
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🌟 Best Practices
+      </h3>
+      <ul className="topic-checklist">
+        <li>✅ Use version control inside the IDE (e.g., Git integration)</li>
+        <li>✅ Use light themes when coding long hours to reduce eye strain</li>
+        <li>
+          ✅ Get comfortable with keyboard shortcuts (boost your coding speed!)
         </li>
-        <li>Avoid bloating your project — only add what you need!</li>
+        <li>✅ Use the built-in terminal for Maven, Git, and other tools</li>
       </ul>
-
-      <h3>🎁 Did You Know?</h3>
-      <div
-        className="topic-callout"
-        style={{ background: "#fff3e0", borderLeft: "5px solid #ff9800" }}
-      >
-        <span role="img" aria-label="lightbulb">
-          💡
-        </span>{" "}
-        The Spring Boot Starter naming convention (
-        <code>spring-boot-starter-*</code>) bundles multiple libraries into one!
-        <br />
-        For example, <code>spring-boot-starter-web</code> includes:
-        <ul>
-          <li>Tomcat</li>
-          <li>Spring MVC</li>
-          <li>Jackson for JSON handling</li>
-        </ul>
-      </div>
-
-      <h3>🛡️ Maven Commands Cheat Sheet</h3>
-      <table className="key-concepts-table">
-        <thead>
-          <tr>
-            <th>Command</th>
-            <th>What It Does</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <code>mvn clean</code>
-            </td>
-            <td>Deletes old build files</td>
-          </tr>
-          <tr>
-            <td>
-              <code>mvn compile</code>
-            </td>
-            <td>Compiles your code</td>
-          </tr>
-          <tr>
-            <td>
-              <code>mvn test</code>
-            </td>
-            <td>Runs all tests</td>
-          </tr>
-          <tr>
-            <td>
-              <code>mvn package</code>
-            </td>
-            <td>
-              Creates the <code>.jar</code> or <code>.war</code> file
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <code>mvn spring-boot:run</code>
-            </td>
-            <td>Runs the Spring Boot app</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h3>🚀 Ready to Get Started?</h3>
-      <div
-        className="topic-callout"
-        style={{ background: "#e8f5e8", borderLeft: "5px solid #4caf50" }}
-      >
-        <span role="img" aria-label="rocket">
-          🚀
-        </span>{" "}
-        Ready to cleanly package your app and install the right building blocks?
-        Maven's got your back 💪
-      </div>
     </div>
   );
 }
