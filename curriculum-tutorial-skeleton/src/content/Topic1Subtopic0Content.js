@@ -25,7 +25,7 @@ export default function Topic1Subtopic0Content() {
       <h3>🎯 Learning Outcomes</h3>
       <ul className="topic-checklist">
         <li>
-          ✅ Initialize a Spring Boot project using <b>Spring Initializr</b>
+          ✅ Initialize a Spring Boot project using&nbsp; <b>Spring Initializr</b>
         </li>
         <li>✅ Understand the project structure and what goes where</li>
         <li>✅ Learn how Maven manages your dependencies</li>

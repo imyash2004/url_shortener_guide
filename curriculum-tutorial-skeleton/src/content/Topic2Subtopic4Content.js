@@ -63,7 +63,7 @@ const Topic2Subtopic4Content = () => {
           <span role="img" aria-label="checkmark">
             ✅
           </span>{" "}
-          Learn the difference between <strong>Entity</strong> and{" "}
+          Learn the difference between&nbsp; <strong>Entity</strong>&nbsp; and{" "}&nbsp;
           <strong>DTO</strong>
         </li>
         <li>

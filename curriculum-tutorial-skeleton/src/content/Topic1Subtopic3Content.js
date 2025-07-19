@@ -36,14 +36,14 @@ export default function Topic1Subtopic3Content() {
       <ul className="topic-checklist">
         <li>✅ Navigate the key folders and files in a Spring Boot project</li>
         <li>
-          ✅ Organize code using best-practice <b>package structures</b>
+          ✅ Organize code using best-practice&nbsp; <b>package structures</b>
         </li>
         <li>
-          ✅ Understand the <b>layered architecture</b> (Controller → Service →
+          ✅ Understand the &nbsp;<b>layered architecture</b> &nbsp;(Controller → Service →
           Repository → Entity)
         </li>
         <li>
-          ✅ Set up your own <b>clean architecture</b> for real-world
+          ✅ Set up your own&nbsp; <b>clean architecture</b>&nbsp; for real-world
           development
         </li>
       </ul>

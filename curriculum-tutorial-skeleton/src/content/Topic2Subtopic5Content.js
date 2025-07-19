@@ -107,11 +107,11 @@ const Topic2Subtopic5Content = () => {
       <ul className="topic-checklist">
         <li>✅ Understand why structured responses are important</li>
         <li>
-          ✅ Create a <code>BaseResponse</code> DTO
+          ✅ Create a&nbsp; <code>BaseResponse</code>&nbsp; DTO
         </li>
         <li>✅ Learn how to use generics for flexible return types</li>
         <li>
-          ✅ Use <code>ResponseEntity</code> with status codes and body
+          ✅ Use&nbsp; <code>ResponseEntity</code>&nbsp; with status codes and body
         </li>
         <li>✅ Improve error responses in future sections</li>
       </ul>

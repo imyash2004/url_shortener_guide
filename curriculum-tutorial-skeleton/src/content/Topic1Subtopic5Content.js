@@ -30,7 +30,7 @@ export default function Topic1Subtopic5Content() {
           auto-imports
         </li>
         <li>
-          ✅ Use <b>plugins</b> to support Maven, Lombok, Spring, and more
+          ✅ Use &nbsp;<b>plugins</b>&nbsp; to support Maven, Lombok, Spring, and more
         </li>
         <li>✅ Run your application from the IDE with just one click</li>
         <li>✅ Debug and inspect running apps in real-time</li>

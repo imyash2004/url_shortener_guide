@@ -59,26 +59,28 @@ const Topic2Subtopic3Content = () => {
           <span role="img" aria-label="checkmark">
             ✅
           </span>{" "}
-          Create a <code>UrlRepository</code> to access <code>url</code> table
+          Create a&nbsp; <code>UrlRepository</code>&nbsp; to access&nbsp;
+          <code>url</code>&nbsp; table
         </li>
         <li>
           <span role="img" aria-label="checkmark">
             ✅
           </span>{" "}
-          Use <code>JpaRepository</code> to auto-generate CRUD operations
+          Use&nbsp; <code>JpaRepository</code>&nbsp; to auto-generate CRUD operations
         </li>
         <li>
           <span role="img" aria-label="checkmark">
             ✅
           </span>{" "}
-          Create <strong>custom query methods</strong> using method naming
+          Create&nbsp; <strong>custom query methods</strong>&nbsp; using method naming
           conventions
         </li>
         <li>
           <span role="img" aria-label="checkmark">
             ✅
           </span>{" "}
-          Write <strong>custom SQL/HQL</strong> using <code>@Query</code>
+          Write&nbsp; <strong>custom SQL/HQL</strong>&nbsp; using&nbsp;
+          <code>@Query</code>
         </li>
         <li>
           <span role="img" aria-label="checkmark">

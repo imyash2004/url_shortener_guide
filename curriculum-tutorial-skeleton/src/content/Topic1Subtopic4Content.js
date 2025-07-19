@@ -65,11 +65,11 @@ export default function Topic1Subtopic4Content() {
       <ul className="topic-checklist">
         <li>✅ Understand what dependencies are and how Maven manages them</li>
         <li>
-          ✅ Add necessary Spring Boot dependencies like <b>Security</b>,{" "}
-          <b>JWT</b>, and <b>MySQL</b>
+          ✅ Add necessary Spring Boot dependencies like&nbsp; <b>Security</b>,&nbsp;
+          <b>JWT</b>, and&nbsp; <b>MySQL</b>
         </li>
         <li>
-          ✅ Learn how Maven resolves <b>conflicts</b> between multiple
+          ✅ Learn how Maven resolves&nbsp; <b>conflicts</b>&nbsp; between multiple
           libraries
         </li>
         <li>

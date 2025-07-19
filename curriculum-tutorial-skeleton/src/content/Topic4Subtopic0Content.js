@@ -1,256 +1,177 @@
 import React, { useState } from "react";
-import "../App.css";
+import "./CustomSectionStyles.css";
 
-export default function Topic4Subtopic0Content() {
-  const [showA1, setShowA1] = useState(false);
-  const [showA2, setShowA2] = useState(false);
-  const [showA3, setShowA3] = useState(false);
-  const [showA4, setShowA4] = useState(false);
+const learningOutcomes = [
+  "Understand the key terms: page number, page size, total elements, and total pages",
+  "Learn how clients request specific pages of data",
+  "Recognize the importance of metadata (e.g., total records) in paginated responses",
+  "Get introduced to sorting concepts often paired with pagination",
+];
+
+const keyTerms = [
+  [
+    "Page Number",
+    "The index of the page requested by the client (often 0 or 1 based)",
+  ],
+  ["Page Size", "The number of items (URLs) to include on one page"],
+  ["Total Elements", "Total number of items available in the dataset"],
+  ["Total Pages", "The total number of pages available based on the page size"],
+  ["Sorting", "Ordering the data by one or more fields (e.g., date created)"],
+];
+
+const whyEssential = [
+  "Prevents overloading the client with too much data at once",
+  "Reduces response time and memory usage on both client and server",
+  "Allows easy navigation through data using pages",
+  "Enables efficient data caching and querying on the backend",
+];
+
+const tryItTasks = [
+  "Explore some popular websites or apps and notice how they paginate lists (e.g., Google search results, YouTube videos)",
+  "Consider how page number and size affect the data shown",
+  "Think about what metadata you’d need to build a pagination UI",
+];
+
+const discussionPrompts = [
+  {
+    q: "What would happen if you didn’t paginate a large dataset?",
+    a: "The server might slow down or crash due to too much data processing; the client could get overwhelmed with data.",
+  },
+  {
+    q: "Why do clients need total elements or total pages in the response?",
+    a: "So they can build navigation controls (like page numbers, next/previous buttons) for a better user experience.",
+  },
+  {
+    q: "How is sorting related to pagination?",
+    a: "Sorting defines the order of items within each page, making the displayed data more meaningful and consistent.",
+  },
+];
+
+const bestPractices = [
+  [
+    "Use zero-based page numbering",
+    "Common convention in APIs and programming",
+  ],
+  [
+    "Set default and maximum page sizes",
+    "Prevents overly large or empty pages",
+  ],
+  [
+    "Include pagination metadata",
+    "Helps frontend properly display and navigate pages",
+  ],
+  ["Support sorting with pagination", "Gives users control over data ordering"],
+];
+
+const Topic4Subtopic0Content = () => {
+  const [openFAQ, setOpenFAQ] = useState(
+    Array(discussionPrompts.length).fill(false)
+  );
+
+  const toggleFAQ = (idx) => {
+    setOpenFAQ((prev) => prev.map((v, i) => (i === idx ? !v : v)));
+  };
 
   return (
-    <div className="topic-content">
-      <div className="key-idea-box">
-        <h3>🧭 Overview: Handling Large Data Sets Gracefully</h3>
-        <p>
-          When your URL shortener scales and users have hundreds or thousands of
-          URLs,{" "}
-          <b>returning all records at once becomes inefficient and slow</b>.
-          <br />
-          Pagination solves this problem by{" "}
-          <b>splitting data into manageable pages</b> — sending only a subset of
-          records per request. This improves performance, user experience, and
-          reduces server load.
-        </p>
-        <div className="topic-callout" style={{ marginTop: "1rem" }}>
-          <b>
-            Think of pagination as flipping through a book, page by page,
-            instead of seeing all pages at once.
-          </b>
-        </div>
+    <div className="topic-animated-content">
+      <h2 style={{ color: "#1769aa" }}>✅ 4.1 – Pagination Concepts</h2>
+      <hr />
+      <div className="yellow-callout">
+        <b>Overview: Understanding the Basics of Pagination</b>
+        <br />
+        When dealing with large datasets in your application — like thousands of
+        URLs — returning all records in a single API response is inefficient and
+        impractical.
+        <br />
+        <br />
+        <b>Pagination</b> breaks down this large data into{" "}
+        <b>smaller, manageable chunks (pages)</b> that can be requested and
+        viewed one at a time. This approach enhances performance, reduces server
+        load, and improves the user experience.
+        <br />
+        <br />
+        <i>
+          Think of pagination like browsing a book: you don’t read all pages at
+          once; you turn one page at a time.
+        </i>
       </div>
 
-      <h3>🎯 Learning Outcomes</h3>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🎯 Learning Outcomes
+      </h3>
       <ul className="topic-checklist">
-        <li>✅ Understand the concepts and benefits of pagination</li>
-        <li>
-          ✅ Use Spring Data’s <code>Pageable</code> interface to handle
-          pagination parameters
-        </li>
-        <li>✅ Customize page size and page number from client requests</li>
-        <li>✅ Return paginated responses with total counts and metadata</li>
-        <li>
-          ✅ Implement sorting alongside pagination for better data ordering
-        </li>
+        {learningOutcomes.map((item, i) => (
+          <li key={i}>✅ {item}</li>
+        ))}
       </ul>
 
-      <h3>📚 Why Pagination Matters</h3>
-      <table className="boundaries-table">
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        📚 Key Terms Explained
+      </h3>
+      <table className="custom-table">
         <thead>
           <tr>
-            <th>Without Pagination</th>
-            <th>With Pagination</th>
+            <th>Term</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Slow response times with large data</td>
-            <td>Fast responses with smaller data chunks</td>
-          </tr>
-          <tr>
-            <td>High memory and bandwidth usage</td>
-            <td>Efficient resource utilization</td>
-          </tr>
-          <tr>
-            <td>Poor user experience with endless scrolling</td>
-            <td>Easy navigation and UI control</td>
-          </tr>
-          <tr>
-            <td>Difficult backend performance optimization</td>
-            <td>Backend can optimize queries and caching</td>
-          </tr>
+          {keyTerms.map(([term, desc], i) => (
+            <tr key={i}>
+              <td>
+                <b>{term}</b>
+              </td>
+              <td>{desc}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
 
-      <h3>🔍 Key Concepts in Pagination</h3>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🔍 Why Pagination is Essential
+      </h3>
       <ul className="topic-bullets">
-        <li>
-          <b>Page Number:</b> Which page of results to retrieve (0-based or
-          1-based index)
-        </li>
-        <li>
-          <b>Page Size:</b> How many items to return per page
-        </li>
-        <li>
-          <b>Total Elements:</b> Total number of records available
-        </li>
-        <li>
-          <b>Total Pages:</b> Total number of pages available based on size
-        </li>
-        <li>
-          <b>Sorting:</b> Ordering results by one or more fields
-        </li>
+        {whyEssential.map((item, i) => (
+          <li key={i}>{item}</li>
+        ))}
       </ul>
 
-      <div
-        className="topic-callout"
-        style={{
-          background: "#e3f2fd",
-          borderLeft: "5px solid #2196f3",
-          marginTop: "1.5rem",
-        }}
-      >
-        <h4 style={{ margin: 0 }}>🧱 How Spring Data Supports Pagination</h4>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🧪 Try It Yourself Tasks
+      </h3>
+      <div className="blue-card-section try-tasks">
         <ul>
-          <li>
-            Use <code>Pageable</code> interface to accept pagination parameters
-            (<code>page</code>, <code>size</code>, <code>sort</code>)
-            automatically
-          </li>
-          <li>
-            Return a <code>Page&lt;T&gt;</code> object containing content and
-            metadata
-          </li>
-          <li>
-            Support sorting via <code>Sort</code> parameter inside{" "}
-            <code>Pageable</code>
-          </li>
-          <li>
-            Clients specify pagination info via query parameters (e.g.,{" "}
-            <code>/api/urls?page=0&amp;size=10&amp;sort=createdAt,desc</code>)
-          </li>
+          {tryItTasks.map((t, i) => (
+            <li key={i}>🔹 {t}</li>
+          ))}
         </ul>
       </div>
 
-      <div
-        className="topic-callout"
-        style={{
-          background: "#e3f2fd",
-          borderLeft: "5px solid #2196f3",
-          marginTop: "1.5rem",
-        }}
-      >
-        <h4 style={{ margin: 0 }}>
-          📝 Implementing Pagination in URL Shortener
-        </h4>
-        <table className="boundaries-table">
-          <thead>
-            <tr>
-              <th>Step</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Controller</td>
-              <td>
-                Accept <code>Pageable</code> as method parameter
-              </td>
-            </tr>
-            <tr>
-              <td>Service</td>
-              <td>
-                Call repository method returning <code>Page&lt;Url&gt;</code>
-              </td>
-            </tr>
-            <tr>
-              <td>Repository</td>
-              <td>
-                Use built-in <code>findAll(Pageable pageable)</code>
-              </td>
-            </tr>
-            <tr>
-              <td>Response DTO</td>
-              <td>Create a paginated response DTO including metadata</td>
-            </tr>
-            <tr>
-              <td>Frontend/Client</td>
-              <td>Send page, size, sort query params in requests</td>
-            </tr>
-          </tbody>
-        </table>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        💬 Discussion Points (With Answers)
+      </h3>
+      <div className="blue-card-section">
+        {discussionPrompts.map((item, idx) => (
+          <div key={idx} style={{ marginBottom: "1.2rem" }}>
+            <div style={{ marginBottom: "0.5rem" }}>
+              <b>Q{idx + 1}:</b> {item.q}
+            </div>
+            <button
+              className="reveal-btn"
+              onClick={() => toggleFAQ(idx)}
+              style={{ marginBottom: "0.5rem" }}
+            >
+              {openFAQ[idx] ? "Hide Answer" : "Reveal Answer"}
+            </button>
+            {openFAQ[idx] && <div className="yellow-callout">{item.a}</div>}
+          </div>
+        ))}
       </div>
 
-      <h3>🧪 Try It Yourself Tasks</h3>
-      <div
-        className="topic-callout"
-        style={{ background: "#e3f2fd", borderLeft: "5px solid #2196f3" }}
-      >
-        <ul className="topic-bullets">
-          <li>Modify your URL list API to accept pagination parameters</li>
-          <li>
-            Return a paginated response including total pages and total elements
-          </li>
-          <li>Add sorting by creation date or click count</li>
-          <li>
-            Test your paginated API with Postman or curl using different page
-            and size values
-          </li>
-          <li>
-            Experiment with large datasets to observe performance benefits
-          </li>
-        </ul>
-      </div>
-
-      <h3>💬 Discussion Points</h3>
-      <div className="topic-faq">
-        <div className="topic-faq-q">
-          <b>
-            Q: How does Spring Data’s <code>Pageable</code> interface simplify
-            pagination?
-          </b>
-        </div>
-        <button className="reveal-btn" onClick={() => setShowA1((v) => !v)}>
-          {showA1 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA1 && (
-          <div className="topic-faq-a">
-            A: It abstracts pagination parameters, automatically maps query
-            params, and provides metadata with results.
-          </div>
-        )}
-        <div className="topic-faq-q">
-          <b>Q: Why is it important to return pagination metadata?</b>
-        </div>
-        <button className="reveal-btn" onClick={() => setShowA2((v) => !v)}>
-          {showA2 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA2 && (
-          <div className="topic-faq-a">
-            A: Metadata helps clients display navigation controls like
-            next/previous buttons and total page counts.
-          </div>
-        )}
-        <div className="topic-faq-q">
-          <b>Q: Can you combine sorting with pagination? How?</b>
-        </div>
-        <button className="reveal-btn" onClick={() => setShowA3((v) => !v)}>
-          {showA3 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA3 && (
-          <div className="topic-faq-a">
-            A: Yes, by including sort parameters (e.g.,{" "}
-            <code>sort=createdAt,desc</code>) which Spring Data applies along
-            with pagination.
-          </div>
-        )}
-        <div className="topic-faq-q">
-          <b>
-            Q: What issues might arise if you don’t paginate large datasets?
-          </b>
-        </div>
-        <button className="reveal-btn" onClick={() => setShowA4((v) => !v)}>
-          {showA4 ? "Hide Answer" : "Reveal Answer"}
-        </button>
-        {showA4 && (
-          <div className="topic-faq-a">
-            A: Slow responses, server crashes, high bandwidth use, and poor user
-            experience.
-          </div>
-        )}
-      </div>
-
-      <h3>🧼 Best Practices</h3>
-      <table className="boundaries-table">
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🧼 Best Practices
+      </h3>
+      <table className="custom-table">
         <thead>
           <tr>
             <th>Practice</th>
@@ -258,28 +179,16 @@ export default function Topic4Subtopic0Content() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>✅ Set sensible default page size</td>
-            <td>Prevent excessive data transfer by default</td>
-          </tr>
-          <tr>
-            <td>✅ Limit maximum page size</td>
-            <td>Protect server from large payload requests</td>
-          </tr>
-          <tr>
-            <td>✅ Include pagination metadata</td>
-            <td>Provide clients with context for UI/UX</td>
-          </tr>
-          <tr>
-            <td>✅ Allow flexible sorting</td>
-            <td>Improve data usability and user control</td>
-          </tr>
-          <tr>
-            <td>✅ Validate pagination parameters</td>
-            <td>Avoid invalid page or size values causing errors</td>
-          </tr>
+          {bestPractices.map(([p, r], i) => (
+            <tr key={i}>
+              <td>✅ {p}</td>
+              <td>{r}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
   );
-}
+};
+
+export default Topic4Subtopic0Content;

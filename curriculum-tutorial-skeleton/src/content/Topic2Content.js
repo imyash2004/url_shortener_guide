@@ -79,15 +79,15 @@ const Topic2Content = () => {
           <span role="img" aria-label="checkmark">
             ✅
           </span>{" "}
-          Understand how a basic <strong>REST API flow</strong> works in Spring
+          Understand how a basic&nbsp; <strong>REST API flow</strong>&nbsp; works in Spring
           Boot
         </li>
         <li>
           <span role="img" aria-label="checkmark">
             ✅
           </span>{" "}
-          Learn about the{" "}
-          <strong>Entity-Repository-Service-Controller (ERSC)</strong> pattern
+          Learn about the{" "}&nbsp;
+          <strong>Entity-Repository-Service-Controller (ERSC)</strong>&nbsp; pattern
         </li>
         <li>
           <span role="img" aria-label="checkmark">
@@ -99,13 +99,13 @@ const Topic2Content = () => {
           <span role="img" aria-label="checkmark">
             ✅
           </span>{" "}
-          Know how to return data in <strong>JSON format</strong> using DTOs
+          Know how to return data in&nbsp; <strong>JSON format</strong>&nbsp; using DTOs
         </li>
         <li>
           <span role="img" aria-label="checkmark">
             ✅
           </span>{" "}
-          Prepare to test your API using tools like <strong>Postman</strong> or{" "}
+          Prepare to test your API using tools like&nbsp; <strong>Postman</strong> &nbsp;or{" "}
           <code>curl</code>
         </li>
       </ul>

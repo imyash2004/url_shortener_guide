@@ -63,7 +63,8 @@ const Topic2Subtopic2Content = () => {
           <span role="img" aria-label="checkmark">
             ✅
           </span>{" "}
-          Configure <strong>H2 Database</strong> for local development
+          Configure &nbsp;<strong>H2 Database</strong> &nbsp;for local
+          development
         </li>
         <li>
           <span role="img" aria-label="checkmark">

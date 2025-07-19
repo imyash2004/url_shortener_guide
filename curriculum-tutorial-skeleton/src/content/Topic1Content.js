@@ -25,21 +25,22 @@ export default function Topic1Content() {
       </h3>
       <ul className="topic-checklist">
         <li>
-          ✅ Create a new Spring Boot project using <b>Spring Initializr</b>.
+          ✅ Create a new Spring Boot project using&nbsp;
+          <b>Spring Initializr</b>
         </li>
         <li>
-          ✅ Understand how the <b>project is structured</b> and why that
+          ✅ Understand how the&nbsp; <b>project is structured</b>&nbsp; and why that
           matters.
         </li>
         <li>
-          ✅ Use <b>Maven</b> to manage dependencies and build your application.
+          ✅ Use &nbsp;<b>Maven</b>&nbsp; to manage dependencies and build your application.
         </li>
         <li>
-          ✅ Set up <b>Git & GitHub</b> to track changes and collaborate with
+          ✅ Set up &nbsp;<b>Git & GitHub</b>&nbsp; to track changes and collaborate with
           others.
         </li>
         <li>
-          ✅ Configure your <b>IDE (like IntelliJ or Eclipse)</b> for
+          ✅ Configure your &nbsp;<b>IDE (like IntelliJ or Eclipse)</b>&nbsp; for
           productivity and debugging.
         </li>
       </ul>

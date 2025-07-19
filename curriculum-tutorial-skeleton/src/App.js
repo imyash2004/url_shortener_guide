@@ -37,7 +37,18 @@ import Topic3Subtopic6Content from "./content/Topic3Subtopic6Content";
 import Topic3Subtopic7Content from "./content/Topic3Subtopic7Content";
 import Topic3Subtopic8Content from "./content/Topic3Subtopic8Content";
 import Topic3Subtopic9Content from "./content/Topic3Subtopic9Content";
+import Topic4Content from "./content/Topic4Content";
 import Topic4Subtopic0Content from "./content/Topic4Subtopic0Content";
+import Topic4Subtopic1Content from "./content/Topic4Subtopic1Content";
+import Topic4Subtopic2Content from "./content/Topic4Subtopic2Content";
+import Topic4Subtopic3Content from "./content/Topic4Subtopic3Content";
+import Topic4Subtopic4Content from "./content/Topic4Subtopic4Content";
+import Topic4Subtopic5Content from "./content/Topic4Subtopic5Content";
+import Topic4Subtopic6Content from "./content/Topic4Subtopic6Content";
+import Topic4Subtopic7Content from "./content/Topic4Subtopic7Content";
+import Topic5Content from "./content/Topic5Content";
+import Topic5Subtopic0Content from "./content/Topic5Subtopic0Content";
+import Topic5Subtopic1Content from "./content/Topic5Subtopic1Content";
 
 const curriculum = [
   {
@@ -385,6 +396,10 @@ function TopicPage() {
           <Topic2Content />
         ) : validIdx === 2 ? (
           <Topic3Content />
+        ) : validIdx === 3 ? (
+          <Topic4Content />
+        ) : validIdx === 4 ? (
+          <Topic5Content />
         ) : (
           <div className="subtopic-scroll-list">
             <ul className="section-bullets">
@@ -545,6 +560,24 @@ function SubtopicPage() {
           <Topic3Subtopic9Content />
         ) : validTIdx === 3 && validSIdx === 0 ? (
           <Topic4Subtopic0Content />
+        ) : validTIdx === 3 && validSIdx === 1 ? (
+          <Topic4Subtopic1Content />
+        ) : validTIdx === 3 && validSIdx === 2 ? (
+          <Topic4Subtopic2Content />
+        ) : validTIdx === 3 && validSIdx === 3 ? (
+          <Topic4Subtopic3Content />
+        ) : validTIdx === 3 && validSIdx === 4 ? (
+          <Topic4Subtopic4Content />
+        ) : validTIdx === 3 && validSIdx === 5 ? (
+          <Topic4Subtopic5Content />
+        ) : validTIdx === 3 && validSIdx === 6 ? (
+          <Topic4Subtopic6Content />
+        ) : validTIdx === 3 && validSIdx === 7 ? (
+          <Topic4Subtopic7Content />
+        ) : validTIdx === 4 && validSIdx === 0 ? (
+          <Topic5Subtopic0Content />
+        ) : validTIdx === 4 && validSIdx === 1 ? (
+          <Topic5Subtopic1Content />
         ) : (
           <>
             <div
@@ -576,7 +609,6 @@ function App() {
           path="/topic/:topicId/subtopic/:subId"
           element={<SubtopicPage />}
         />
-        <Route path="/topic/4/0" element={<Topic4Subtopic0Content />} />
         <Route path="*" element={<Navigate to="/topic/0" replace />} />
       </Routes>
     </Router>

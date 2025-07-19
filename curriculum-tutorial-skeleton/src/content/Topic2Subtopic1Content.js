@@ -68,14 +68,16 @@ const Topic2Subtopic1Content = () => {
           <span role="img" aria-label="checkmark">
             ✅
           </span>{" "}
-          Create the <code>Url</code> entity and map it to a database table
+          Create the&nbsp; <code>Url</code>&nbsp; entity and map it to a database table
         </li>
         <li>
           <span role="img" aria-label="checkmark">
             ✅
           </span>{" "}
-          Use JPA annotations like <code>@Entity</code>, <code>@Id</code>,{" "}
-          <code>@Column</code>, <code>@GeneratedValue</code>
+              Use JPA annotations like&nbsp; <code>@Entity</code>,&nbsp;
+          <code>@Id</code>,&nbsp;
+          <code>@Column</code>,&nbsp;
+          <code>@GeneratedValue</code>
         </li>
         <li>
           <span role="img" aria-label="checkmark">
