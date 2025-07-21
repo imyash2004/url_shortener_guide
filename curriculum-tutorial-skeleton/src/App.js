@@ -49,6 +49,18 @@ import Topic4Subtopic7Content from "./content/Topic4Subtopic7Content";
 import Topic5Content from "./content/Topic5Content";
 import Topic5Subtopic0Content from "./content/Topic5Subtopic0Content";
 import Topic5Subtopic1Content from "./content/Topic5Subtopic1Content";
+import Topic5Subtopic2Content from "./content/Topic5Subtopic2Content";
+import Topic5Subtopic3Content from "./content/Topic5Subtopic3Content";
+import Topic5Subtopic4Content from "./content/Topic5Subtopic4Content";
+import Topic5Subtopic5Content from "./content/Topic5Subtopic5Content";
+import Topic5Subtopic6Content from "./content/Topic5Subtopic6Content";
+import Topic5Subtopic7Content from "./content/Topic5Subtopic7Content";
+import Topic6Content from "./content/Topic6Content";
+import Topic6Subtopic0Content from "./content/Topic6Subtopic0Content";
+import Topic6Subtopic1Content from "./content/Topic6Subtopic1Content";
+import Topic6Subtopic2Content from "./content/Topic6Subtopic2Content";
+import Topic6Subtopic3Content from "./content/Topic6Subtopic3Content";
+import Topic7Content from "./content/Topic7Content";
 
 const curriculum = [
   {
@@ -116,7 +128,6 @@ const curriculum = [
       "Organization Controller",
       "Organization CRUD Operations",
       "URL Filtering by Organization",
-      "Testing Organization APIs",
     ],
   },
   {
@@ -126,9 +137,6 @@ const curriculum = [
       "Redirect Controller Implementation",
       "Path Variable Handling",
       "HTTP Redirect Response",
-      "Analytics Tracking",
-      "Error Handling for Invalid URLs",
-      "Testing Redirect Functionality",
     ],
   },
   {
@@ -400,6 +408,10 @@ function TopicPage() {
           <Topic4Content />
         ) : validIdx === 4 ? (
           <Topic5Content />
+        ) : validIdx === 5 ? (
+          <Topic6Content />
+        ) : validIdx === 6 ? (
+          <Topic7Content />
         ) : (
           <div className="subtopic-scroll-list">
             <ul className="section-bullets">
@@ -578,6 +590,26 @@ function SubtopicPage() {
           <Topic5Subtopic0Content />
         ) : validTIdx === 4 && validSIdx === 1 ? (
           <Topic5Subtopic1Content />
+        ) : validTIdx === 4 && validSIdx === 2 ? (
+          <Topic5Subtopic2Content />
+        ) : validTIdx === 4 && validSIdx === 3 ? (
+          <Topic5Subtopic3Content />
+        ) : validTIdx === 4 && validSIdx === 4 ? (
+          <Topic5Subtopic4Content />
+        ) : validTIdx === 4 && validSIdx === 5 ? (
+          <Topic5Subtopic5Content />
+        ) : validTIdx === 4 && validSIdx === 6 ? (
+          <Topic5Subtopic6Content />
+        ) : validTIdx === 4 && validSIdx === 7 ? (
+          <Topic5Subtopic7Content />
+        ) : validTIdx === 5 && validSIdx === 0 ? (
+          <Topic6Subtopic0Content />
+        ) : validTIdx === 5 && validSIdx === 1 ? (
+          <Topic6Subtopic1Content />
+        ) : validTIdx === 5 && validSIdx === 2 ? (
+          <Topic6Subtopic2Content />
+        ) : validTIdx === 5 && validSIdx === 3 ? (
+          <Topic6Subtopic3Content />
         ) : (
           <>
             <div
