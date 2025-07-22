@@ -61,6 +61,16 @@ import Topic6Subtopic1Content from "./content/Topic6Subtopic1Content";
 import Topic6Subtopic2Content from "./content/Topic6Subtopic2Content";
 import Topic6Subtopic3Content from "./content/Topic6Subtopic3Content";
 import Topic7Content from "./content/Topic7Content";
+import Topic7Subtopic1Content from "./content/Topic7Subtopic1Content";
+import Topic7Subtopic2Content from "./content/Topic7Subtopic2Content";
+import Topic7Subtopic4Content from "./content/Topic7Subtopic4Content";
+import Topic7Subtopic3Content from "./content/Topic7Subtopic3Content";
+import Topic7Subtopic5Content from "./content/Topic7Subtopic5Content";
+import Topic7Subtopic6Content from "./content/Topic7Subtopic6Content";
+import Topic7Subtopic7Content from "./content/Topic7Subtopic7Content";
+import Topic7Subtopic8Content from "./content/Topic7Subtopic8Content";
+import Topic7Subtopic9Content from "./content/Topic7Subtopic9Content";
+import Topic7Subtopic10Content from "./content/Topic7Subtopic10Content";
 
 const curriculum = [
   {
@@ -610,6 +620,26 @@ function SubtopicPage() {
           <Topic6Subtopic2Content />
         ) : validTIdx === 5 && validSIdx === 3 ? (
           <Topic6Subtopic3Content />
+        ) : validTIdx === 6 && validSIdx === 0 ? (
+          <Topic7Subtopic1Content />
+        ) : validTIdx === 6 && validSIdx === 1 ? (
+          <Topic7Subtopic2Content />
+        ) : validTIdx === 6 && validSIdx === 3 ? (
+          <Topic7Subtopic4Content />
+        ) : validTIdx === 6 && validSIdx === 2 ? (
+          <Topic7Subtopic3Content />
+        ) : validTIdx === 6 && validSIdx === 4 ? (
+          <Topic7Subtopic5Content />
+        ) : validTIdx === 6 && validSIdx === 5 ? (
+          <Topic7Subtopic6Content />
+        ) : validTIdx === 6 && validSIdx === 6 ? (
+          <Topic7Subtopic7Content />
+        ) : validTIdx === 6 && validSIdx === 7 ? (
+          <Topic7Subtopic8Content />
+        ) : validTIdx === 6 && validSIdx === 8 ? (
+          <Topic7Subtopic9Content />
+        ) : validTIdx === 6 && validSIdx === 9 ? (
+          <Topic7Subtopic10Content />
         ) : (
           <>
             <div
