@@ -9,7 +9,9 @@ const Topic7Subtopic10Content = () => {
 
   return (
     <div className="topic-animated-content">
-      <h2 style={{ color: "#1769aa" }}>🧪 7.10 – Testing Authentication APIs</h2>
+      <h2 style={{ color: "#1769aa" }}>
+        🧪 7.10 – Testing Authentication APIs
+      </h2>
       <hr />
       <div className="yellow-callout">
         This section is all about <b>verifying</b> that:
@@ -35,19 +37,27 @@ const Topic7Subtopic10Content = () => {
         </thead>
         <tbody>
           <tr>
-            <td><code>POST /signup</code></td>
+            <td>
+              <code>POST /signup</code>
+            </td>
             <td>Register a new user</td>
           </tr>
           <tr>
-            <td><code>POST /signin</code></td>
+            <td>
+              <code>POST /signin</code>
+            </td>
             <td>Log in and receive JWT</td>
           </tr>
           <tr>
-            <td><code>Authorization</code> header</td>
+            <td>
+              <code>Authorization</code> header
+            </td>
             <td>Pass JWT in protected request headers</td>
           </tr>
           <tr>
-            <td><code>/api/**</code></td>
+            <td>
+              <code>/api/**</code>
+            </td>
             <td>Should fail without JWT, succeed with JWT</td>
           </tr>
         </tbody>
@@ -57,18 +67,24 @@ const Topic7Subtopic10Content = () => {
         📦 1. Signup Test – <code>/api/auth/signup</code>
       </h3>
       <div className="blue-card-section">
-        <p><strong>Request:</strong></p>
+        <p>
+          <strong>Request:</strong>
+        </p>
         <pre className="topic-codeblock">{`POST /api/auth/signup
 Content-Type: application/json`}</pre>
 
-        <p><strong>Body:</strong></p>
+        <p>
+          <strong>Body:</strong>
+        </p>
         <pre className="topic-codeblock">{`{
   "name": "Alice",
   "email": "alice@example.com",
   "password": "password123"
 }`}</pre>
 
-        <p><strong>Expected Response:</strong></p>
+        <p>
+          <strong>Expected Response:</strong>
+        </p>
         <pre className="topic-codeblock">{`{
   "status": "success",
   "message": "User registered successfully"
@@ -86,24 +102,32 @@ Content-Type: application/json`}</pre>
         🔑 2. Login Test – <code>/api/auth/signin</code>
       </h3>
       <div className="blue-card-section">
-        <p><strong>Request:</strong></p>
+        <p>
+          <strong>Request:</strong>
+        </p>
         <pre className="topic-codeblock">{`POST /api/auth/signin
 Content-Type: application/json`}</pre>
 
-        <p><strong>Body:</strong></p>
+        <p>
+          <strong>Body:</strong>
+        </p>
         <pre className="topic-codeblock">{`{
   "email": "alice@example.com",
   "password": "password123"
 }`}</pre>
 
-        <p><strong>Expected Response:</strong></p>
+        <p>
+          <strong>Expected Response:</strong>
+        </p>
         <pre className="topic-codeblock">{`{
   "status": "success",
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
   }
 }`}</pre>
-        <p>✅ Copy this <code>token</code> — we'll use it to access secure APIs!</p>
+        <p>
+          ✅ Copy this <code>token</code> — we'll use it to access secure APIs!
+        </p>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
@@ -112,13 +136,19 @@ Content-Type: application/json`}</pre>
       <div className="blue-card-section">
         <h4>❌ Without Token</h4>
         <pre className="topic-codeblock">{`GET /api/urls`}</pre>
-        <p><strong>Expected:</strong> <code>401 Unauthorized</code></p>
-        <p><strong>Reason:</strong> JWT is not provided</p>
+        <p>
+          <strong>Expected:</strong> <code>401 Unauthorized</code>
+        </p>
+        <p>
+          <strong>Reason:</strong> JWT is not provided
+        </p>
 
         <h4>✅ With Token</h4>
         <pre className="topic-codeblock">{`GET /api/urls
 Authorization: Bearer <token>`}</pre>
-        <p><strong>Expected:</strong> Success response with protected data</p>
+        <p>
+          <strong>Expected:</strong> Success response with protected data
+        </p>
         <p>Example:</p>
         <pre className="topic-codeblock">{`{
   "status": "success",
@@ -141,7 +171,8 @@ Authorization: Bearer <token>`}</pre>
           </button>
           {showQ1 && (
             <div className="topic-faq-a">
-              By adding the JWT in the <code>Authorization</code> header: <code>Bearer &lt;token&gt;</code>
+              By adding the JWT in the <code>Authorization</code> header:{" "}
+              <code>Bearer &lt;token&gt;</code>
             </div>
           )}
 
@@ -177,7 +208,8 @@ Authorization: Bearer <token>`}</pre>
           </button>
           {showQ4 && (
             <div className="topic-faq-a">
-              Repeat the signup + login process for different email/password combos
+              Repeat the signup + login process for different email/password
+              combos
             </div>
           )}
         </div>
@@ -221,7 +253,9 @@ Authorization: Bearer <token>`}</pre>
           </tr>
           <tr>
             <td>Access Protected</td>
-            <td>Requires valid <code>Authorization</code> header</td>
+            <td>
+              Requires valid <code>Authorization</code> header
+            </td>
           </tr>
           <tr>
             <td>Invalid Token</td>

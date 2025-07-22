@@ -71,6 +71,8 @@ import Topic7Subtopic7Content from "./content/Topic7Subtopic7Content";
 import Topic7Subtopic8Content from "./content/Topic7Subtopic8Content";
 import Topic7Subtopic9Content from "./content/Topic7Subtopic9Content";
 import Topic7Subtopic10Content from "./content/Topic7Subtopic10Content";
+import Topic8Content from "./content/Topic8Content";
+import Topic8Subtopic1Content from "./content/Topic8Subtopic1Content";
 
 const curriculum = [
   {
@@ -422,6 +424,8 @@ function TopicPage() {
           <Topic6Content />
         ) : validIdx === 6 ? (
           <Topic7Content />
+        ) : validIdx === 7 ? (
+          <Topic8Content />
         ) : (
           <div className="subtopic-scroll-list">
             <ul className="section-bullets">
@@ -640,6 +644,8 @@ function SubtopicPage() {
           <Topic7Subtopic9Content />
         ) : validTIdx === 6 && validSIdx === 9 ? (
           <Topic7Subtopic10Content />
+        ) : validTIdx === 7 && validSIdx === 0 ? (
+          <Topic8Subtopic1Content />
         ) : (
           <>
             <div
