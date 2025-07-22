@@ -132,7 +132,7 @@ const Topic2Subtopic5Content = () => {
       <div className="topic-codeblock">
         <div className="code-with-copy">
           <button
-            className={`copy-button ${copied.baseResponse ? "copied" : ""}`}
+            className={`copy-button ${copied.baseResponse? "copied" : ""}`}
             onClick={() =>
               copyToClipboard(codeBlocks.baseResponse, "baseResponse")
             }
