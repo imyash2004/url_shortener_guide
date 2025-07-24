@@ -43,7 +43,7 @@ const codeBlocks = {
         filterChain.doFilter(request, response); // move forward
     }
 }`,
-  logExample: `System.out.println("User: " + email + " | Roles: " + authorities);`
+  logExample: `System.out.println("User: " + email + " | Roles: " + authorities);`,
 };
 
 const keySteps = [
@@ -52,7 +52,10 @@ const keySteps = [
   ["Verify Signature", "Uses secret key to validate JWT signature"],
   ["Extract Claims", "Pulls out email and roles from the payload"],
   ["Build Auth Object", "Wraps info in `UsernamePasswordAuthenticationToken`"],
-  ["Set Context", "Adds it to `SecurityContextHolder` for Spring to recognize the user"]
+  [
+    "Set Context",
+    "Adds it to `SecurityContextHolder` for Spring to recognize the user",
+  ],
 ];
 
 const summaryTable = [
@@ -60,30 +63,30 @@ const summaryTable = [
   ["SecurityContextHolder", "Stores the authenticated user details"],
   ["JwtTokenValidator", "Validates token, extracts info, sets context"],
   ["AuthorityUtils", "Converts role strings into `GrantedAuthority` list"],
-  ["UsernamePasswordAuthenticationToken", "Represents the authenticated user"]
+  ["UsernamePasswordAuthenticationToken", "Represents the authenticated user"],
 ];
 
 const discussionPrompts = [
   {
     q: "What class is used to build a custom filter?",
-    a: "`OncePerRequestFilter`"
+    a: "`OncePerRequestFilter`",
   },
   {
     q: "Where is the authentication info stored once the JWT is validated?",
-    a: "In `SecurityContextHolder`"
+    a: "In `SecurityContextHolder`",
   },
   {
     q: "What happens if the token is invalid?",
-    a: "`BadCredentialsException` is thrown"
+    a: "`BadCredentialsException` is thrown",
   },
   {
     q: "Why use `Bearer ` prefix?",
-    a: "It's the standard way to include JWT in the Authorization header"
+    a: "It's the standard way to include JWT in the Authorization header",
   },
   {
     q: "What utility class converts roles?",
-    a: "`AuthorityUtils.commaSeparatedStringToAuthorityList()`"
-  }
+    a: "`AuthorityUtils.commaSeparatedStringToAuthorityList()`",
+  },
 ];
 
 const tryItTasks = [
@@ -91,20 +94,22 @@ const tryItTasks = [
     title: "Break the JWT",
     description: "Send a request with a malformed or expired token:",
     code: "Authorization: Bearer fake.token.here",
-    expected: "401 Unauthorized"
+    expected: "401 Unauthorized",
   },
   {
     title: "Use a valid token",
-    description: "1. Log in via `/api/auth/signin`\n2. Copy the token from the response\n3. Hit a protected API with:",
+    description:
+      "1. Log in via `/api/auth/signin`\n2. Copy the token from the response\n3. Hit a protected API with:",
     code: "Authorization: Bearer {your_token_here}",
-    expected: "Access granted ✅"
+    expected: "Access granted ✅",
   },
   {
     title: "Add logging inside the filter",
     description: "Add this inside your filter to debug user access:",
-    code: "System.out.println(\"User: \" + email + \" | Roles: \" + authorities);",
-    expected: "Check your console when requests are made. You'll see who accessed what — super useful for debugging!"
-  }
+    code: 'System.out.println("User: " + email + " | Roles: " + authorities);',
+    expected:
+      "Check your console when requests are made. You'll see who accessed what — super useful for debugging!",
+  },
 ];
 
 const Topic8Subtopic2Content = () => {
@@ -112,7 +117,7 @@ const Topic8Subtopic2Content = () => {
   const [openFAQ, setOpenFAQ] = useState(
     Array(discussionPrompts.length).fill(false)
   );
-  
+
   const copyToClipboard = async (text, codeId) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -124,7 +129,7 @@ const Topic8Subtopic2Content = () => {
       console.error("Failed to copy: ", err);
     }
   };
-  
+
   const toggleFAQ = (idx) => {
     setOpenFAQ((prev) => prev.map((v, i) => (i === idx ? !v : v)));
   };
@@ -134,21 +139,32 @@ const Topic8Subtopic2Content = () => {
       <h2 style={{ color: "#1769aa" }}>🔐 8.2 – JWT Security Filter</h2>
       <hr />
       <div className="yellow-callout">
-        In this section, we'll explore how to implement a <b>custom filter</b> that intercepts every request, extracts the JWT, 
-        validates it, and sets the user as authenticated — all before your controller or service logic runs.
-        <br /><br />
-        This is done using a powerful component called <span className="blue-inline-code">OncePerRequestFilter</span>.
+        In this section, we'll explore how to implement a <b>custom filter</b>{" "}
+        that intercepts every request, extracts the JWT, validates it, and sets
+        the user as authenticated — all before your controller or service logic
+        runs.
+        <br />
+        <br />
+        This is done using a powerful component called{" "}
+        <span className="blue-inline-code">OncePerRequestFilter</span>.
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🧠 What Is <span className="blue-inline-code">OncePerRequestFilter</span>?
+        🧠 What Is{" "}
+        <span className="blue-inline-code">OncePerRequestFilter</span>?
       </h3>
       <div className="blue-card-section">
-        This is a Spring class that ensures your custom filter runs <b>once per request</b>. It's ideal for token validation because:
+        This is a Spring class that ensures your custom filter runs{" "}
+        <b>once per request</b>. It's ideal for token validation because:
         <ul style={{ margin: "0.7rem 0 0 1.2rem" }}>
           <li>It sits early in the filter chain</li>
-          <li>It works on <b>every incoming HTTP request</b></li>
-          <li>It allows you to <b>inspect headers</b>, do validations, and set authentication</li>
+          <li>
+            It works on <b>every incoming HTTP request</b>
+          </li>
+          <li>
+            It allows you to <b>inspect headers</b>, do validations, and set
+            authentication
+          </li>
         </ul>
       </div>
 
@@ -157,7 +173,10 @@ const Topic8Subtopic2Content = () => {
       </h3>
       <div className="blue-card-section">
         Here's the full implementation:
-        <div className="topic-codeblock code-with-copy" style={{ margin: "0.7rem 0" }}>
+        <div
+          className="topic-codeblock code-with-copy"
+          style={{ margin: "0.7rem 0" }}
+        >
           <button
             className={`copy-button ${copied.jwtFilter ? "copied" : ""}`}
             onClick={() => copyToClipboard(codeBlocks.jwtFilter, "jwtFilter")}
@@ -220,11 +239,18 @@ const Topic8Subtopic2Content = () => {
       <div className="blue-card-section">
         {tryItTasks.map((task, idx) => (
           <div key={idx} style={{ marginBottom: "1.5rem" }}>
-            <h4>🚀 Task {idx + 1}: {task.title}</h4>
+            <h4>
+              🚀 Task {idx + 1}: {task.title}
+            </h4>
             <p>{task.description}</p>
-            <div className="topic-codeblock code-with-copy" style={{ margin: "0.7rem 0" }}>
+            <div
+              className="topic-codeblock code-with-copy"
+              style={{ margin: "0.7rem 0" }}
+            >
               <button
-                className={`copy-button ${copied[`task${idx}`] ? "copied" : ""}`}
+                className={`copy-button ${
+                  copied[`task${idx}`] ? "copied" : ""
+                }`}
                 onClick={() => copyToClipboard(task.code, `task${idx}`)}
               >
                 {copied[`task${idx}`] ? "Copied!" : "Copy"}
@@ -234,17 +260,23 @@ const Topic8Subtopic2Content = () => {
               </pre>
             </div>
             <p>
-              {task.expected.startsWith("4") ? <span style={{ color: "#d32f2f" }}>🟥 Expected: {task.expected}</span> : 
-               task.expected.includes("✅") ? <span style={{ color: "#388e3c" }}>🟩 Expected: {task.expected}</span> :
-               <span>Expected: {task.expected}</span>}
+              {task.expected.startsWith("4") ? (
+                <span style={{ color: "#d32f2f" }}>
+                  🟥 Expected: {task.expected}
+                </span>
+              ) : task.expected.includes("✅") ? (
+                <span style={{ color: "#388e3c" }}>
+                  🟩 Expected: {task.expected}
+                </span>
+              ) : (
+                <span>Expected: {task.expected}</span>
+              )}
             </p>
           </div>
         ))}
       </div>
 
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        ✅ Summary
-      </h3>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>✅ Summary</h3>
       <table className="custom-table">
         <thead>
           <tr>

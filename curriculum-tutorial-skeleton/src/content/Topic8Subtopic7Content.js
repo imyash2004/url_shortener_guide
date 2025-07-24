@@ -50,26 +50,26 @@ SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
   headers: {
     Authorization: "Bearer <your-token>",
   }
-})`
+})`,
 };
 
 const discussionPrompts = [
   {
     q: "Why do we need CORS configuration?",
-    a: "Browsers block requests between different origins unless explicitly allowed."
+    a: "Browsers block requests between different origins unless explicitly allowed.",
   },
   {
     q: "What does the browser send before actual request?",
-    a: "A preflight OPTIONS request."
+    a: "A preflight OPTIONS request.",
   },
   {
     q: "Where should CORS be configured in Spring Boot?",
-    a: "Inside SecurityFilterChain with a CorsConfigurationSource."
+    a: "Inside SecurityFilterChain with a CorsConfigurationSource.",
   },
   {
     q: "Can we use * for all origins if credentials are enabled?",
-    a: "❌ No. You must explicitly list allowed origins."
-  }
+    a: "❌ No. You must explicitly list allowed origins.",
+  },
 ];
 
 const tryItTasks = [
@@ -78,21 +78,30 @@ const tryItTasks = [
     code: `allowed-origins:
   - http://localhost:5173
   - https://zesty-sawine-c372eb.netlify.app`,
-    description: "Edit your application.yml to allow these origins"
+    description: "Edit your application.yml to allow these origins",
   },
   {
     title: "Test API from Frontend",
     code: codeBlocks.frontendTest,
-    description: "Use fetch() or axios from your frontend and pass the JWT"
-  }
+    description: "Use fetch() or axios from your frontend and pass the JWT",
+  },
 ];
 
 const summaryTable = [
   ["CORS", "Mechanism to allow cross-origin API access"],
-  ["Preflight Request", "An OPTIONS request sent by browser to verify permission"],
-  ["CorsConfiguration", "Spring class to set allowed origins, headers, methods, etc."],
+  [
+    "Preflight Request",
+    "An OPTIONS request sent by browser to verify permission",
+  ],
+  [
+    "CorsConfiguration",
+    "Spring class to set allowed origins, headers, methods, etc.",
+  ],
   ["SecurityFilterChain", "Where global CORS is configured in Spring Security"],
-  ["application.yml", "Central config for origins, headers, methods used by frontend"]
+  [
+    "application.yml",
+    "Central config for origins, headers, methods used by frontend",
+  ],
 ];
 
 const Topic8Subtopic7Content = () => {
@@ -122,33 +131,41 @@ const Topic8Subtopic7Content = () => {
       <h2 style={{ color: "#1769aa" }}>🌍 8.7 – CORS Configuration</h2>
       <hr />
       <div className="yellow-callout">
-        <strong>CORS (Cross-Origin Resource Sharing)</strong> is a security mechanism that allows a backend server (e.g., <code>https://api.myapp.com</code>) to accept requests from a different frontend origin (e.g., <code>https://myfrontend.netlify.app</code>).
+        <strong>CORS (Cross-Origin Resource Sharing)</strong> is a security
+        mechanism that allows a backend server (e.g.,{" "}
+        <code>https://api.myapp.com</code>) to accept requests from a different
+        frontend origin (e.g., <code>https://myfrontend.netlify.app</code>).
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
         🧠 Why CORS Is Needed
       </h3>
       <div className="blue-card-section">
-        Browsers <strong>block API calls</strong> made from one origin to another unless the server explicitly allows it.
-
+        Browsers <strong>block API calls</strong> made from one origin to
+        another unless the server explicitly allows it.
         <div style={{ marginTop: "1rem" }}>
           Without CORS:
           <ul style={{ margin: "0.7rem 0 0 1.2rem" }}>
-            <li>Your frontend gets a <strong>CORS error</strong>.</li>
-            <li>API calls <strong>fail silently</strong> — even before hitting your controller.</li>
+            <li>
+              Your frontend gets a <strong>CORS error</strong>.
+            </li>
+            <li>
+              API calls <strong>fail silently</strong> — even before hitting
+              your controller.
+            </li>
             <li>Users are left confused (and so are you 😓).</li>
           </ul>
         </div>
       </div>
 
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🔐 How It Works
-      </h3>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>🔐 How It Works</h3>
       <div className="blue-card-section">
-        When a browser makes a cross-origin request, it first sends a <strong>preflight request (OPTIONS)</strong> to check if it's safe. If allowed, the browser continues with the actual request.
-        
+        When a browser makes a cross-origin request, it first sends a{" "}
+        <strong>preflight request (OPTIONS)</strong> to check if it's safe. If
+        allowed, the browser continues with the actual request.
         <div style={{ marginTop: "1rem" }}>
-          You can allow these requests using Spring's <strong>CORS configuration</strong>.
+          You can allow these requests using Spring's{" "}
+          <strong>CORS configuration</strong>.
         </div>
       </div>
 
@@ -156,8 +173,8 @@ const Topic8Subtopic7Content = () => {
         🧱 Setting Up CORS in Spring Boot
       </h3>
       <div className="blue-card-section">
-        Let's configure CORS <strong>globally</strong> using your existing <code>AppConfig</code>:
-        
+        Let's configure CORS <strong>globally</strong> using your existing{" "}
+        <code>AppConfig</code>:
         <div
           className="topic-codeblock code-with-copy"
           style={{ margin: "0.7rem 0" }}
@@ -174,20 +191,16 @@ const Topic8Subtopic7Content = () => {
             <code>{codeBlocks.securityConfig}</code>
           </pre>
         </div>
-
         <div style={{ marginTop: "1rem" }}>
           Now create the configuration source:
         </div>
-
         <div
           className="topic-codeblock code-with-copy"
           style={{ margin: "0.7rem 0" }}
         >
           <button
             className={`copy-button ${copied.corsSource ? "copied" : ""}`}
-            onClick={() =>
-              copyToClipboard(codeBlocks.corsSource, "corsSource")
-            }
+            onClick={() => copyToClipboard(codeBlocks.corsSource, "corsSource")}
           >
             {copied.corsSource ? "Copied!" : "Copy"}
           </button>
@@ -195,9 +208,10 @@ const Topic8Subtopic7Content = () => {
             <code>{codeBlocks.corsSource}</code>
           </pre>
         </div>
-
         <div style={{ marginTop: "1rem" }}>
-          Make sure you've created a <code>CorsProperties</code> class that loads the config from <code>application.yml</code> or <code>application.properties</code>.
+          Make sure you've created a <code>CorsProperties</code> class that
+          loads the config from <code>application.yml</code> or{" "}
+          <code>application.properties</code>.
         </div>
       </div>
 
@@ -222,8 +236,17 @@ const Topic8Subtopic7Content = () => {
           </pre>
         </div>
 
-        <div style={{ marginTop: "1rem", backgroundColor: "#f8f9fa", padding: "0.75rem", borderLeft: "4px solid #4CAF50", borderRadius: "0.25rem" }}>
-          ✅ With this setup, your React/Angular/Vue frontend can call protected APIs and send the JWT in headers.
+        <div
+          style={{
+            marginTop: "1rem",
+            backgroundColor: "#f8f9fa",
+            padding: "0.75rem",
+            borderLeft: "4px solid #4CAF50",
+            borderRadius: "0.25rem",
+          }}
+        >
+          ✅ With this setup, your React/Angular/Vue frontend can call protected
+          APIs and send the JWT in headers.
         </div>
       </div>
 
@@ -232,9 +255,19 @@ const Topic8Subtopic7Content = () => {
       </h3>
       <div className="blue-card-section">
         <ul style={{ margin: "0.7rem 0 0 1.2rem" }}>
-          <li>Always set <code>Allow-Credentials</code> to <code>true</code> if your frontend needs cookies or auth headers.</li>
-          <li>Never use <code>"*"</code> for <code>allowedOrigins</code> when credentials are enabled — it will <strong>not work</strong>.</li>
-          <li>You can also annotate specific controllers with <code>@CrossOrigin(...)</code>, but global config is better for consistency.</li>
+          <li>
+            Always set <code>Allow-Credentials</code> to <code>true</code> if
+            your frontend needs cookies or auth headers.
+          </li>
+          <li>
+            Never use <code>"*"</code> for <code>allowedOrigins</code> when
+            credentials are enabled — it will <strong>not work</strong>.
+          </li>
+          <li>
+            You can also annotate specific controllers with{" "}
+            <code>@CrossOrigin(...)</code>, but global config is better for
+            consistency.
+          </li>
         </ul>
       </div>
 
@@ -246,7 +279,9 @@ const Topic8Subtopic7Content = () => {
         {discussionPrompts.map((faq, idx) => (
           <div key={idx} style={{ marginBottom: "1.2rem" }}>
             <div style={{ marginBottom: "0.5rem" }}>
-              <b>Q{idx + 1}: {faq.q}</b>
+              <b>
+                Q{idx + 1}: {faq.q}
+              </b>
             </div>
             <button
               className="reveal-btn"
@@ -266,17 +301,19 @@ const Topic8Subtopic7Content = () => {
       <div className="blue-card-section try-tasks">
         {tryItTasks.map((task, idx) => (
           <div key={idx} style={{ marginBottom: "1.5rem" }}>
-            <h4>🚀 Task {idx + 1}: {task.title}</h4>
+            <h4>
+              🚀 Task {idx + 1}: {task.title}
+            </h4>
             <p>{task.description}</p>
             <div
               className="topic-codeblock code-with-copy"
               style={{ margin: "0.7rem 0" }}
             >
               <button
-                className={`copy-button ${copied[`task${idx}`] ? "copied" : ""}`}
-                onClick={() =>
-                  copyToClipboard(task.code, `task${idx}`)
-                }
+                className={`copy-button ${
+                  copied[`task${idx}`] ? "copied" : ""
+                }`}
+                onClick={() => copyToClipboard(task.code, `task${idx}`)}
               >
                 {copied[`task${idx}`] ? "Copied!" : "Copy"}
               </button>

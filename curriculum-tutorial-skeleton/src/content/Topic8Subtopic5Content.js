@@ -54,34 +54,34 @@ public class SecurityUtil {
   task1: `System.out.println("Request from user: " + SecurityUtil.getCurrentUserEmail());`,
   task2: `if (SecurityUtil.hasRole("ADMIN")) {
     System.out.println("Admin is performing this action.");
-}`
+}`,
 };
 
 const summaryTable = [
   ["getCurrentUserEmail()", "Fetches the logged-in user's email"],
   ["getCurrentUserRoles()", "Returns list of roles"],
-  ["hasRole(\"ADMIN\")", "Checks if user has a specific role"],
+  ['hasRole("ADMIN")', "Checks if user has a specific role"],
   ["isLoggedIn()", "Verifies if user is authenticated"],
-  ["SecurityContextHolder", "Global context holding security info"]
+  ["SecurityContextHolder", "Global context holding security info"],
 ];
 
 const discussionPrompts = [
   {
     q: "What is the purpose of SecurityUtil.getCurrentUserEmail()?",
-    a: "To get the email of the currently authenticated user."
+    a: "To get the email of the currently authenticated user.",
   },
   {
     q: "Why is SecurityContextHolder used?",
-    a: "It holds the authentication context for the current request."
+    a: "It holds the authentication context for the current request.",
   },
   {
     q: "Why prefix ROLE_ in hasRole()?",
-    a: "Because Spring adds ROLE_ to authorities internally."
+    a: "Because Spring adds ROLE_ to authorities internally.",
   },
   {
     q: "Is it safe to use this utility in services?",
-    a: "✅ Yes — as long as you've validated JWTs before."
-  }
+    a: "✅ Yes — as long as you've validated JWTs before.",
+  },
 ];
 
 const tryItTasks = [
@@ -89,14 +89,14 @@ const tryItTasks = [
     title: "Log user info on every request",
     description: "Add this line to any controller method:",
     code: codeBlocks.task1,
-    instructions: "Run the app and test with JWT headers."
+    instructions: "Run the app and test with JWT headers.",
   },
   {
     title: "Conditional Role Logic",
     description: "In a service:",
     code: codeBlocks.task2,
-    instructions: "Try calling it with an admin token and a user token."
-  }
+    instructions: "Try calling it with an admin token and a user token.",
+  },
 ];
 
 const Topic8Subtopic5Content = () => {
@@ -104,7 +104,7 @@ const Topic8Subtopic5Content = () => {
   const [openFAQ, setOpenFAQ] = useState(
     Array(discussionPrompts.length).fill(false)
   );
-  
+
   const copyToClipboard = async (text, codeId) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -116,7 +116,7 @@ const Topic8Subtopic5Content = () => {
       console.error("Failed to copy: ", err);
     }
   };
-  
+
   const toggleFAQ = (idx) => {
     setOpenFAQ((prev) => prev.map((v, i) => (i === idx ? !v : v)));
   };
@@ -141,21 +141,37 @@ const Topic8Subtopic5Content = () => {
       <div className="blue-card-section">
         <p>While writing services and controllers, you'll often need:</p>
         <ul style={{ margin: "0.7rem 0 0 1.2rem" }}>
-          <li>The <b>logged-in user's identity</b></li>
-          <li>Their <b>roles</b> to authorize behavior</li>
-          <li>To <b>avoid copying JWT parsing logic everywhere</b></li>
+          <li>
+            The <b>logged-in user's identity</b>
+          </li>
+          <li>
+            Their <b>roles</b> to authorize behavior
+          </li>
+          <li>
+            To <b>avoid copying JWT parsing logic everywhere</b>
+          </li>
         </ul>
-        <p>Instead of duplicating this code, we'll create a <span className="blue-inline-code">SecurityUtil</span> class. This is also safer — because JWT parsing is <b>already handled</b> by <span className="blue-inline-code">SecurityContextHolder</span>.</p>
+        <p>
+          Instead of duplicating this code, we'll create a{" "}
+          <span className="blue-inline-code">SecurityUtil</span> class. This is
+          also safer — because JWT parsing is <b>already handled</b> by{" "}
+          <span className="blue-inline-code">SecurityContextHolder</span>.
+        </p>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
         🧱 Create <span className="blue-inline-code">SecurityUtil</span> Class
       </h3>
       <div className="blue-card-section">
-        <div className="topic-codeblock code-with-copy" style={{ margin: "0.7rem 0" }}>
+        <div
+          className="topic-codeblock code-with-copy"
+          style={{ margin: "0.7rem 0" }}
+        >
           <button
             className={`copy-button ${copied.securityUtil ? "copied" : ""}`}
-            onClick={() => copyToClipboard(codeBlocks.securityUtil, "securityUtil")}
+            onClick={() =>
+              copyToClipboard(codeBlocks.securityUtil, "securityUtil")
+            }
           >
             {copied.securityUtil ? "Copied!" : "Copy"}
           </button>
@@ -170,11 +186,16 @@ const Topic8Subtopic5Content = () => {
       </h3>
       <div className="blue-card-section">
         <p>Let's say you want to log which user created a short URL:</p>
-        
-        <div className="topic-codeblock code-with-copy" style={{ margin: "0.7rem 0" }}>
+
+        <div
+          className="topic-codeblock code-with-copy"
+          style={{ margin: "0.7rem 0" }}
+        >
           <button
             className={`copy-button ${copied.createShortUrl ? "copied" : ""}`}
-            onClick={() => copyToClipboard(codeBlocks.createShortUrl, "createShortUrl")}
+            onClick={() =>
+              copyToClipboard(codeBlocks.createShortUrl, "createShortUrl")
+            }
           >
             {copied.createShortUrl ? "Copied!" : "Copy"}
           </button>
@@ -182,13 +203,20 @@ const Topic8Subtopic5Content = () => {
             <code>{codeBlocks.createShortUrl}</code>
           </pre>
         </div>
-        
+
         <p>Or maybe conditionally allow access:</p>
-        
-        <div className="topic-codeblock code-with-copy" style={{ margin: "0.7rem 0" }}>
+
+        <div
+          className="topic-codeblock code-with-copy"
+          style={{ margin: "0.7rem 0" }}
+        >
           <button
-            className={`copy-button ${copied.conditionalAccess ? "copied" : ""}`}
-            onClick={() => copyToClipboard(codeBlocks.conditionalAccess, "conditionalAccess")}
+            className={`copy-button ${
+              copied.conditionalAccess ? "copied" : ""
+            }`}
+            onClick={() =>
+              copyToClipboard(codeBlocks.conditionalAccess, "conditionalAccess")
+            }
           >
             {copied.conditionalAccess ? "Copied!" : "Copy"}
           </button>
@@ -226,12 +254,19 @@ const Topic8Subtopic5Content = () => {
       <div className="blue-card-section">
         {tryItTasks.map((task, idx) => (
           <div key={idx} style={{ marginBottom: "1.5rem" }}>
-            <h4>🚀 Task {idx + 1}: {task.title}</h4>
+            <h4>
+              🚀 Task {idx + 1}: {task.title}
+            </h4>
             <p>{task.description}</p>
-            
-            <div className="topic-codeblock code-with-copy" style={{ margin: "0.7rem 0" }}>
+
+            <div
+              className="topic-codeblock code-with-copy"
+              style={{ margin: "0.7rem 0" }}
+            >
               <button
-                className={`copy-button ${copied[`task${idx}`] ? "copied" : ""}`}
+                className={`copy-button ${
+                  copied[`task${idx}`] ? "copied" : ""
+                }`}
                 onClick={() => copyToClipboard(task.code, `task${idx}`)}
               >
                 {copied[`task${idx}`] ? "Copied!" : "Copy"}
@@ -240,15 +275,13 @@ const Topic8Subtopic5Content = () => {
                 <code>{task.code}</code>
               </pre>
             </div>
-            
+
             <p>{task.instructions}</p>
           </div>
         ))}
       </div>
 
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        ✅ Summary
-      </h3>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>✅ Summary</h3>
       <table className="custom-table">
         <thead>
           <tr>

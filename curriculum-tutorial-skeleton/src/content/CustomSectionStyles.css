@@ -1,3 +1,18 @@
+/* Endpoint Example Styling */
+.endpoint-example {
+  font-family: "Fira Mono", "Consolas", "Menlo", monospace;
+  background: #e3eefd;
+  color: #1769aa;
+  border-radius: 5px;
+  padding: 0.13em 0.5em;
+  font-size: 0.98em;
+  margin-right: 0.3em;
+  border: 1px solid #e3eefd;
+}
+.endpoint-url {
+  color: #1976d2;
+  font-weight: 500;
+}
 /* Blue Card Style (for Try It Yourself, Discussion, etc.) */
 .blue-card-section {
   background: linear-gradient(135deg, #e3f0fd 0%, #f8fbff 100%);

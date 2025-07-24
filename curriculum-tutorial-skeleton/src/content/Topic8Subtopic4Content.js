@@ -26,7 +26,7 @@ public String adminView() {
     return "Welcome Admin!";
 }`,
   securityRule: `.requestMatchers("/api/admin/**").hasRole("ADMIN")`,
-  denyAllRule: `.anyRequest().denyAll()`
+  denyAllRule: `.anyRequest().denyAll()`,
 };
 
 const matcherTable = [
@@ -35,7 +35,7 @@ const matcherTable = [
   ["/api/user/**", "Requires `ROLE_USER`"],
   ["/api/**", "Any logged-in user"],
   ["/s/**`, `/api/public/**", "Public, no auth required"],
-  ["anyRequest()", "Default: allow or deny others"]
+  ["anyRequest()", "Default: allow or deny others"],
 ];
 
 const summaryTable = [
@@ -43,53 +43,55 @@ const summaryTable = [
   ["requestMatchers()", "Matches specific path patterns"],
   ["hasRole() / permitAll()", "Defines access logic"],
   ["anyRequest()", "Final catch-all rule"],
-  ["Order of rules", "Top-down priority; define specific routes first"]
+  ["Order of rules", "Top-down priority; define specific routes first"],
 ];
 
 const discussionPrompts = [
   {
     q: "Where do we define path-based access rules?",
-    a: "Inside `authorizeHttpRequests()` of `SecurityFilterChain`"
+    a: "Inside `authorizeHttpRequests()` of `SecurityFilterChain`",
   },
   {
     q: "What happens if no rule matches a request?",
-    a: "It falls back to `.anyRequest()` – usually `permitAll()` or `denyAll()`"
+    a: "It falls back to `.anyRequest()` – usually `permitAll()` or `denyAll()`",
   },
   {
-    q: "Why are roles written as \"hasRole('ADMIN')\" and not \"ROLE_ADMIN\"?",
-    a: "Spring adds the `\"ROLE_\"` prefix automatically"
+    q: 'Why are roles written as "hasRole(\'ADMIN\')" and not "ROLE_ADMIN"?',
+    a: 'Spring adds the `"ROLE_"` prefix automatically',
   },
   {
     q: "Is this enough to protect internal logic?",
-    a: "No — always combine with method-level security for full protection"
-  }
+    a: "No — always combine with method-level security for full protection",
+  },
 ];
 
 const tryItTasks = [
   {
     title: "Make an Admin-only Endpoint",
-    description: "🔁 Test as a regular user → 🟥 403 Forbidden\n🔁 Test as admin → ✅ Success",
+    description:
+      "🔁 Test as a regular user → 🟥 403 Forbidden\n🔁 Test as admin → ✅ Success",
     codeBlocks: [
       {
         id: "adminEndpoint",
-        code: codeBlocks.adminEndpoint
+        code: codeBlocks.adminEndpoint,
       },
       {
         id: "securityRule",
-        code: codeBlocks.securityRule
-      }
-    ]
+        code: codeBlocks.securityRule,
+      },
+    ],
   },
   {
     title: "Make a fallback `denyAll()` rule",
-    description: "Try accessing an undefined path like `/hidden/system/config` → 🛑 Access denied!",
+    description:
+      "Try accessing an undefined path like `/hidden/system/config` → 🛑 Access denied!",
     codeBlocks: [
       {
         id: "denyAllRule",
-        code: codeBlocks.denyAllRule
-      }
-    ]
-  }
+        code: codeBlocks.denyAllRule,
+      },
+    ],
+  },
 ];
 
 const Topic8Subtopic4Content = () => {
@@ -97,7 +99,7 @@ const Topic8Subtopic4Content = () => {
   const [openFAQ, setOpenFAQ] = useState(
     Array(discussionPrompts.length).fill(false)
   );
-  
+
   const copyToClipboard = async (text, codeId) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -109,7 +111,7 @@ const Topic8Subtopic4Content = () => {
       console.error("Failed to copy: ", err);
     }
   };
-  
+
   const toggleFAQ = (idx) => {
     setOpenFAQ((prev) => prev.map((v, i) => (i === idx ? !v : v)));
   };
@@ -119,23 +121,48 @@ const Topic8Subtopic4Content = () => {
       <h2 style={{ color: "#1769aa" }}>🌐 8.4 – URL-Based Security</h2>
       <hr />
       <div className="yellow-callout">
-        In this section, we'll explore how to <b>protect API endpoints based on URL patterns and user roles</b> using Spring Security's <span className="blue-inline-code">authorizeHttpRequests</span> configuration.
-        <br /><br />
-        This ensures that <b>unauthorized users can't even reach protected endpoints</b>, even before method-level security kicks in.
+        In this section, we'll explore how to{" "}
+        <b>protect API endpoints based on URL patterns and user roles</b> using
+        Spring Security's{" "}
+        <span className="blue-inline-code">authorizeHttpRequests</span>{" "}
+        configuration.
+        <br />
+        <br />
+        This ensures that{" "}
+        <b>unauthorized users can't even reach protected endpoints</b>, even
+        before method-level security kicks in.
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
         🔍 What Is URL-Based Security?
       </h3>
       <div className="blue-card-section">
-        <p>URL-based security allows you to configure access rules for different routes like:</p>
+        <p>
+          URL-based security allows you to configure access rules for different
+          routes like:
+        </p>
         <ul style={{ margin: "0.7rem 0 0 1.2rem" }}>
-          <li><span className="blue-inline-code">/api/auth/**</span> → Public</li>
-          <li><span className="blue-inline-code">/api/admin/**</span> → Only Admins</li>
-          <li><span className="blue-inline-code">/api/user/**</span> → Only Logged-in Users</li>
+          <li>
+            <span className="blue-inline-code">/api/auth/**</span> → Public
+          </li>
+          <li>
+            <span className="blue-inline-code">/api/admin/**</span> → Only
+            Admins
+          </li>
+          <li>
+            <span className="blue-inline-code">/api/user/**</span> → Only
+            Logged-in Users
+          </li>
         </ul>
-        <p>You define this in your <span className="blue-inline-code">SecurityFilterChain</span> using <span className="blue-inline-code">.authorizeHttpRequests()</span>.</p>
-        <p>This makes security <b>centralized</b>, <b>fast</b>, and <b>highly customizable</b>.</p>
+        <p>
+          You define this in your{" "}
+          <span className="blue-inline-code">SecurityFilterChain</span> using{" "}
+          <span className="blue-inline-code">.authorizeHttpRequests()</span>.
+        </p>
+        <p>
+          This makes security <b>centralized</b>, <b>fast</b>, and{" "}
+          <b>highly customizable</b>.
+        </p>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
@@ -143,10 +170,15 @@ const Topic8Subtopic4Content = () => {
       </h3>
       <div className="blue-card-section">
         <p>Here's how you configure it:</p>
-        <div className="topic-codeblock code-with-copy" style={{ margin: "0.7rem 0" }}>
+        <div
+          className="topic-codeblock code-with-copy"
+          style={{ margin: "0.7rem 0" }}
+        >
           <button
             className={`copy-button ${copied.securityConfig ? "copied" : ""}`}
-            onClick={() => copyToClipboard(codeBlocks.securityConfig, "securityConfig")}
+            onClick={() =>
+              copyToClipboard(codeBlocks.securityConfig, "securityConfig")
+            }
           >
             {copied.securityConfig ? "Copied!" : "Copy"}
           </button>
@@ -177,10 +209,13 @@ const Topic8Subtopic4Content = () => {
           ))}
         </tbody>
       </table>
-      
-      <div className="yellow-callout" style={{marginTop: "1rem"}}>
+
+      <div className="yellow-callout" style={{ marginTop: "1rem" }}>
         <p>
-          💡 Remember: roles are automatically prefixed with <span className="blue-inline-code">ROLE_</span>. So <span className="blue-inline-code">"hasRole('ADMIN')"</span> maps to <span className="blue-inline-code">"ROLE_ADMIN"</span> in JWT.
+          💡 Remember: roles are automatically prefixed with{" "}
+          <span className="blue-inline-code">ROLE_</span>. So{" "}
+          <span className="blue-inline-code">"hasRole('ADMIN')"</span> maps to{" "}
+          <span className="blue-inline-code">"ROLE_ADMIN"</span> in JWT.
         </p>
       </div>
 
@@ -188,10 +223,22 @@ const Topic8Subtopic4Content = () => {
         🔁 Order Matters!
       </h3>
       <div className="blue-card-section">
-        <p>Spring evaluates your matchers <b>top-down</b>.</p>
-        <p>Put more specific rules <b>above</b> general ones.<br/>For example:</p>
-        <p>✅ <span className="blue-inline-code">/api/admin/**</span><br/>⬇️ <span className="blue-inline-code">/api/**</span></p>
-        <p>If you reverse them, the general rule may override the specific one!</p>
+        <p>
+          Spring evaluates your matchers <b>top-down</b>.
+        </p>
+        <p>
+          Put more specific rules <b>above</b> general ones.
+          <br />
+          For example:
+        </p>
+        <p>
+          ✅ <span className="blue-inline-code">/api/admin/**</span>
+          <br />
+          ⬇️ <span className="blue-inline-code">/api/**</span>
+        </p>
+        <p>
+          If you reverse them, the general rule may override the specific one!
+        </p>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
@@ -222,12 +269,20 @@ const Topic8Subtopic4Content = () => {
       <div className="blue-card-section">
         {tryItTasks.map((task, idx) => (
           <div key={idx} style={{ marginBottom: "1.5rem" }}>
-            <h4>🚀 Task {idx + 1}: {task.title}</h4>
-            
+            <h4>
+              🚀 Task {idx + 1}: {task.title}
+            </h4>
+
             {task.codeBlocks.map((codeBlock, codeIdx) => (
-              <div key={codeIdx} className="topic-codeblock code-with-copy" style={{ margin: "0.7rem 0" }}>
+              <div
+                key={codeIdx}
+                className="topic-codeblock code-with-copy"
+                style={{ margin: "0.7rem 0" }}
+              >
                 <button
-                  className={`copy-button ${copied[codeBlock.id] ? "copied" : ""}`}
+                  className={`copy-button ${
+                    copied[codeBlock.id] ? "copied" : ""
+                  }`}
                   onClick={() => copyToClipboard(codeBlock.code, codeBlock.id)}
                 >
                   {copied[codeBlock.id] ? "Copied!" : "Copy"}
@@ -237,15 +292,20 @@ const Topic8Subtopic4Content = () => {
                 </pre>
               </div>
             ))}
-            
-            <p dangerouslySetInnerHTML={{ __html: task.description.replace(/🟥/g, '<span style="color: #d32f2f">🟥</span>').replace(/✅/g, '<span style="color: #388e3c">✅</span>').replace(/🛑/g, '<span style="color: #d32f2f">🛑</span>') }} />
+
+            <p
+              dangerouslySetInnerHTML={{
+                __html: task.description
+                  .replace(/🟥/g, '<span style="color: #d32f2f">🟥</span>')
+                  .replace(/✅/g, '<span style="color: #388e3c">✅</span>')
+                  .replace(/🛑/g, '<span style="color: #d32f2f">🛑</span>'),
+              }}
+            />
           </div>
         ))}
       </div>
 
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        ✅ Summary
-      </h3>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>✅ Summary</h3>
       <table className="custom-table">
         <thead>
           <tr>

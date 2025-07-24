@@ -80,6 +80,12 @@ import Topic8Subtopic5Content from "./content/Topic8Subtopic5Content";
 import Topic8Subtopic6Content from "./content/Topic8Subtopic6Content";
 import Topic8Subtopic7Content from "./content/Topic8Subtopic7Content";
 import Topic8Subtopic8Content from "./content/Topic8Subtopic8Content";
+import Topic9Content from "./content/Topic9Content";
+import Topic9Subtopic1Content from "./content/Topic9Subtopic1Content";
+import Topic9Subtopic2Content from "./content/Topic9Subtopic2Content";
+import Topic9Subtopic3Content from "./content/Topic9Subtopic3Content";
+import Topic9Subtopic4Content from "./content/Topic9Subtopic4Content";
+import Topic9Subtopic5Content from "./content/Topic9Subtopic5Content";
 
 const curriculum = [
   {
@@ -194,7 +200,6 @@ const curriculum = [
       "User-Organization Service",
       "User-Organization Controller",
       "Role-based Access",
-      "Organization Membership Management",
     ],
   },
   {
@@ -433,6 +438,8 @@ function TopicPage() {
           <Topic7Content />
         ) : validIdx === 7 ? (
           <Topic8Content />
+        ) : validIdx === 8 ? (
+          <Topic9Content />
         ) : (
           <div className="subtopic-scroll-list">
             <ul className="section-bullets">
@@ -667,6 +674,16 @@ function SubtopicPage() {
           <Topic8Subtopic7Content />
         ) : validTIdx === 7 && validSIdx === 7 ? (
           <Topic8Subtopic8Content />
+        ) : validTIdx === 8 && validSIdx === 0 ? (
+          <Topic9Subtopic1Content />
+        ) : validTIdx === 8 && validSIdx === 1 ? (
+          <Topic9Subtopic2Content />
+        ) : validTIdx === 8 && validSIdx === 2 ? (
+          <Topic9Subtopic3Content />
+        ) : validTIdx === 8 && validSIdx === 3 ? (
+          <Topic9Subtopic4Content />
+        ) : validTIdx === 8 && validSIdx === 4 ? (
+          <Topic9Subtopic5Content />
         ) : (
           <>
             <div
