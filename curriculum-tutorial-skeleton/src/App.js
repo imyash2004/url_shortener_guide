@@ -86,6 +86,10 @@ import Topic9Subtopic2Content from "./content/Topic9Subtopic2Content";
 import Topic9Subtopic3Content from "./content/Topic9Subtopic3Content";
 import Topic9Subtopic4Content from "./content/Topic9Subtopic4Content";
 import Topic9Subtopic5Content from "./content/Topic9Subtopic5Content";
+import Topic10Content from "./content/Topic10Content";
+import Topic10Subtopic0Content from "./content/Topic10Subtopic0Content";
+import Topic10Subtopic1Content from "./content/Topic10Subtopic1Content";
+import Topic10Subtopic2Content from "./content/Topic10Subtopic2Content";
 
 const curriculum = [
   {
@@ -208,9 +212,6 @@ const curriculum = [
       "URL Expiration",
       "Custom Short Codes",
       "URL Statistics",
-      "Bulk Operations (Not Required)",
-      "Search and Filtering",
-      "Rate Limiting (Not Required)",
     ],
   },
   {
@@ -440,6 +441,8 @@ function TopicPage() {
           <Topic8Content />
         ) : validIdx === 8 ? (
           <Topic9Content />
+        ) : validIdx === 9 ? (
+          <Topic10Content />
         ) : (
           <div className="subtopic-scroll-list">
             <ul className="section-bullets">
@@ -684,6 +687,12 @@ function SubtopicPage() {
           <Topic9Subtopic4Content />
         ) : validTIdx === 8 && validSIdx === 4 ? (
           <Topic9Subtopic5Content />
+        ) : validTIdx === 9 && validSIdx === 0 ? (
+          <Topic10Subtopic0Content />
+        ) : validTIdx === 9 && validSIdx === 1 ? (
+          <Topic10Subtopic1Content />
+        ) : validTIdx === 9 && validSIdx === 2 ? (
+          <Topic10Subtopic2Content />
         ) : (
           <>
             <div
