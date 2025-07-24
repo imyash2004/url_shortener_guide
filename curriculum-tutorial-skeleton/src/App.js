@@ -73,6 +73,13 @@ import Topic7Subtopic9Content from "./content/Topic7Subtopic9Content";
 import Topic7Subtopic10Content from "./content/Topic7Subtopic10Content";
 import Topic8Content from "./content/Topic8Content";
 import Topic8Subtopic1Content from "./content/Topic8Subtopic1Content";
+import Topic8Subtopic2Content from "./content/Topic8Subtopic2Content";
+import Topic8Subtopic3Content from "./content/Topic8Subtopic3Content";
+import Topic8Subtopic4Content from "./content/Topic8Subtopic4Content";
+import Topic8Subtopic5Content from "./content/Topic8Subtopic5Content";
+import Topic8Subtopic6Content from "./content/Topic8Subtopic6Content";
+import Topic8Subtopic7Content from "./content/Topic8Subtopic7Content";
+import Topic8Subtopic8Content from "./content/Topic8Subtopic8Content";
 
 const curriculum = [
   {
@@ -646,6 +653,20 @@ function SubtopicPage() {
           <Topic7Subtopic10Content />
         ) : validTIdx === 7 && validSIdx === 0 ? (
           <Topic8Subtopic1Content />
+        ) : validTIdx === 7 && validSIdx === 1 ? (
+          <Topic8Subtopic2Content />
+        ) : validTIdx === 7 && validSIdx === 2 ? (
+          <Topic8Subtopic3Content />
+        ) : validTIdx === 7 && validSIdx === 3 ? (
+          <Topic8Subtopic4Content />
+        ) : validTIdx === 7 && validSIdx === 4 ? (
+          <Topic8Subtopic5Content />
+        ) : validTIdx === 7 && validSIdx === 5 ? (
+          <Topic8Subtopic6Content />
+        ) : validTIdx === 7 && validSIdx === 6 ? (
+          <Topic8Subtopic7Content />
+        ) : validTIdx === 7 && validSIdx === 7 ? (
+          <Topic8Subtopic8Content />
         ) : (
           <>
             <div

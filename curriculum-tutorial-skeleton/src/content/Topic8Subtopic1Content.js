@@ -47,15 +47,30 @@ public class AppConfig {
         };
     }
 }`,
-  fakePathExample: `.requestMatchers("/open/**").permitAll()`
+  fakePathExample: `.requestMatchers("/open/**").permitAll()`,
 };
 
 const keyHighlights = [
-  ["sessionCreationPolicy(SessionCreationPolicy.STATELESS)", "No HTTP sessions are created. JWT is used instead — each request must include a token."],
-  [".permitAll() vs .authenticated()", "Define what's public (signup, redirect) and what's secure (/api/**)."],
-  ["addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)", "This adds our custom JWT validator to intercept and validate tokens before Spring's filters act."],
-  ["csrf().disable()", "CSRF is a problem in session-based logins. Since JWT is stateless and stored in headers, CSRF protection is not required."],
-  ["CORS Setup", "Allows frontend on a different domain (like React or Angular) to communicate with this API."]
+  [
+    "sessionCreationPolicy(SessionCreationPolicy.STATELESS)",
+    "No HTTP sessions are created. JWT is used instead — each request must include a token.",
+  ],
+  [
+    ".permitAll() vs .authenticated()",
+    "Define what's public (signup, redirect) and what's secure (/api/**).",
+  ],
+  [
+    "addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)",
+    "This adds our custom JWT validator to intercept and validate tokens before Spring's filters act.",
+  ],
+  [
+    "csrf().disable()",
+    "CSRF is a problem in session-based logins. Since JWT is stateless and stored in headers, CSRF protection is not required.",
+  ],
+  [
+    "CORS Setup",
+    "Allows frontend on a different domain (like React or Angular) to communicate with this API.",
+  ],
 ];
 
 const summaryTable = [
@@ -92,7 +107,7 @@ const discussionPrompts = [
 const tryItTasks = [
   "Block access to /api/urls without JWT: Try sending GET /api/urls and expect 401 Unauthorized",
   "Allow access to /api/auth/signup without JWT: Send a POST /api/auth/signup and expect 200 OK",
-  "Add a fake path to test permitAll(): Add '.requestMatchers(\"/open/**\").permitAll()' and hit GET /open/test"
+  "Add a fake path to test permitAll(): Add '.requestMatchers(\"/open/**\").permitAll()' and hit GET /open/test",
 ];
 
 const Topic8Subtopic1Content = () => {
@@ -100,7 +115,7 @@ const Topic8Subtopic1Content = () => {
   const [openFAQ, setOpenFAQ] = useState(
     Array(discussionPrompts.length).fill(false)
   );
-  
+
   const copyToClipboard = async (text, codeId) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -112,33 +127,47 @@ const Topic8Subtopic1Content = () => {
       console.error("Failed to copy: ", err);
     }
   };
-  
+
   const toggleFAQ = (idx) => {
     setOpenFAQ((prev) => prev.map((v, i) => (i === idx ? !v : v)));
   };
-  
+
   return (
     <div className="topic-animated-content">
-      <h2 style={{ color: "#1769aa" }}>🔐 8.1 – Spring Security Configuration</h2>
+      <h2 style={{ color: "#1769aa" }}>
+        🔐 8.1 – Spring Security Configuration
+      </h2>
       <hr />
       <div className="yellow-callout">
-        Spring Security is extremely flexible. In this section, we'll customize it to:
+        Spring Security is extremely flexible. In this section, we'll customize
+        it to:
         <ul style={{ margin: "0.7rem 0 0 1.2rem" }}>
           <li>✅ Accept JWT for all authenticated APIs</li>
           <li>✅ Allow public access to signup/login/redirect routes</li>
-          <li>✅ Set session management to <b>stateless</b></li>
+          <li>
+            ✅ Set session management to <b>stateless</b>
+          </li>
           <li>✅ Disable CSRF (not needed for token-based APIs)</li>
-          <li>✅ Enable proper <b>CORS</b> support</li>
-          <li>✅ Apply custom filters like <span className="blue-inline-code">JwtTokenValidator</span></li>
+          <li>
+            ✅ Enable proper <b>CORS</b> support
+          </li>
+          <li>
+            ✅ Apply custom filters like{" "}
+            <span className="blue-inline-code">JwtTokenValidator</span>
+          </li>
         </ul>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🧭 What is <span className="blue-inline-code">SecurityFilterChain</span>?
+        🧭 What is <span className="blue-inline-code">SecurityFilterChain</span>
+        ?
       </h3>
       <div className="blue-card-section">
-        In Spring Security, instead of extending <span className="blue-inline-code">WebSecurityConfigurerAdapter</span> (deprecated), 
-        we now use <span className="blue-inline-code">SecurityFilterChain</span> beans to define:
+        In Spring Security, instead of extending{" "}
+        <span className="blue-inline-code">WebSecurityConfigurerAdapter</span>{" "}
+        (deprecated), we now use{" "}
+        <span className="blue-inline-code">SecurityFilterChain</span> beans to
+        define:
         <ul style={{ margin: "0.7rem 0 0 1.2rem" }}>
           <li>Which endpoints are protected or open</li>
           <li>What filters to apply</li>
@@ -152,10 +181,15 @@ const Topic8Subtopic1Content = () => {
       </h3>
       <div className="blue-card-section">
         Here's a clean and production-ready example:
-        <div className="topic-codeblock code-with-copy" style={{ margin: "0.7rem 0" }}>
+        <div
+          className="topic-codeblock code-with-copy"
+          style={{ margin: "0.7rem 0" }}
+        >
           <button
             className={`copy-button ${copied.securityConfig ? "copied" : ""}`}
-            onClick={() => copyToClipboard(codeBlocks.securityConfig, "securityConfig")}
+            onClick={() =>
+              copyToClipboard(codeBlocks.securityConfig, "securityConfig")
+            }
           >
             {copied.securityConfig ? "Copied!" : "Copy"}
           </button>
@@ -172,28 +206,38 @@ const Topic8Subtopic1Content = () => {
       <div style={{ margin: "1.2rem 0" }}>
         <div className="blue-card-section" style={{ marginBottom: "1rem" }}>
           <div style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
-            <span className="blue-inline-code">sessionCreationPolicy(SessionCreationPolicy.STATELESS)</span>
+            <span className="blue-inline-code">
+              sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            </span>
           </div>
           <div>
-            No HTTP sessions are created. JWT is used instead — each request must include a token.
+            No HTTP sessions are created. JWT is used instead — each request
+            must include a token.
           </div>
         </div>
 
         <div className="blue-card-section" style={{ marginBottom: "1rem" }}>
           <div style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
-            <span className="blue-inline-code">.permitAll() vs .authenticated()</span>
+            <span className="blue-inline-code">
+              .permitAll() vs .authenticated()
+            </span>
           </div>
           <div>
-            Define what's <b>public</b> (signup, redirect) and what's <b>secure</b> (/api/**).
+            Define what's <b>public</b> (signup, redirect) and what's{" "}
+            <b>secure</b> (/api/**).
           </div>
         </div>
 
         <div className="blue-card-section" style={{ marginBottom: "1rem" }}>
           <div style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
-            <span className="blue-inline-code">addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)</span>
+            <span className="blue-inline-code">
+              addFilterBefore(new JwtTokenValidator(),
+              BasicAuthenticationFilter.class)
+            </span>
           </div>
           <div>
-            This adds our custom JWT validator to intercept and validate tokens before Spring's filters act.
+            This adds our custom JWT validator to intercept and validate tokens
+            before Spring's filters act.
           </div>
         </div>
 
@@ -202,7 +246,8 @@ const Topic8Subtopic1Content = () => {
             <span className="blue-inline-code">csrf().disable()</span>
           </div>
           <div>
-            CSRF is a problem in session-based logins. Since JWT is stateless and stored in headers, CSRF protection is not required.
+            CSRF is a problem in session-based logins. Since JWT is stateless
+            and stored in headers, CSRF protection is not required.
           </div>
         </div>
 
@@ -211,7 +256,8 @@ const Topic8Subtopic1Content = () => {
             <span className="blue-inline-code">CORS Setup</span>
           </div>
           <div>
-            Allows frontend on a different domain (like React or Angular) to communicate with this API.
+            Allows frontend on a different domain (like React or Angular) to
+            communicate with this API.
           </div>
         </div>
       </div>
@@ -228,7 +274,8 @@ const Topic8Subtopic1Content = () => {
           <li>You'd accidentally expose sensitive data</li>
         </ul>
         <div style={{ marginTop: "1rem" }}>
-          This configuration ensures that every request is <b>authenticated, validated, and filtered properly</b>.
+          This configuration ensures that every request is{" "}
+          <b>authenticated, validated, and filtered properly</b>.
         </div>
       </div>
 
@@ -263,10 +310,15 @@ const Topic8Subtopic1Content = () => {
           ))}
         </ol>
 
-        <div className="topic-codeblock code-with-copy" style={{ margin: "1.2rem 0 0.7rem 0" }}>
+        <div
+          className="topic-codeblock code-with-copy"
+          style={{ margin: "1.2rem 0 0.7rem 0" }}
+        >
           <button
             className={`copy-button ${copied.fakePathExample ? "copied" : ""}`}
-            onClick={() => copyToClipboard(codeBlocks.fakePathExample, "fakePathExample")}
+            onClick={() =>
+              copyToClipboard(codeBlocks.fakePathExample, "fakePathExample")
+            }
           >
             {copied.fakePathExample ? "Copied!" : "Copy"}
           </button>
@@ -276,9 +328,7 @@ const Topic8Subtopic1Content = () => {
         </div>
       </div>
 
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        ✅ Summary
-      </h3>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>✅ Summary</h3>
       <div className="blue-card-section">
         <table className="custom-table">
           <thead>
