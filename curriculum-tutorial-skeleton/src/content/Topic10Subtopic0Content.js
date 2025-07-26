@@ -54,44 +54,45 @@ public void redirectToOriginal(
 }`,
   defaultExpiry: `if (request.getExpiryDate() == null) {
     url.setExpiryDate(LocalDateTime.now().plusDays(30));
-}`
+}`,
 };
 
 const summaryTable = [
   ["expiryDate", "Controls lifespan of a short link"],
   ["410 Gone", "Indicates the resource is intentionally unavailable"],
   ["Optional Default", "Prevent links from staying alive forever"],
-  ["Expiry Check", "Done during redirection logic"]
+  ["Expiry Check", "Done during redirection logic"],
 ];
 
 const discussionQA = [
   {
     question: "What field controls whether a URL is expired?",
-    answer: "expiryDate in the Url entity."
+    answer: "expiryDate in the Url entity.",
   },
   {
     question: "What HTTP status should be returned for expired links?",
-    answer: "410 Gone (not 404)."
+    answer: "410 Gone (not 404).",
   },
   {
     question: "What happens if expiry is not set?",
-    answer: "You can choose to allow it forever, or assign a default (like +30 days)."
+    answer:
+      "You can choose to allow it forever, or assign a default (like +30 days).",
   },
   {
     question: "Is expiry enforced in DB or code?",
-    answer: "Handled in application logic (service/controller)."
-  }
+    answer: "Handled in application logic (service/controller).",
+  },
 ];
 
 const tryItTasks = [
   "Add an expiryDate field to your database.",
   "Accept this field in URL creation.",
   "Modify the redirect logic to return 410 if expired.",
-  "Optional: Create a /api/expired endpoint to list expired URLs."
+  "Optional: Create a /api/expired endpoint to list expired URLs.",
 ];
 
 const bonusTasks = [
-  "Add a background job to archive/delete expired URLs nightly."
+  "Add a background job to archive/delete expired URLs nightly.",
 ];
 
 const Topic10Subtopic0Content = () => {
@@ -139,8 +140,10 @@ const Topic10Subtopic0Content = () => {
           <li>Temporary landing pages</li>
         </ul>
         <div style={{ marginTop: "1rem" }}>
-          <b>They don't want those links to work forever.</b><br />
-          Expiration protects users from outdated or invalid pages, and avoids misuse of public links later.
+          <b>They don't want those links to work forever.</b>
+          <br />
+          Expiration protects users from outdated or invalid pages, and avoids
+          misuse of public links later.
         </div>
       </div>
 
@@ -148,7 +151,10 @@ const Topic10Subtopic0Content = () => {
         🧱 Update the Url Entity
       </h3>
       <div className="blue-card-section">
-        <b>Add an <span className="blue-inline-code">expiryDate</span> field to your Url model.</b>
+        <b>
+          Add an <span className="blue-inline-code">expiryDate</span> field to
+          your Url model.
+        </b>
         <div
           className="topic-codeblock code-with-copy"
           style={{ margin: "0.7rem 0" }}
@@ -165,9 +171,7 @@ const Topic10Subtopic0Content = () => {
         </div>
       </div>
 
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        📥 Update DTOs
-      </h3>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>📥 Update DTOs</h3>
       <div className="blue-card-section">
         <b>Make sure to accept expiry dates in your Create URL DTO:</b>
         <div
@@ -190,14 +194,19 @@ const Topic10Subtopic0Content = () => {
         ⚙️ Update the Redirect Logic
       </h3>
       <div className="blue-card-section">
-        <b>Update your redirect controller to check if the link has expired before sending the redirect:</b>
+        <b>
+          Update your redirect controller to check if the link has expired
+          before sending the redirect:
+        </b>
         <div
           className="topic-codeblock code-with-copy"
           style={{ margin: "0.7rem 0" }}
         >
           <button
             className={`copy-button ${copied.redirectLogic ? "copied" : ""}`}
-            onClick={() => copyToClipboard(codeBlocks.redirectLogic, "redirectLogic")}
+            onClick={() =>
+              copyToClipboard(codeBlocks.redirectLogic, "redirectLogic")
+            }
           >
             {copied.redirectLogic ? "Copied!" : "Copy"}
           </button>
@@ -218,7 +227,9 @@ const Topic10Subtopic0Content = () => {
         >
           <button
             className={`copy-button ${copied.defaultExpiry ? "copied" : ""}`}
-            onClick={() => copyToClipboard(codeBlocks.defaultExpiry, "defaultExpiry")}
+            onClick={() =>
+              copyToClipboard(codeBlocks.defaultExpiry, "defaultExpiry")
+            }
           >
             {copied.defaultExpiry ? "Copied!" : "Copy"}
           </button>
@@ -227,7 +238,8 @@ const Topic10Subtopic0Content = () => {
           </pre>
         </div>
         <div style={{ marginTop: "0.7rem" }}>
-          This avoids creating forever-valid links, especially for anonymous or free-tier users.
+          This avoids creating forever-valid links, especially for anonymous or
+          free-tier users.
         </div>
       </div>
 
@@ -235,19 +247,20 @@ const Topic10Subtopic0Content = () => {
         🔁 Update URL Service Layer
       </h3>
       <div className="blue-card-section">
-        Make sure your <span className="blue-inline-code">UrlService</span> and repository allow setting and filtering by expiry dates if needed.
+        Make sure your <span className="blue-inline-code">UrlService</span> and
+        repository allow setting and filtering by expiry dates if needed.
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
         🧠 Discussion Section
       </h3>
       <div className="blue-card-section">
-        <h4 style={{ color: "#1976d2", margin: "0 0 0.5rem 0" }}>❓ Short Answers:</h4>
+        <h4 style={{ color: "#1976d2", margin: "0 0 0.5rem 0" }}>
+          ❓ Short Answers:
+        </h4>
         {discussionQA.map((item, idx) => (
           <div key={idx} style={{ marginBottom: "1.2rem" }}>
-            <div
-              style={{ fontWeight: 500, color: "#222", marginBottom: 4 }}
-            >
+            <div style={{ fontWeight: 500, color: "#222", marginBottom: 4 }}>
               Q{idx + 1}: {item.question}
             </div>
             <button
@@ -296,7 +309,9 @@ const Topic10Subtopic0Content = () => {
         <tbody>
           {summaryTable.map(([feature, purpose], idx) => (
             <tr key={idx}>
-              <td><span className="blue-inline-code">{feature}</span></td>
+              <td>
+                <span className="blue-inline-code">{feature}</span>
+              </td>
               <td>{purpose}</td>
             </tr>
           ))}

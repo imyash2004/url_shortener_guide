@@ -61,6 +61,7 @@ import Topic6Subtopic1Content from "./content/Topic6Subtopic1Content";
 import Topic6Subtopic2Content from "./content/Topic6Subtopic2Content";
 import Topic6Subtopic3Content from "./content/Topic6Subtopic3Content";
 import Topic7Content from "./content/Topic7Content";
+import Topic7Subtopic0Content from "./content/Topic7Subtopic0Content";
 import Topic7Subtopic1Content from "./content/Topic7Subtopic1Content";
 import Topic7Subtopic2Content from "./content/Topic7Subtopic2Content";
 import Topic7Subtopic4Content from "./content/Topic7Subtopic4Content";
@@ -90,6 +91,24 @@ import Topic10Content from "./content/Topic10Content";
 import Topic10Subtopic0Content from "./content/Topic10Subtopic0Content";
 import Topic10Subtopic1Content from "./content/Topic10Subtopic1Content";
 import Topic10Subtopic2Content from "./content/Topic10Subtopic2Content";
+import Topic11Content from "./content/Topic11Content";
+import Topic11Subtopic0Content from "./content/Topic11Subtopic0Content";
+import Topic11Subtopic1Content from "./content/Topic11Subtopic1Content";
+import Topic11Subtopic2Content from "./content/Topic11Subtopic2Content";
+import Topic11Subtopic3Content from "./content/Topic11Subtopic3Content";
+import Topic11Subtopic4Content from "./content/Topic11Subtopic4Content";
+import Topic12Content from "./content/Topic12Content";
+import Topic12Subtopic1Content from "./content/Topic12Subtopic1Content";
+import Topic12Subtopic2Content from "./content/Topic12Subtopic2Content";
+import Topic12Subtopic3Content from "./content/Topic12Subtopic3Content";
+import Topic12Subtopic4Content from "./content/Topic12Subtopic4Content";
+import Topic12Subtopic5Content from "./content/Topic12Subtopic5Content";
+import Topic13Content from "./content/Topic13Content";
+import Topic13Subtopic1Content from "./content/Topic13Subtopic1Content";
+import Topic13Subtopic2Content from "./content/Topic13Subtopic2Content";
+import Topic13Subtopic3Content from "./content/Topic13Subtopic3Content";
+import Topic13Subtopic4Content from "./content/Topic13Subtopic4Content";
+import Topic13Subtopic5Content from "./content/Topic13Subtopic5Content";
 
 const curriculum = [
   {
@@ -208,55 +227,26 @@ const curriculum = [
   },
   {
     title: "Advanced Features",
-    subtopics: [
-      "URL Expiration",
-      "Custom Short Codes",
-      "URL Statistics",
-    ],
+    subtopics: ["URL Expiration", "Custom Short Codes", "URL Statistics"],
   },
   {
     title: "Testing & Quality",
     subtopics: [
-      "Unit Testing",
-      "Integration Testing",
-      "Repository Testing",
-      "Controller Testing",
-      "Test Configuration",
+      "Unit Testing with JUnit & Mockito",
+      "Integration Testing with @SpringBootTest",
+      "Controller Layer Testing with MockMvc",
+      "Test Configuration & Setup",
       "Test Data Management",
-      "Code Coverage",
     ],
   },
   {
-    title: "Documentation & API Standards",
+    title: "Code Coverage & Quality Tools",
     subtopics: [
-      "API Documentation (Swagger/OpenAPI)",
-      "Code Documentation",
-      "README Documentation",
-      "API Versioning (Not Required)",
-      "Response Standardization",
-      "Error Code Standards (Not Required)",
-    ],
-  },
-  {
-    title: "Performance & Optimization",
-    subtopics: [
-      "Database Indexing (Not Required)",
-      "Query Optimization (Not Required)",
-      "Caching Implementation (Not Required)",
-      "Performance Testing (Not Required)",
-      "Memory Management (Not Required)",
-    ],
-  },
-  {
-    title: "Deployment & Production",
-    subtopics: [
-      "Production Configuration",
-      "Environment Variables",
-      "Database Migration (Not Required)",
-      "Packaging with Maven",
-      "Docker Configuration (Optional)",
-      "Cloud Deployment (Not Required)",
-      "Monitoring and Logging (Not Required)",
+      "Introduction to Code Quality & SonarQube",
+      "Setting Up SonarQube Locally with Docker",
+      "Integrating SonarQube with Spring Boot",
+      "Understanding SonarQube Metrics",
+      "Improving Code Quality & Fixing Issues",
     ],
   },
   {
@@ -443,6 +433,12 @@ function TopicPage() {
           <Topic9Content />
         ) : validIdx === 9 ? (
           <Topic10Content />
+        ) : validIdx === 10 ? (
+          <Topic11Content />
+        ) : validIdx === 11 ? (
+          <Topic12Content />
+        ) : validIdx === 12 ? (
+          <Topic13Content />
         ) : (
           <div className="subtopic-scroll-list">
             <ul className="section-bullets">
@@ -642,24 +638,26 @@ function SubtopicPage() {
         ) : validTIdx === 5 && validSIdx === 3 ? (
           <Topic6Subtopic3Content />
         ) : validTIdx === 6 && validSIdx === 0 ? (
-          <Topic7Subtopic1Content />
+          <Topic7Subtopic0Content />
         ) : validTIdx === 6 && validSIdx === 1 ? (
+          <Topic7Subtopic1Content />
+        ) : validTIdx === 6 && validSIdx === 2 ? (
           <Topic7Subtopic2Content />
         ) : validTIdx === 6 && validSIdx === 3 ? (
-          <Topic7Subtopic4Content />
-        ) : validTIdx === 6 && validSIdx === 2 ? (
           <Topic7Subtopic3Content />
         ) : validTIdx === 6 && validSIdx === 4 ? (
-          <Topic7Subtopic5Content />
+          <Topic7Subtopic4Content />
         ) : validTIdx === 6 && validSIdx === 5 ? (
-          <Topic7Subtopic6Content />
+          <Topic7Subtopic5Content />
         ) : validTIdx === 6 && validSIdx === 6 ? (
-          <Topic7Subtopic7Content />
+          <Topic7Subtopic6Content />
         ) : validTIdx === 6 && validSIdx === 7 ? (
-          <Topic7Subtopic8Content />
+          <Topic7Subtopic7Content />
         ) : validTIdx === 6 && validSIdx === 8 ? (
-          <Topic7Subtopic9Content />
+          <Topic7Subtopic8Content />
         ) : validTIdx === 6 && validSIdx === 9 ? (
+          <Topic7Subtopic9Content />
+        ) : validTIdx === 6 && validSIdx === 10 ? (
           <Topic7Subtopic10Content />
         ) : validTIdx === 7 && validSIdx === 0 ? (
           <Topic8Subtopic1Content />
@@ -693,6 +691,36 @@ function SubtopicPage() {
           <Topic10Subtopic1Content />
         ) : validTIdx === 9 && validSIdx === 2 ? (
           <Topic10Subtopic2Content />
+        ) : validTIdx === 10 && validSIdx === 0 ? (
+          <Topic11Subtopic0Content />
+        ) : validTIdx === 10 && validSIdx === 1 ? (
+          <Topic11Subtopic1Content />
+        ) : validTIdx === 10 && validSIdx === 2 ? (
+          <Topic11Subtopic2Content />
+        ) : validTIdx === 10 && validSIdx === 3 ? (
+          <Topic11Subtopic3Content />
+        ) : validTIdx === 10 && validSIdx === 4 ? (
+          <Topic11Subtopic4Content />
+        ) : validTIdx === 11 && validSIdx === 0 ? (
+          <Topic12Subtopic1Content />
+        ) : validTIdx === 11 && validSIdx === 1 ? (
+          <Topic12Subtopic2Content />
+        ) : validTIdx === 11 && validSIdx === 2 ? (
+          <Topic12Subtopic3Content />
+        ) : validTIdx === 11 && validSIdx === 3 ? (
+          <Topic12Subtopic4Content />
+        ) : validTIdx === 11 && validSIdx === 4 ? (
+          <Topic12Subtopic5Content />
+        ) : validTIdx === 12 && validSIdx === 0 ? (
+          <Topic13Subtopic1Content />
+        ) : validTIdx === 12 && validSIdx === 1 ? (
+          <Topic13Subtopic2Content />
+        ) : validTIdx === 12 && validSIdx === 2 ? (
+          <Topic13Subtopic3Content />
+        ) : validTIdx === 12 && validSIdx === 3 ? (
+          <Topic13Subtopic4Content />
+        ) : validTIdx === 12 && validSIdx === 4 ? (
+          <Topic13Subtopic5Content />
         ) : (
           <>
             <div

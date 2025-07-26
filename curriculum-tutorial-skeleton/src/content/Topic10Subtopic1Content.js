@@ -56,33 +56,34 @@ public class Url {
   errorResponse: `409 Conflict
 {
   "error": "Custom code already in use"
-}`
+}`,
 };
 
 const summaryTable = [
   ["customCode", "Allows user-defined short code"],
   ["Unique constraint", "Ensures no duplicates exist"],
   ["409 Conflict", "Response for already-used custom code"],
-  ["Code fallback", "Automatically generates a code if blank"]
+  ["Code fallback", "Automatically generates a code if blank"],
 ];
 
 const discussionQA = [
   {
     question: "Why do brands prefer custom short codes?",
-    answer: "It improves readability, brand recall, and trust."
+    answer: "It improves readability, brand recall, and trust.",
   },
   {
     question: "What status should be returned for duplicate codes?",
-    answer: "409 Conflict."
+    answer: "409 Conflict.",
   },
   {
     question: "What's the fallback if user doesn't provide a code?",
-    answer: "Generate a random 5–8 character code (e.g., Base62)."
+    answer: "Generate a random 5–8 character code (e.g., Base62).",
   },
   {
     question: "Where should uniqueness be enforced?",
-    answer: "In both database (unique constraint) and service layer (manual check)."
-  }
+    answer:
+      "In both database (unique constraint) and service layer (manual check).",
+  },
 ];
 
 const tryItTasks = [
@@ -90,18 +91,18 @@ const tryItTasks = [
   "Let users send a preferred code",
   "Check for duplicates",
   "Fall back to auto-generation if null",
-  "Return a friendly 409 error if duplicate"
+  "Return a friendly 409 error if duplicate",
 ];
 
 const bonusTasks = [
-  "Implement validation like ^[a-zA-Z0-9_-]{4,30}$ to restrict custom codes."
+  "Implement validation like ^[a-zA-Z0-9_-]{4,30}$ to restrict custom codes.",
 ];
 
 const brandedBenefits = [
   "Easy to read and remember",
   "Great for marketing (flyers, social posts, ads)",
   "Improve trust and click-through rates",
-  "SEO-friendly (when using 301 redirects)"
+  "SEO-friendly (when using 301 redirects)",
 ];
 
 const Topic10Subtopic1Content = () => {
@@ -131,9 +132,15 @@ const Topic10Subtopic1Content = () => {
       <div className="yellow-callout">
         <b>In this section, we'll enable users to:</b>
         <ul style={{ margin: "0.5rem 0 0 1.2rem" }}>
-          <li><b>Provide a custom short code</b> during URL creation</li>
-          <li>Fall back to <b>auto-generated code</b> if not provided</li>
-          <li>Handle <b>duplicate conflicts gracefully</b></li>
+          <li>
+            <b>Provide a custom short code</b> during URL creation
+          </li>
+          <li>
+            Fall back to <b>auto-generated code</b> if not provided
+          </li>
+          <li>
+            Handle <b>duplicate conflicts gracefully</b>
+          </li>
         </ul>
       </div>
 
@@ -153,7 +160,10 @@ const Topic10Subtopic1Content = () => {
         🔄 Modify the Create URL Request DTO
       </h3>
       <div className="blue-card-section">
-        <b>Update your request DTO to accept a <span className="blue-inline-code">customCode</span> field:</b>
+        <b>
+          Update your request DTO to accept a{" "}
+          <span className="blue-inline-code">customCode</span> field:
+        </b>
         <div
           className="topic-codeblock code-with-copy"
           style={{ margin: "0.7rem 0" }}
@@ -174,7 +184,10 @@ const Topic10Subtopic1Content = () => {
         🧱 Update the URL Entity
       </h3>
       <div className="blue-card-section">
-        <b>Ensure your <span className="blue-inline-code">shortCode</span> field is unique:</b>
+        <b>
+          Ensure your <span className="blue-inline-code">shortCode</span> field
+          is unique:
+        </b>
         <div
           className="topic-codeblock code-with-copy"
           style={{ margin: "0.7rem 0" }}
@@ -195,14 +208,19 @@ const Topic10Subtopic1Content = () => {
         ⚙️ Implement Logic in Service Layer
       </h3>
       <div className="blue-card-section">
-        <b>Handle both <b>custom</b> and <b>generated</b> short codes in your service:</b>
+        <b>
+          Handle both <b>custom</b> and <b>generated</b> short codes in your
+          service:
+        </b>
         <div
           className="topic-codeblock code-with-copy"
           style={{ margin: "0.7rem 0" }}
         >
           <button
             className={`copy-button ${copied.serviceLogic ? "copied" : ""}`}
-            onClick={() => copyToClipboard(codeBlocks.serviceLogic, "serviceLogic")}
+            onClick={() =>
+              copyToClipboard(codeBlocks.serviceLogic, "serviceLogic")
+            }
           >
             {copied.serviceLogic ? "Copied!" : "Copy"}
           </button>
@@ -216,14 +234,19 @@ const Topic10Subtopic1Content = () => {
         🛑 Handle Duplicates
       </h3>
       <div className="blue-card-section">
-        <b>If <span className="blue-inline-code">customCode</span> is already taken, respond with:</b>
+        <b>
+          If <span className="blue-inline-code">customCode</span> is already
+          taken, respond with:
+        </b>
         <div
           className="topic-codeblock code-with-copy"
           style={{ margin: "0.7rem 0" }}
         >
           <button
             className={`copy-button ${copied.errorResponse ? "copied" : ""}`}
-            onClick={() => copyToClipboard(codeBlocks.errorResponse, "errorResponse")}
+            onClick={() =>
+              copyToClipboard(codeBlocks.errorResponse, "errorResponse")
+            }
           >
             {copied.errorResponse ? "Copied!" : "Copy"}
           </button>
@@ -240,7 +263,10 @@ const Topic10Subtopic1Content = () => {
         <b>Allow the user to:</b>
         <ul style={{ margin: "0.5rem 0 0 1.2rem" }}>
           <li>Enter a preferred short code (optional)</li>
-          <li>See a preview of their final short link: <span className="blue-inline-code">short.ly/org/customCode</span></li>
+          <li>
+            See a preview of their final short link:{" "}
+            <span className="blue-inline-code">short.ly/org/customCode</span>
+          </li>
         </ul>
       </div>
 
@@ -248,12 +274,12 @@ const Topic10Subtopic1Content = () => {
         🧠 Discussion Section
       </h3>
       <div className="blue-card-section">
-        <h4 style={{ color: "#1976d2", margin: "0 0 0.5rem 0" }}>❓ Short Answers:</h4>
+        <h4 style={{ color: "#1976d2", margin: "0 0 0.5rem 0" }}>
+          ❓ Short Answers:
+        </h4>
         {discussionQA.map((item, idx) => (
           <div key={idx} style={{ marginBottom: "1.2rem" }}>
-            <div
-              style={{ fontWeight: 500, color: "#222", marginBottom: 4 }}
-            >
+            <div style={{ fontWeight: 500, color: "#222", marginBottom: 4 }}>
               Q{idx + 1}: {item.question}
             </div>
             <button
@@ -302,7 +328,9 @@ const Topic10Subtopic1Content = () => {
         <tbody>
           {summaryTable.map(([feature, purpose], idx) => (
             <tr key={idx}>
-              <td><span className="blue-inline-code">{feature}</span></td>
+              <td>
+                <span className="blue-inline-code">{feature}</span>
+              </td>
               <td>{purpose}</td>
             </tr>
           ))}

@@ -52,57 +52,55 @@ public class StatsController {
   bonus: `@GetMapping("/top/{orgShortName}")
 public ResponseEntity<List<Object[]>> getTopUrls(@PathVariable String orgShortName) {
     return ResponseEntity.ok(urlHitRepository.getHitsPerUrlByOrg(orgShortName));
-}`
+}`,
 };
 
 const metricsTable = [
   ["Total Clicks", "Total times a short URL was accessed"],
   ["Last Accessed", "Timestamp of the most recent hit"],
   ["Hits per URL", "Per-shortCode click breakdown"],
-  ["Organization Stats", "Total links and total hits per org"]
+  ["Organization Stats", "Total links and total hits per org"],
 ];
 
 const summaryTable = [
   ["countByShortCode", "Total number of redirects"],
   ["Last access time", "Helps see recent activity"],
   ["Organization stats", "Helps brands assess campaign performance"],
-  ["DTOs + Controller", "Deliver clean, structured results"]
+  ["DTOs + Controller", "Deliver clean, structured results"],
 ];
 
 const discussionQA = [
   {
     question: "What metric tells you how many times a URL was clicked?",
-    answer: "countByShortCode(...) returns total clicks."
+    answer: "countByShortCode(...) returns total clicks.",
   },
   {
     question: "How do we determine the last access time?",
-    answer: "Sort hits by timestamp and pick the latest one."
+    answer: "Sort hits by timestamp and pick the latest one.",
   },
   {
     question: "What data structure do we return to frontend for stats?",
-    answer: "UrlStatsDTO with shortCode, totalHits, and lastAccessed."
+    answer: "UrlStatsDTO with shortCode, totalHits, and lastAccessed.",
   },
   {
     question: "Where are URL stats stored?",
-    answer: "Derived from the url_hits table."
-  }
+    answer: "Derived from the url_hits table.",
+  },
 ];
 
 const tryItTasks = [
   "Create UrlStatsDTO",
   "Write service to count total clicks and fetch last access time",
   "Create endpoint: /api/stats/{shortCode}",
-  "Bonus: Create /api/stats/top/{org} for top-performing URLs"
+  "Bonus: Create /api/stats/top/{org} for top-performing URLs",
 ];
 
-const bonusTasks = [
-  "Return stats in tabular format if building a dashboard."
-];
+const bonusTasks = ["Return stats in tabular format if building a dashboard."];
 
 const useCases = [
   "Marketing teams (campaign effectiveness)",
   "Product managers (user engagement)",
-  "Admins (abuse detection, reporting)"
+  "Admins (abuse detection, reporting)",
 ];
 
 const Topic10Subtopic2Content = () => {
@@ -130,7 +128,10 @@ const Topic10Subtopic2Content = () => {
       <h2 style={{ color: "#1769aa" }}>📈 10.3 – URL Statistics</h2>
       <hr />
       <div className="yellow-callout">
-        <b>In this section, we'll implement statistics endpoints so brands and admins can see the performance of their short links.</b>
+        <b>
+          In this section, we'll implement statistics endpoints so brands and
+          admins can see the performance of their short links.
+        </b>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
@@ -148,7 +149,9 @@ const Topic10Subtopic2Content = () => {
           <tbody>
             {metricsTable.map(([metric, description], idx) => (
               <tr key={idx}>
-                <td><b>{metric}</b></td>
+                <td>
+                  <b>{metric}</b>
+                </td>
                 <td>{description}</td>
               </tr>
             ))}
@@ -261,12 +264,12 @@ const Topic10Subtopic2Content = () => {
         🧠 Discussion Section
       </h3>
       <div className="blue-card-section">
-        <h4 style={{ color: "#1976d2", margin: "0 0 0.5rem 0" }}>❓ Short Answers:</h4>
+        <h4 style={{ color: "#1976d2", margin: "0 0 0.5rem 0" }}>
+          ❓ Short Answers:
+        </h4>
         {discussionQA.map((item, idx) => (
           <div key={idx} style={{ marginBottom: "1.2rem" }}>
-            <div
-              style={{ fontWeight: 500, color: "#222", marginBottom: 4 }}
-            >
+            <div style={{ fontWeight: 500, color: "#222", marginBottom: 4 }}>
               Q{idx + 1}: {item.question}
             </div>
             <button
@@ -315,7 +318,9 @@ const Topic10Subtopic2Content = () => {
         <tbody>
           {summaryTable.map(([feature, purpose], idx) => (
             <tr key={idx}>
-              <td><span className="blue-inline-code">{feature}</span></td>
+              <td>
+                <span className="blue-inline-code">{feature}</span>
+              </td>
               <td>{purpose}</td>
             </tr>
           ))}

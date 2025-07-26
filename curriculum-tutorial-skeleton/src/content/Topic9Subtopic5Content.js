@@ -43,50 +43,50 @@ public class RoleChecker {
         }
         return false;
     }
-}`
+}`,
 };
 
 const useCasesTable = [
   ["Assign Users", "Only ADMIN can assign"],
   ["Delete URLs", "Only URL creator or ADMIN"],
   ["View Analytics", "Allow ADMIN, VIEWER"],
-  ["Update Organization Info", "Only ADMIN"]
+  ["Update Organization Info", "Only ADMIN"],
 ];
 
 const summaryTable = [
   ["@PreAuthorize", "Secures methods based on user roles"],
   ["RoleChecker", "Custom logic to evaluate dynamic roles"],
   ["authentication.name", "Retrieves logged-in user's identity"],
-  ["Method-level Security", "Enables per-org access control"]
+  ["Method-level Security", "Enables per-org access control"],
 ];
 
 const discussionQA = [
   {
     question: "What annotation is used for method-level access control?",
-    answer: "@PreAuthorize"
+    answer: "@PreAuthorize",
   },
   {
     question: "What does authentication.name return?",
-    answer: "The logged-in user's email (or username)"
+    answer: "The logged-in user's email (or username)",
   },
   {
     question: "Where is dynamic role check logic placed?",
-    answer: "In a component like RoleChecker injected using Spring"
+    answer: "In a component like RoleChecker injected using Spring",
   },
   {
     question: "Can multiple roles be allowed?",
-    answer: "Yes, use logical operators in @PreAuthorize, like || or &&"
-  }
+    answer: "Yes, use logical operators in @PreAuthorize, like || or &&",
+  },
 ];
 
 const tryItTasks = [
-  "Add @PreAuthorize(\"@roleChecker.isAdmin(authentication, #orgId)\") to your assignUserToOrganization method",
-  "Test by logging in with different users and attempting the action"
+  'Add @PreAuthorize("@roleChecker.isAdmin(authentication, #orgId)") to your assignUserToOrganization method',
+  "Test by logging in with different users and attempting the action",
 ];
 
 const bonusTasks = [
   "Create roles like VIEWER, EDITOR",
-  "Block URL delete/edit for non-creators"
+  "Block URL delete/edit for non-creators",
 ];
 
 const Topic9Subtopic5Content = () => {
@@ -116,14 +116,27 @@ const Topic9Subtopic5Content = () => {
       <div className="yellow-callout">
         <b>In this section, you'll learn how to:</b>
         <ul style={{ margin: "0.5rem 0 0 1.2rem" }}>
-          <li>Restrict access to endpoints based on roles like <span className="blue-inline-code">ADMIN</span>, <span className="blue-inline-code">USER</span>, or <span className="blue-inline-code">VIEWER</span></li>
-          <li>Use Spring Security's <span className="blue-inline-code">@PreAuthorize</span> and method-level security</li>
-          <li>Dynamically check a user's role within a specific organization</li>
+          <li>
+            Restrict access to endpoints based on roles like{" "}
+            <span className="blue-inline-code">ADMIN</span>,{" "}
+            <span className="blue-inline-code">USER</span>, or{" "}
+            <span className="blue-inline-code">VIEWER</span>
+          </li>
+          <li>
+            Use Spring Security's{" "}
+            <span className="blue-inline-code">@PreAuthorize</span> and
+            method-level security
+          </li>
+          <li>
+            Dynamically check a user's role within a specific organization
+          </li>
           <li>Secure your app for real-world multi-tenant use</li>
         </ul>
         <div style={{ marginTop: "1rem", fontStyle: "italic" }}>
           Let's make your platform smart enough to say: <br />
-          <b>"You can only do this if you're an Admin of this Organization." ✅</b>
+          <b>
+            "You can only do this if you're an Admin of this Organization." ✅
+          </b>
         </div>
       </div>
 
@@ -133,12 +146,19 @@ const Topic9Subtopic5Content = () => {
       <div className="blue-card-section">
         <b>Imagine a system where:</b>
         <ul style={{ margin: "0.5rem 0 0 1.2rem" }}>
-          <li>A <b>Zomato Admin</b> can add new users to the org.</li>
-          <li>A <b>Flipkart User</b> can only view links, not add/delete.</li>
-          <li>A <b>Viewer</b> can only check analytics but not manage anything.</li>
+          <li>
+            A <b>Zomato Admin</b> can add new users to the org.
+          </li>
+          <li>
+            A <b>Flipkart User</b> can only view links, not add/delete.
+          </li>
+          <li>
+            A <b>Viewer</b> can only check analytics but not manage anything.
+          </li>
         </ul>
         <div style={{ marginTop: "1rem" }}>
-          Without proper <b>access control</b>, your API is a security risk. <br />
+          Without proper <b>access control</b>, your API is a security risk.{" "}
+          <br />
           With it, you unlock <b>fine-grained permissions</b> per organization.
         </div>
       </div>
@@ -154,7 +174,9 @@ const Topic9Subtopic5Content = () => {
         >
           <button
             className={`copy-button ${copied.securityConfig ? "copied" : ""}`}
-            onClick={() => copyToClipboard(codeBlocks.securityConfig, "securityConfig")}
+            onClick={() =>
+              copyToClipboard(codeBlocks.securityConfig, "securityConfig")
+            }
           >
             {copied.securityConfig ? "Copied!" : "Copy"}
           </button>
@@ -168,17 +190,25 @@ const Topic9Subtopic5Content = () => {
         🔐 Using @PreAuthorize Annotations
       </h3>
       <div className="blue-card-section">
-        <b>You can now add <span className="blue-inline-code">@PreAuthorize</span> on service or controller methods.</b>
+        <b>
+          You can now add{" "}
+          <span className="blue-inline-code">@PreAuthorize</span> on service or
+          controller methods.
+        </b>
       </div>
 
-      <h4 style={{ color: "#1976d2", marginTop: "1rem" }}>Example 1: Allow only Admins</h4>
+      <h4 style={{ color: "#1976d2", marginTop: "1rem" }}>
+        Example 1: Allow only Admins
+      </h4>
       <div
         className="topic-codeblock code-with-copy"
         style={{ margin: "0.7rem 0" }}
       >
         <button
           className={`copy-button ${copied.adminExample ? "copied" : ""}`}
-          onClick={() => copyToClipboard(codeBlocks.adminExample, "adminExample")}
+          onClick={() =>
+            copyToClipboard(codeBlocks.adminExample, "adminExample")
+          }
         >
           {copied.adminExample ? "Copied!" : "Copy"}
         </button>
@@ -187,14 +217,18 @@ const Topic9Subtopic5Content = () => {
         </pre>
       </div>
 
-      <h4 style={{ color: "#1976d2", marginTop: "1rem" }}>Example 2: Allow Admins or Self</h4>
+      <h4 style={{ color: "#1976d2", marginTop: "1rem" }}>
+        Example 2: Allow Admins or Self
+      </h4>
       <div
         className="topic-codeblock code-with-copy"
         style={{ margin: "0.7rem 0" }}
       >
         <button
           className={`copy-button ${copied.adminOrSelfExample ? "copied" : ""}`}
-          onClick={() => copyToClipboard(codeBlocks.adminOrSelfExample, "adminOrSelfExample")}
+          onClick={() =>
+            copyToClipboard(codeBlocks.adminOrSelfExample, "adminOrSelfExample")
+          }
         >
           {copied.adminOrSelfExample ? "Copied!" : "Copy"}
         </button>
@@ -214,7 +248,9 @@ const Topic9Subtopic5Content = () => {
         >
           <button
             className={`copy-button ${copied.roleChecker ? "copied" : ""}`}
-            onClick={() => copyToClipboard(codeBlocks.roleChecker, "roleChecker")}
+            onClick={() =>
+              copyToClipboard(codeBlocks.roleChecker, "roleChecker")
+            }
           >
             {copied.roleChecker ? "Copied!" : "Copy"}
           </button>
@@ -240,7 +276,9 @@ const Topic9Subtopic5Content = () => {
             {useCasesTable.map(([area, example], idx) => (
               <tr key={idx}>
                 <td>{area}</td>
-                <td><span className="blue-inline-code">{example}</span></td>
+                <td>
+                  <span className="blue-inline-code">{example}</span>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -251,12 +289,12 @@ const Topic9Subtopic5Content = () => {
         🧠 Discussion Section
       </h3>
       <div className="blue-card-section">
-        <h4 style={{ color: "#1976d2", margin: "0 0 0.5rem 0" }}>❓ Short Answers:</h4>
+        <h4 style={{ color: "#1976d2", margin: "0 0 0.5rem 0" }}>
+          ❓ Short Answers:
+        </h4>
         {discussionQA.map((item, idx) => (
           <div key={idx} style={{ marginBottom: "1.2rem" }}>
-            <div
-              style={{ fontWeight: 500, color: "#222", marginBottom: 4 }}
-            >
+            <div style={{ fontWeight: 500, color: "#222", marginBottom: 4 }}>
               Q{idx + 1}: {item.question}
             </div>
             <button
@@ -305,7 +343,9 @@ const Topic9Subtopic5Content = () => {
         <tbody>
           {summaryTable.map(([feature, purpose], idx) => (
             <tr key={idx}>
-              <td><span className="blue-inline-code">{feature}</span></td>
+              <td>
+                <span className="blue-inline-code">{feature}</span>
+              </td>
               <td>{purpose}</td>
             </tr>
           ))}

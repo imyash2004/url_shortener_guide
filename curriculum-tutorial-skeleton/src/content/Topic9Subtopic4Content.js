@@ -91,15 +91,19 @@ public ResponseEntity<ApiResponse<String>> changeUserRole(
 
     userOrgService.changeUserRole(userId, orgId, role);
     return ResponseEntity.ok(ApiResponse.success("User role updated successfully"));
-}`
+}`,
 };
 
 const apiDesignTable = [
   ["/api/orgs/{orgId}/users/{userId}", "POST", "Assign user to org"],
   ["/api/orgs/{orgId}/users", "GET", "List users in org"],
   ["/api/orgs/user/{userId}", "GET", "Get all orgs user belongs to"],
-  ["/api/orgs/{orgId}/users/{userId}/role", "GET", "Get user's role in that org"],
-  ["/api/orgs/{orgId}/users/{userId}/role", "PUT", "Change user's role"]
+  [
+    "/api/orgs/{orgId}/users/{userId}/role",
+    "GET",
+    "Get user's role in that org",
+  ],
+  ["/api/orgs/{orgId}/users/{userId}/role", "PUT", "Change user's role"],
 ];
 
 const summaryTable = [
@@ -107,37 +111,39 @@ const summaryTable = [
   ["Users list endpoint", "Useful for org dashboards"],
   ["Orgs list for user", "Shows user their active orgs"],
   ["Role endpoints", "Manage permission levels per org"],
-  ["Secure + scalable", "Perfect foundation for multi-org platforms"]
+  ["Secure + scalable", "Perfect foundation for multi-org platforms"],
 ];
 
 const discussionQA = [
   {
     question: "What should be the default role while assigning a user?",
-    answer: "\"USER\" is a good default unless explicitly set."
+    answer: '"USER" is a good default unless explicitly set.',
   },
   {
     question: "Why do we separate role change and assignment APIs?",
-    answer: "To follow single-responsibility and allow admins to manage roles later."
+    answer:
+      "To follow single-responsibility and allow admins to manage roles later.",
   },
   {
     question: "Can the same user be added to the same org twice?",
-    answer: "No, the service logic prevents duplicates using existsByUserAndOrganization."
+    answer:
+      "No, the service logic prevents duplicates using existsByUserAndOrganization.",
   },
   {
     question: "Should these endpoints be secured?",
-    answer: "Yes! Add role-based checks to restrict who can assign or update."
-  }
+    answer: "Yes! Add role-based checks to restrict who can assign or update.",
+  },
 ];
 
 const tryItTasks = [
   "Create UserOrganizationController.java",
   "Implement all 5 endpoints shown above",
-  "Test with Postman by assigning users and fetching orgs"
+  "Test with Postman by assigning users and fetching orgs",
 ];
 
 const bonusTasks = [
   "Add pagination to /users list if needed",
-  "Only allow admins to change roles using a @PreAuthorize(\"hasRole('ADMIN')\") check"
+  "Only allow admins to change roles using a @PreAuthorize(\"hasRole('ADMIN')\") check",
 ];
 
 const Topic9Subtopic4Content = () => {
@@ -162,7 +168,9 @@ const Topic9Subtopic4Content = () => {
 
   return (
     <div className="topic-animated-content">
-      <h2 style={{ color: "#1769aa" }}>🧩 9.4 – User-Organization Controller</h2>
+      <h2 style={{ color: "#1769aa" }}>
+        🧩 9.4 – User-Organization Controller
+      </h2>
       <hr />
       <div className="yellow-callout">
         <b>In this section, we'll:</b>
@@ -172,7 +180,8 @@ const Topic9Subtopic4Content = () => {
           <li>Get all organizations a user belongs to</li>
           <li>Retrieve or update the user's role in an organization</li>
         </ul>
-        We'll make this clean, descriptive, and ready to integrate with a frontend or another service.
+        We'll make this clean, descriptive, and ready to integrate with a
+        frontend or another service.
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
@@ -181,12 +190,33 @@ const Topic9Subtopic4Content = () => {
       <div className="blue-card-section">
         Our backend needs to expose user-organization interactions like:
         <ul style={{ margin: "0.5rem 0 0 1.2rem" }}>
-          <li><span className="blue-inline-code">POST /api/orgs/&#123;orgId&#125;/users/&#123;userId&#125;</span> → Assign user</li>
-          <li><span className="blue-inline-code">GET /api/orgs/&#123;orgId&#125;/users</span> → List all users</li>
-          <li><span className="blue-inline-code">GET /api/users/&#123;userId&#125;/orgs</span> → List all orgs for a user</li>
-          <li><span className="blue-inline-code">PUT /api/orgs/&#123;orgId&#125;/users/&#123;userId&#125;/role</span> → Change role</li>
+          <li>
+            <span className="blue-inline-code">
+              POST /api/orgs/&#123;orgId&#125;/users/&#123;userId&#125;
+            </span>{" "}
+            → Assign user
+          </li>
+          <li>
+            <span className="blue-inline-code">
+              GET /api/orgs/&#123;orgId&#125;/users
+            </span>{" "}
+            → List all users
+          </li>
+          <li>
+            <span className="blue-inline-code">
+              GET /api/users/&#123;userId&#125;/orgs
+            </span>{" "}
+            → List all orgs for a user
+          </li>
+          <li>
+            <span className="blue-inline-code">
+              PUT /api/orgs/&#123;orgId&#125;/users/&#123;userId&#125;/role
+            </span>{" "}
+            → Change role
+          </li>
         </ul>
-        All of these will be managed in a dedicated controller to keep code modular and focused.
+        All of these will be managed in a dedicated controller to keep code
+        modular and focused.
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
@@ -210,15 +240,19 @@ const Topic9Subtopic4Content = () => {
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
         🎯 Endpoint Breakdown
       </h3>
-      
-      <h4 style={{ color: "#1976d2", marginTop: "1rem" }}>✅ Assign User to Organization</h4>
+
+      <h4 style={{ color: "#1976d2", marginTop: "1rem" }}>
+        ✅ Assign User to Organization
+      </h4>
       <div
         className="topic-codeblock code-with-copy"
         style={{ margin: "0.7rem 0" }}
       >
         <button
           className={`copy-button ${copied.assignEndpoint ? "copied" : ""}`}
-          onClick={() => copyToClipboard(codeBlocks.assignEndpoint, "assignEndpoint")}
+          onClick={() =>
+            copyToClipboard(codeBlocks.assignEndpoint, "assignEndpoint")
+          }
         >
           {copied.assignEndpoint ? "Copied!" : "Copy"}
         </button>
@@ -227,14 +261,18 @@ const Topic9Subtopic4Content = () => {
         </pre>
       </div>
 
-      <h4 style={{ color: "#1976d2", marginTop: "1rem" }}>✅ Get All Users in Organization</h4>
+      <h4 style={{ color: "#1976d2", marginTop: "1rem" }}>
+        ✅ Get All Users in Organization
+      </h4>
       <div
         className="topic-codeblock code-with-copy"
         style={{ margin: "0.7rem 0" }}
       >
         <button
           className={`copy-button ${copied.getUsersEndpoint ? "copied" : ""}`}
-          onClick={() => copyToClipboard(codeBlocks.getUsersEndpoint, "getUsersEndpoint")}
+          onClick={() =>
+            copyToClipboard(codeBlocks.getUsersEndpoint, "getUsersEndpoint")
+          }
         >
           {copied.getUsersEndpoint ? "Copied!" : "Copy"}
         </button>
@@ -243,14 +281,18 @@ const Topic9Subtopic4Content = () => {
         </pre>
       </div>
 
-      <h4 style={{ color: "#1976d2", marginTop: "1rem" }}>✅ Get All Organizations for User</h4>
+      <h4 style={{ color: "#1976d2", marginTop: "1rem" }}>
+        ✅ Get All Organizations for User
+      </h4>
       <div
         className="topic-codeblock code-with-copy"
         style={{ margin: "0.7rem 0" }}
       >
         <button
           className={`copy-button ${copied.getOrgsEndpoint ? "copied" : ""}`}
-          onClick={() => copyToClipboard(codeBlocks.getOrgsEndpoint, "getOrgsEndpoint")}
+          onClick={() =>
+            copyToClipboard(codeBlocks.getOrgsEndpoint, "getOrgsEndpoint")
+          }
         >
           {copied.getOrgsEndpoint ? "Copied!" : "Copy"}
         </button>
@@ -273,8 +315,24 @@ const Topic9Subtopic4Content = () => {
         <tbody>
           {apiDesignTable.map(([endpoint, method, description], idx) => (
             <tr key={idx}>
-              <td><span className="blue-inline-code">{endpoint}</span></td>
-              <td><span style={{ color: method === 'POST' ? '#4caf50' : method === 'PUT' ? '#ff9800' : '#2196f3', fontWeight: 'bold' }}>{method}</span></td>
+              <td>
+                <span className="blue-inline-code">{endpoint}</span>
+              </td>
+              <td>
+                <span
+                  style={{
+                    color:
+                      method === "POST"
+                        ? "#4caf50"
+                        : method === "PUT"
+                        ? "#ff9800"
+                        : "#2196f3",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {method}
+                </span>
+              </td>
               <td>{description}</td>
             </tr>
           ))}
@@ -292,7 +350,9 @@ const Topic9Subtopic4Content = () => {
         >
           <button
             className={`copy-button ${copied.secureExample ? "copied" : ""}`}
-            onClick={() => copyToClipboard(codeBlocks.secureExample, "secureExample")}
+            onClick={() =>
+              copyToClipboard(codeBlocks.secureExample, "secureExample")
+            }
           >
             {copied.secureExample ? "Copied!" : "Copy"}
           </button>
@@ -307,12 +367,12 @@ const Topic9Subtopic4Content = () => {
         🧠 Discussion Section
       </h3>
       <div className="blue-card-section">
-        <h4 style={{ color: "#1976d2", margin: "0 0 0.5rem 0" }}>❓ Short Answers:</h4>
+        <h4 style={{ color: "#1976d2", margin: "0 0 0.5rem 0" }}>
+          ❓ Short Answers:
+        </h4>
         {discussionQA.map((qa, idx) => (
           <div key={idx} style={{ marginBottom: "1.2rem" }}>
-            <div
-              style={{ fontWeight: 500, color: "#222", marginBottom: 4 }}
-            >
+            <div style={{ fontWeight: 500, color: "#222", marginBottom: 4 }}>
               Q{idx + 1}: {qa.question}
             </div>
             <button
