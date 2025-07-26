@@ -2,32 +2,53 @@ import React from "react";
 import "./CustomSectionStyles.css";
 
 const summaryTable = [
-  ["AuthRequest", "Holds username & password for login"],
-  ["AuthResponse", "Returns JWT token after successful login"],
-  ["RegisterRequest", "Optional — supports registration fields"],
-  ["Validation", "Ensures only clean and required data flows"],
+  ["BCryptPasswordEncoder", "Secure password hashing tool"],
+  ["encode()", "Hashes the password before saving it"],
+  ["matches()", "Validates raw input against the stored hash"],
+  ["Adaptive Hashing", "Becomes slower with increased strength value"],
+  ["Spring Integration", "Easily managed as a Spring @Bean"],
+];
+
+const bestPractices = [
+  ["Always hash before storing", "Never save raw passwords"],
+  [
+    "Use BCryptPasswordEncoder",
+    "Industry-standard, secure, salted, and adaptive",
+  ],
+  [
+    "Never manually compare passwords",
+    "Use passwordEncoder.matches() for verification",
+  ],
+  [
+    "Never log passwords (even hashed)",
+    "Logging credentials is a huge security flaw",
+  ],
+  [
+    "Use a bean instead of new instance",
+    "Lets Spring inject and manage configuration",
+  ],
 ];
 
 const discussionPrompts = [
   {
-    q: "Why shouldn’t we use the User entity directly in controllers?",
-    a: "To avoid exposing sensitive fields and to separate DB model from API structure.",
+    q: "Why is BCrypt better than MD5 or SHA-256?",
+    a: "BCrypt is salted, slow, and adaptive — perfect for password hashing. MD5/SHA are fast and insecure for passwords.",
   },
   {
-    q: "What is the purpose of AuthResponse?",
-    a: "To return the JWT token after successful login.",
+    q: "What happens if you save a password without encoding it?",
+    a: "It's stored in plain text and can be stolen easily.",
   },
   {
-    q: "Can we include fields like email and role in a registration DTO?",
-    a: "Yes, but sanitize and validate them properly.",
+    q: "How do you compare a raw password with a hashed one?",
+    a: "Use passwordEncoder.matches(raw, hashed)",
   },
   {
-    q: "What annotation ensures a field is not empty in the DTO?",
-    a: "@NotBlank (from javax.validation.constraints)",
+    q: "What annotation is used to make PasswordEncoder injectable across the app?",
+    a: "@Bean inside a @Configuration class",
   },
 ];
 
-const Topic7Subtopic3Content = () => {
+const Topic7Subtopic4Content = () => {
   const [openFAQ, setOpenFAQ] = React.useState(
     Array(discussionPrompts.length).fill(false)
   );
@@ -36,167 +57,115 @@ const Topic7Subtopic3Content = () => {
   };
   return (
     <div className="topic-animated-content">
-      <h2 style={{ color: "#1769aa" }}>✉️ 7.3 – Authentication DTOs</h2>
+      <h2 style={{ color: "#1769aa" }}>🔒 7.4 – Password Encryption</h2>
       <hr />
       <div className="yellow-callout">
-        In this section, we’ll create <b>DTOs (Data Transfer Objects)</b> for
-        login and registration. DTOs are <b>simple Java classes</b> used to
-        carry data between processes — in this case, between the frontend/client
-        and backend.
-        <br />
-        <br />
-        They help you separate your <b>internal database models</b> from the{" "}
-        <b>external API contract</b>, which keeps your application{" "}
-        <b>clean, secure, and maintainable</b>.
+        In this section, we’ll learn how to <b>securely store user passwords</b>{" "}
+        using the <b>BCrypt hashing algorithm</b> — ensuring even if your
+        database is compromised, raw passwords are never exposed.
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🔍 Why Use DTOs?
+        🔍 Why Encrypt Passwords?
       </h3>
-      <div style={{ marginBottom: "1.5rem", padding: "1rem 1.2rem" }}>
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}
-        >
-          <div
-            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
-          >
-            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
-            <div>
-              <b>Security:</b> You don’t want to expose your full{" "}
-              <span className="blue-inline-code">User</span> entity (especially
-              fields like <span className="blue-inline-code">id</span>,{" "}
-              <span className="blue-inline-code">password</span>,{" "}
-              <span className="blue-inline-code">role</span>, etc.) in API
-              responses.
-            </div>
-          </div>
-          <div
-            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
-          >
-            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
-            <div>
-              <b>Validation:</b> DTOs allow you to add custom validation logic
-              without modifying your core entity.
-            </div>
-          </div>
-          <div
-            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
-          >
-            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
-            <div>
-              <b>Flexibility:</b> You can shape your request/response payloads
-              however you like, independently of your database schema.
-            </div>
-          </div>
-          <div
-            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
-          >
-            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
-            <div>
-              <b>Clean API Contract:</b> DTOs form the bridge between the client
-              and backend, making your API more predictable and stable.
-            </div>
-          </div>
-        </div>
+      <div className="blue-card-section">
+        <b>Never store passwords in plain text.</b>
+        <br />
+        If a hacker gets access to your database and passwords aren’t encrypted,
+        every user’s account — potentially across multiple platforms — is
+        compromised.
+      </div>
+      <ul className="topic-checklist">
+        <li>✔️ Prevents raw password leaks</li>
+        <li>✔️ Adds computational cost (slows down brute force attacks)</li>
+        <li>
+          ✔️ BCrypt includes a <b>salt</b> internally (extra randomness)
+        </li>
+      </ul>
+      <div className="blue-card-section">
+        BCrypt is a widely trusted and <b>adaptive</b> hashing algorithm —
+        meaning it can be made slower over time as computers get faster.
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🧱 Create Request and Response DTOs
+        🧱 Using BCryptPasswordEncoder in Spring Boot
       </h3>
       <div className="blue-card-section">
-        You typically need <b>two request DTOs</b> (for login and register) and{" "}
-        <b>one response DTO</b> (for token response):
+        Spring Security makes it <b>super easy</b> to hash and validate
+        passwords using <code>BCryptPasswordEncoder</code>.
       </div>
+      <h4 style={{ marginTop: "1.2rem", color: "#1769aa" }}>
+        Step 1️⃣ – Create a Bean
+      </h4>
+      <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>
+        {`
+@Configuration
+public class PasswordConfig {
 
-      <div className="blue-card-section" style={{ marginTop: "1.2rem" }}>
-        <b>📝 AuthRequest (for Login/Register)</b>
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
-public class AuthRequest {
-
-    @NotBlank(message = "Username is required")
-    private String username;
-
-    @NotBlank(message = "Password is required")
-    private String password;
-
-    // Getters and Setters
-}
-`}</pre>
-      </div>
-
-      <div className="blue-card-section" style={{ marginTop: "1.2rem" }}>
-        <b>📨 AuthResponse (for returning JWT Token)</b>
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
-public class AuthResponse {
-
-    private String token;
-
-    public AuthResponse(String token) {
-        this.token = token;
-    }
-
-    // Getter
-    public String getToken() {
-        return token;
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
-`}</pre>
-      </div>
-
-      <div className="blue-card-section" style={{ marginTop: "1.2rem" }}>
-        <b>🧾 (Optional) RegisterRequest</b>
-        <div style={{ marginBottom: "0.5rem" }}>
-          If you want to support <b>extra fields during registration</b> (e.g.,
-          email, role):
-        </div>
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
-public class RegisterRequest {
-
-    @NotBlank
-    private String username;
-
-    @NotBlank
-    private String password;
-
-    private String role = "USER"; // Default role
-
-    // Optional: email, phone, etc.
-
-    // Getters and Setters
-}
-`}</pre>
-      </div>
-
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>✨ Key Notes</h3>
+`}
+      </pre>
+      <h4 style={{ marginTop: "1.2rem", color: "#1769aa" }}>
+        Step 2️⃣ – Encode Password Before Saving
+      </h4>
       <div className="blue-card-section">
-        <ul className="topic-checklist" style={{ margin: 0 }}>
-          <li>
-            All these classes are <b>POJOs (Plain Old Java Objects)</b>.
-          </li>
-          <li>
-            Decorate fields with <b>validation annotations</b> like{" "}
-            <code>@NotBlank</code>, <code>@Size</code>, <code>@Email</code> for
-            better input safety.
-          </li>
-          <li>
-            You can use <b>Lombok</b> annotations like <code>@Data</code>,{" "}
-            <code>@AllArgsConstructor</code>, and{" "}
-            <code>@NoArgsConstructor</code> to reduce boilerplate.
-          </li>
-        </ul>
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class AuthRequest {
-    private String username;
-    private String password;
-}
-`}</pre>
-        <div style={{ marginTop: "0.5rem" }}>
-          Just make sure Lombok is in your dependencies.
-        </div>
+        In your Auth Service (during registration):
       </div>
+      <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>
+        {`
+@Autowired
+private PasswordEncoder passwordEncoder;
+
+public void registerUser(RegisterRequest request) {
+    User user = new User();
+    user.setUsername(request.getUsername());
+    
+    // Hash the password before saving
+    user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+    userRepository.save(user);
+}
+`}
+      </pre>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🔁 Validating Password During Login
+      </h3>
+      <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>
+        {`
+User user = userRepository.findByUsername(request.getUsername())
+    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+// Match raw input with hashed password
+if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+    throw new BadCredentialsException("Invalid credentials");
+}
+`}
+      </pre>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        💡 Best Practices
+      </h3>
+      <table className="custom-table">
+        <thead>
+          <tr>
+            <th>Best Practice</th>
+            <th>Why It Matters</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bestPractices.map(([practice, why], idx) => (
+            <tr key={idx}>
+              <td>{practice}</td>
+              <td>{why}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
         🧠 Discussion Section
@@ -225,23 +194,25 @@ public class AuthRequest {
       <div className="blue-card-section try-tasks">
         <ol style={{ margin: 0, paddingLeft: "1.2rem" }}>
           <li>
-            Create <b>AuthRequest</b> and <b>AuthResponse</b> DTOs.
+            Add <b>BCryptPasswordEncoder</b> bean to your config
           </li>
           <li>
-            Add validation annotations for fields like <b>username</b> and{" "}
-            <b>password</b>.
+            Use <b>.encode()</b> while registering the user
           </li>
           <li>
-            Use these DTOs in your <b>AuthController</b> (which we’ll build in{" "}
-            <b>7.8</b>).
+            Use <b>.matches()</b> while logging in
           </li>
           <li>
-            <b>Bonus:</b> Create a <b>RegisterRequest</b> DTO that supports
-            fields like email, role, and confirmPassword.
+            Verify in DB: passwords should look like <code>$2a$10$qJk...</code>{" "}
+            instead of plain strings
           </li>
           <li>
-            <b>Bonus:</b> Add a global <b>@ControllerAdvice</b> to handle
-            validation errors nicely.
+            <b>Bonus:</b> Try increasing BCrypt strength:{" "}
+            <code>new BCryptPasswordEncoder(12)</code> (default is 10)
+          </li>
+          <li>
+            <b>Bonus:</b> Log the time taken to hash vs validate — see how
+            BCrypt slows brute force
           </li>
         </ol>
       </div>
@@ -250,14 +221,14 @@ public class AuthRequest {
       <table className="custom-table">
         <thead>
           <tr>
-            <th>DTO Class</th>
-            <th>Purpose</th>
+            <th>Feature</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
-          {summaryTable.map(([dto, desc], idx) => (
+          {summaryTable.map(([feature, desc], idx) => (
             <tr key={idx}>
-              <td>{dto}</td>
+              <td>{feature}</td>
               <td>{desc}</td>
             </tr>
           ))}
@@ -267,4 +238,4 @@ public class AuthRequest {
   );
 };
 
-export default Topic7Subtopic3Content;
+export default Topic7Subtopic4Content;

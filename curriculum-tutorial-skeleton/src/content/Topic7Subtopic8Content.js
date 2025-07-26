@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./CustomSectionStyles.css";
 
-const Topic7Subtopic8Content = () => {
+const Topic7Subtopic9Content = () => {
   const [showQ1, setShowQ1] = useState(false);
   const [showQ2, setShowQ2] = useState(false);
   const [showQ3, setShowQ3] = useState(false);
@@ -9,191 +9,193 @@ const Topic7Subtopic8Content = () => {
 
   return (
     <div className="topic-animated-content">
-      <h2 style={{ color: "#1769aa" }}>
-        🔓 7.8 – Auth Controller (Login/Register)
-      </h2>
+      <h2 style={{ color: "#1769aa" }}>🛡️ 7.9 – JWT Configuration</h2>
       <hr />
       <div className="yellow-callout">
-        In this section, we'll create the <b>AuthController</b>, which:
+        In this section, we'll explore how to{" "}
+        <b>integrate JWT into Spring Security</b> by customizing the{" "}
+        <code>SecurityFilterChain</code>. This setup ensures that:
         <ul className="topic-checklist">
-          <li>Accepts HTTP POST requests from the client</li>
-          <li>Validates request bodies (DTOs)</li>
-          <li>Delegates to AuthService</li>
+          <li>Public routes are accessible without login</li>
+          <li>Protected APIs require a valid JWT</li>
+          <li>Tokens are validated via a custom filter</li>
+          <li>CORS and CSRF are handled properly</li>
+        </ul>
+      </div>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🎯 Why JWT Configuration Is Needed?
+      </h3>
+      <div className="blue-card-section">
+        Spring Security, by default, expects <b>session-based</b>{" "}
+        authentication. But we're using <b>stateless JWT</b> authentication.
+        <br />
+        <br />
+        So we must:
+        <ul className="topic-checklist">
+          <li>Turn off sessions</li>
+          <li>Inject our JWT validator</li>
+          <li>Define public and protected routes</li>
+          <li>Add password encoder</li>
+          <li>Configure CORS properly</li>
+        </ul>
+      </div>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🧱 Configuration Breakdown
+      </h3>
+      <div className="blue-card-section">
+        <p>You already shared this class:</p>
+        <pre className="topic-codeblock">{`@Configuration
+@EnableWebSecurity
+public class AppConfig {
+
+    @Autowired
+    private CorsProperties corsProperties;
+
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/s/**", "/api/auth/**", "/api/public/**").permitAll()
+                .requestMatchers("/api/**").authenticated()
+                .anyRequest().permitAll()
+            )
+            .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+        return http.build();
+    }
+
+    private CorsConfigurationSource corsConfigurationSource() {
+        return request -> {
+            CorsConfiguration cfg = new CorsConfiguration();
+            cfg.setAllowedOrigins(corsProperties.getAllowedOrigins());
+            cfg.setAllowedMethods(corsProperties.getAllowedMethods());
+            cfg.setAllowCredentials(corsProperties.isAllowCredentials());
+            cfg.setAllowedHeaders(corsProperties.getAllowedHeaders());
+            cfg.setExposedHeaders(corsProperties.getExposedHeaders());
+            cfg.setMaxAge(corsProperties.getMaxAge());
+            return cfg;
+        };
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}`}</pre>
+      </div>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🔍 Let's Understand Each Part
+      </h3>
+
+      <h4>✅ SessionCreationPolicy.STATELESS</h4>
+      <div className="blue-card-section">
+        Disables HTTP sessions. Each request must carry its{" "}
+        <b>own authentication token (JWT)</b>.
+      </div>
+
+      <h4>✅ authorizeHttpRequests</h4>
+      <div className="blue-card-section">
+        Defines <b>public and protected</b> routes:
+        <ul className="topic-checklist">
           <li>
-            Returns a structured response (token, success message, or errors)
+            <code>/s/**</code>, <code>/api/auth/**</code>,{" "}
+            <code>/api/public/**</code> → accessible without login
+          </li>
+          <li>
+            <code>/api/**</code> → requires authentication
           </li>
         </ul>
       </div>
 
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🎯 Why an Auth Controller?
-      </h3>
+      <h4>✅ addFilterBefore</h4>
       <div className="blue-card-section">
-        Your backend needs <b>entry points</b> for clients like:
-        <ul className="topic-checklist">
-          <li>Web frontend (React, Angular, etc.)</li>
-          <li>Mobile apps</li>
-          <li>API consumers (Postman, curl)</li>
-        </ul>
-        The controller defines these entry points using REST endpoints (
-        <code>/api/auth/signup</code>, <code>/api/auth/signin</code>), following
-        best practices for:
-        <ul className="topic-checklist">
-          <li>✅ Route naming</li>
-          <li>✅ Input validation</li>
-          <li>✅ Clean delegation to services</li>
-          <li>✅ Standardized responses</li>
-        </ul>
+        This is the <b>heart of JWT authentication</b>. It ensures every request
+        to a protected route is validated by your <code>JwtTokenValidator</code>
+        .
+      </div>
+
+      <h4>✅ csrf().disable()</h4>
+      <div className="blue-card-section">
+        Since JWTs are immune to CSRF, we turn this off.
+      </div>
+
+      <h4>✅ cors()</h4>
+      <div className="blue-card-section">
+        Needed if your frontend is hosted on a different origin.
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🧱 AuthController Implementation
+        🔐 Password Encoder Bean
       </h3>
       <div className="blue-card-section">
-        <pre className="topic-codeblock">{`@RestController
-@RequestMapping("/api/auth")
-public class AuthController {
-
-    @Autowired
-    private AuthService authService;
-
-    /**
-     * Signup endpoint
-     */
-    @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<String>> registerUser(
-            @Valid @RequestBody SignUpRequest request) {
-        ApiResponse<String> response = authService.register(request);
-        return ResponseEntity.status(response.getStatusCode()).body(response);
-    }
-
-    /**
-     * Login endpoint
-     */
-    @PostMapping("/signin")
-    public ResponseEntity<ApiResponse<AuthResponse>> loginUser(
-            @Valid @RequestBody SignInRequest request) {
-        ApiResponse<AuthResponse> response = authService.login(request);
-        return ResponseEntity.status(response.getStatusCode()).body(response);
-    }
+        <pre className="topic-codeblock">{`@Bean
+PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
 }`}</pre>
-      </div>
-
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        📦 What Each Endpoint Does
-      </h3>
-      <table className="custom-table">
-        <thead>
-          <tr>
-            <th>Method</th>
-            <th>Path</th>
-            <th>Input DTO</th>
-            <th>Output DTO</th>
-            <th>Function</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>POST</td>
-            <td>
-              <code>/api/auth/signup</code>
-            </td>
-            <td>
-              <code>SignUpRequest</code>
-            </td>
-            <td>
-              <code>ApiResponse&lt;String&gt;</code>
-            </td>
-            <td>Registers a new user</td>
-          </tr>
-          <tr>
-            <td>POST</td>
-            <td>
-              <code>/api/auth/signin</code>
-            </td>
-            <td>
-              <code>SignInRequest</code>
-            </td>
-            <td>
-              <code>ApiResponse&lt;AuthResponse&gt;</code>
-            </td>
-            <td>Authenticates & returns JWT</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>📥 DTOs Recap</h3>
-      <div className="blue-card-section">
-        <p>Here's what your request/response models likely look like:</p>
-
-        <h4>🔸 SignUpRequest</h4>
-        <pre className="topic-codeblock">{`public class SignUpRequest {
-    @NotBlank
-    private String name;
-
-    @Email
-    private String email;
-
-    @Size(min = 6)
-    private String password;
-    // Getters/Setters
-}`}</pre>
-
-        <h4>🔸 SignInRequest</h4>
-        <pre className="topic-codeblock">{`public class SignInRequest {
-    @Email
-    private String email;
-
-    @NotBlank
-    private String password;
-    // Getters/Setters
-}`}</pre>
-
-        <h4>🔸 AuthResponse</h4>
-        <pre className="topic-codeblock">{`public class AuthResponse {
-    private String token;
-    // Constructors, Getters
-}`}</pre>
-      </div>
-
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🔄 End-to-End Example
-      </h3>
-      <div className="blue-card-section">
-        <h4>
-          ✅ Signup Request (POST <code>/api/auth/signup</code>):
-        </h4>
-        <pre className="topic-codeblock">{`{
-  "name": "Alice",
-  "email": "alice@example.com",
-  "password": "12345678"
-}`}</pre>
-
         <p>
-          <strong>Response:</strong>
+          This bean is <b>required</b> by Spring Security to encrypt passwords
+          during signup and match during login.
         </p>
-        <pre className="topic-codeblock">{`{
-  "status": "success",
-  "message": "User registered successfully"
-}`}</pre>
+      </div>
 
-        <h4>
-          ✅ Login Request (POST <code>/api/auth/signin</code>):
-        </h4>
-        <pre className="topic-codeblock">{`{
-  "email": "alice@example.com",
-  "password": "12345678"
-}`}</pre>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🧠 Extra: JwtTokenValidator Recap
+      </h3>
+      <div className="blue-card-section">
+        <pre className="topic-codeblock">{`public class JwtTokenValidator extends OncePerRequestFilter {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
 
-        <p>
-          <strong>Response:</strong>
-        </p>
-        <pre className="topic-codeblock">{`{
-  "status": "success",
-  "data": {
-    "token": "eyJhbGciOiJIUzI1NiIsInR..."
-  }
+        String jwt = request.getHeader("Authorization");
+
+        if (jwt != null && jwt.startsWith("Bearer ")) {
+            jwt = jwt.substring(7);
+            try {
+                Claims claims = Jwts.parserBuilder()
+                        .setSigningKey(Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes()))
+                        .build()
+                        .parseClaimsJws(jwt)
+                        .getBody();
+
+                String email = claims.get("email", String.class);
+                String roles = claims.get("authorities", String.class);
+                List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(roles);
+
+                Authentication auth = new UsernamePasswordAuthenticationToken(email, null, authorities);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            } catch (Exception e) {
+                throw new BadCredentialsException("Invalid token");
+            }
+        }
+
+        chain.doFilter(request, response);
+    }
 }`}</pre>
+      </div>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🔑 What Happens on a Protected Request?
+      </h3>
+      <div className="blue-card-section">
+        <ol className="topic-checklist">
+          <li>
+            Frontend adds JWT in <code>Authorization</code> header
+          </li>
+          <li>
+            Spring calls <code>JwtTokenValidator</code>
+          </li>
+          <li>It parses the token, extracts email/roles</li>
+          <li>
+            Builds an <code>Authentication</code> object
+          </li>
+          <li>If valid → request continues, else → 401 Unauthorized</li>
+        </ol>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
@@ -202,52 +204,52 @@ public class AuthController {
       <div className="blue-card-section">
         <div className="topic-faq">
           <div className="topic-faq-q">
-            <b>Q1: What is the role of @RequestBody?</b>
+            <b>Q1: What is the role of SecurityFilterChain?</b>
           </div>
           <button className="reveal-btn" onClick={() => setShowQ1(!showQ1)}>
             {showQ1 ? "Hide Answer" : "Reveal Answer"}
           </button>
           {showQ1 && (
             <div className="topic-faq-a">
-              It maps the incoming JSON body to a Java object (DTO).
+              Defines how HTTP requests are secured and which filters handle
+              authentication.
             </div>
           )}
 
           <div className="topic-faq-q">
-            <b>Q2: Why use @Valid with DTOs?</b>
+            <b>Q2: Why disable sessions in JWT-based apps?</b>
           </div>
           <button className="reveal-btn" onClick={() => setShowQ2(!showQ2)}>
             {showQ2 ? "Hide Answer" : "Reveal Answer"}
           </button>
           {showQ2 && (
             <div className="topic-faq-a">
-              Ensures validation annotations (like @NotBlank, @Email) are
-              enforced before calling the service.
+              JWT is stateless, sessions are unnecessary.
             </div>
           )}
 
           <div className="topic-faq-q">
-            <b>Q3: What happens if login credentials are incorrect?</b>
+            <b>Q3: Why use JwtTokenValidator?</b>
           </div>
           <button className="reveal-btn" onClick={() => setShowQ3(!showQ3)}>
             {showQ3 ? "Hide Answer" : "Reveal Answer"}
           </button>
           {showQ3 && (
             <div className="topic-faq-a">
-              The service returns an error response, typically with 401
-              Unauthorized.
+              To verify and extract user info from JWT on each request.
             </div>
           )}
 
           <div className="topic-faq-q">
-            <b>Q4: Why is AuthService injected here?</b>
+            <b>Q4: What is the use of PasswordEncoder bean?</b>
           </div>
           <button className="reveal-btn" onClick={() => setShowQ4(!showQ4)}>
             {showQ4 ? "Hide Answer" : "Reveal Answer"}
           </button>
           {showQ4 && (
             <div className="topic-faq-a">
-              To follow clean architecture (controller → service → repo).
+              Encrypts passwords during signup and checks passwords during
+              login.
             </div>
           )}
         </div>
@@ -260,20 +262,17 @@ public class AuthController {
         <p>🚀 Task:</p>
         <ul className="topic-checklist">
           <li>
-            Hit <code>/api/auth/signup</code> and create a new user.
-          </li>
-          <li>
-            Use the same credentials with <code>/api/auth/signin</code>.
-          </li>
-          <li>
-            Copy the returned token and try accessing a protected API with it.
+            Add a new protected API like <code>/api/user/me</code> and test:
+            <ul>
+              <li>Without token → should get 401</li>
+              <li>With token → should work</li>
+            </ul>
           </li>
         </ul>
 
         <p>💡 Bonus:</p>
         <ul className="topic-checklist">
-          <li>Handle duplicate email during signup</li>
-          <li>Return user info (name/email) along with JWT</li>
+          <li>Return user details (email, name, roles) from token claims</li>
         </ul>
       </div>
 
@@ -282,39 +281,39 @@ public class AuthController {
         <thead>
           <tr>
             <th>Feature</th>
-            <th>Purpose</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>
-              <code>AuthController</code>
+              <code>SecurityFilterChain</code>
             </td>
-            <td>Exposes signup and login APIs</td>
+            <td>Main configuration for HTTP security</td>
           </tr>
           <tr>
             <td>
-              <code>POST /signup</code>
+              <code>JwtTokenValidator</code>
             </td>
-            <td>Registers a new user</td>
+            <td>Custom filter to validate JWT</td>
           </tr>
           <tr>
             <td>
-              <code>POST /signin</code>
+              <code>PasswordEncoder</code>
             </td>
-            <td>Authenticates a user and returns JWT</td>
+            <td>Securely hashes passwords with BCrypt</td>
           </tr>
           <tr>
             <td>
-              <code>@Valid</code>
+              <code>SessionCreationPolicy</code>
             </td>
-            <td>Triggers automatic field-level validation</td>
+            <td>Tells Spring not to use sessions (stateless)</td>
           </tr>
           <tr>
             <td>
-              <code>ApiResponse&lt;T&gt;</code>
+              <code>CORS</code>
             </td>
-            <td>Unified format for success/error responses</td>
+            <td>Ensures browser can call backend from other origins</td>
           </tr>
         </tbody>
       </table>
@@ -322,4 +321,4 @@ public class AuthController {
   );
 };
 
-export default Topic7Subtopic8Content;
+export default Topic7Subtopic9Content;

@@ -2,52 +2,43 @@ import React from "react";
 import "./CustomSectionStyles.css";
 
 const summaryTable = [
-  ["JWT Token", "Secure, self-contained token for authentication"],
-  ["JwtProvider", "Class that builds and signs the token"],
-  ["generateToken()", "Adds email and roles to token payload"],
-  ["Signature", "Ensures token is not forged"],
-  ["Expiration", "Forces clients to re-authenticate after timeout"],
+  ["JwtTokenValidator", "Custom filter that validates every token"],
+  ["Authorization header", "Where the JWT is expected from the client"],
+  ["SecurityContext", "Stores authenticated user context"],
+  ["@OncePerRequestFilter", "Ensures one-time filter per request lifecycle"],
+  ["Token Exception", "Automatically triggers 401 if invalid"],
 ];
 
 const discussionPrompts = [
   {
-    q: "What information is stored inside a JWT?",
-    a: "Claims like email, roles, issued time, and expiration.",
+    q: "Which header contains the JWT token?",
+    a: "Authorization (prefixed with Bearer )",
   },
   {
-    q: "Why is the JWT signed?",
-    a: "To ensure it hasn't been tampered with and to validate authenticity.",
+    q: "What happens if the JWT is expired?",
+    a: "An exception is thrown, and 401 Unauthorized is returned.",
   },
   {
-    q: "Where should JWT be stored on the client side?",
-    a: "Usually in memory, localStorage, or secure HTTP-only cookies.",
+    q: "What does SecurityContextHolder do?",
+    a: "Stores the authenticated user for the current request.",
   },
   {
-    q: "How does the server validate a token later?",
-    a: "It parses and verifies the signature using the same secret key.",
+    q: "What happens if no token is provided?",
+    a: "Spring treats the request as anonymous and restricts protected endpoints.",
   },
 ];
 
-const jwtChecklist = [
-  {
-    label: "No need to store sessions in DB",
-  },
-  {
-    label: "Works perfectly for RESTful APIs",
-  },
-  {
-    label: "Tokens are ",
-    strong: "self-contained",
-    suffix: " (contain all needed info)",
-  },
-  {
-    label: "They can be ",
-    strong: "verified anywhere",
-    suffix: ", including microservices",
-  },
+const howItWorksSteps = [
+  "Extract JWT from Authorization header",
+  "Remove the Bearer prefix",
+  "Validate the token using the signing key",
+  "Parse claims: email, authorities",
+  "Create an Authentication object",
+  "Set the authenticated user in Spring's SecurityContext",
+  "Continue the filter chain",
 ];
 
-const Topic7Subtopic5Content = () => {
+const Topic7Subtopic6Content = () => {
   const [openFAQ, setOpenFAQ] = React.useState(
     Array(discussionPrompts.length).fill(false)
   );
@@ -56,55 +47,88 @@ const Topic7Subtopic5Content = () => {
   };
   return (
     <div className="topic-animated-content">
-      <h2 style={{ color: "#1769aa" }}>🔐 7.5 – JWT Token Generation</h2>
+      <h2 style={{ color: "#1769aa" }}>🔐 7.6 – JWT Token Validation</h2>
       <hr />
       <div className="yellow-callout">
-        In this section, we’ll understand what <b>JWT (JSON Web Tokens)</b> are,
-        why they are crucial for building scalable APIs, and how to generate
-        them securely using Spring Boot. We'll also walk through your existing{" "}
-        <span className="blue-inline-code">JwtProvider</span> class in a very
-        descriptive and interactive way.
+        In this section, we’ll build the logic that validates incoming JWTs to
+        allow secure access to protected resources — essentially replicating how{" "}
+        <b>sessions work without a database</b>.
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🎯 What is a JWT?
+        🎯 Why Do We Need JWT Validation?
       </h3>
       <div className="blue-card-section">
-        A <b>JWT (JSON Web Token)</b> is a compact, URL-safe token used to{" "}
-        <b>securely transmit information</b> between parties. It’s digitally
-        signed so it can be verified but <b>not tampered with</b>.
-      </div>
-      <div className="blue-card-section">
-        <b>JWT Structure (3 parts, separated by dots):</b>
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
-xxxxx.yyyyy.zzzzz
-Header.Payload.Signature
-`}</pre>
-        <table className="custom-table">
-          <thead>
-            <tr>
-              <th>Part</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Header</td>
-              <td>Algorithm & token type (e.g., HS256, JWT)</td>
-            </tr>
-            <tr>
-              <td>Payload</td>
-              <td>Claims (data like username, roles)</td>
-            </tr>
-            <tr>
-              <td>Signature</td>
-              <td>HMAC-SHA256 signature using secret key</td>
-            </tr>
-          </tbody>
-        </table>
+        When a user sends a request to a protected route, the server must:
+        <ol style={{ margin: 0, paddingLeft: "1.2rem" }}>
+          <li>
+            Check if the <b>JWT exists</b> in the request.
+          </li>
+          <li>
+            Verify the <b>signature</b> of the token.
+          </li>
+          <li>
+            Check if the <b>token is expired</b>.
+          </li>
+          <li>
+            Extract the <b>user identity and roles</b>.
+          </li>
+          <li>
+            Inject that into the <b>SecurityContext</b>, so Spring knows who the
+            user is.
+          </li>
+        </ol>
+        <div style={{ marginTop: "1rem" }}>
+          Without this, <b>every route would be unprotected</b>, and tokens
+          would be meaningless.
+        </div>
       </div>
 
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>🧠 Why Use JWT?</h3>
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🧱 Your Existing JwtTokenValidator – Explained
+      </h3>
+      <div className="blue-card-section">
+        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
+public class JwtTokenValidator extends OncePerRequestFilter {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
+
+        String jwt = request.getHeader(JwtConstant.JWT_HEADER);
+
+        if (jwt != null && jwt.startsWith("Bearer ")) {
+            jwt = jwt.substring(7);
+            try {
+                SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+                Claims claims = Jwts.parserBuilder()
+                                    .setSigningKey(key)
+                                    .build()
+                                    .parseClaimsJws(jwt)
+                                    .getBody();
+
+                String email = String.valueOf(claims.get("email"));
+                String authorities = String.valueOf(claims.get("authorities"));
+
+                List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, auths);
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (Exception e) {
+                throw new BadCredentialsException("Invalid token: " + e.getMessage());
+            }
+        }
+
+        filterChain.doFilter(request, response);
+    }
+}
+`}</pre>
+      </div>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🔍 How This Works
+      </h3>
       <div
         style={{
           margin: "1.2rem 0 1.5rem 0",
@@ -114,149 +138,56 @@ Header.Payload.Signature
           border: "1.5px solid #e3eefd",
         }}
       >
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}
-        >
-          <div
-            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
-          >
-            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
-            <div>No need to store sessions in DB</div>
-          </div>
-          <div
-            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
-          >
-            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
-            <div>Works perfectly for RESTful APIs</div>
-          </div>
-          <div
-            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
-          >
-            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
-            <div>
-              Tokens are <b>self-contained</b> (contain all needed info)
-            </div>
-          </div>
-          <div
-            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
-          >
-            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
-            <div>
-              They can be <b>verified anywhere</b>, including microservices
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🛠️ How JWT Token Generation Works
-      </h3>
-      <div className="blue-card-section">
         <ol style={{ margin: 0, paddingLeft: "1.2rem" }}>
-          <li>User logs in with credentials.</li>
           <li>
-            If valid, backend generates a JWT using:
-            <ul style={{ margin: 0, paddingLeft: "1.2rem" }}>
-              <li>User’s email/username</li>
-              <li>Roles/authorities</li>
-              <li>Expiration time</li>
-            </ul>
+            Extract JWT from{" "}
+            <span className="blue-inline-code">Authorization</span> header
           </li>
-          <li>The signed token is returned in the response.</li>
-          <li>The client stores it (usually in localStorage or memory).</li>
           <li>
-            On future requests, client sends the token via the{" "}
-            <span className="blue-inline-code">Authorization</span> header.
+            Remove the <span className="blue-inline-code">Bearer</span> prefix
           </li>
+          <li>Validate the token using the signing key</li>
+          <li>
+            Parse claims: <span className="blue-inline-code">email</span>,{" "}
+            <span className="blue-inline-code">authorities</span>
+          </li>
+          <li>
+            Create an <span className="blue-inline-code">Authentication</span>{" "}
+            object
+          </li>
+          <li>
+            Set the authenticated user in Spring's{" "}
+            <span className="blue-inline-code">SecurityContext</span>
+          </li>
+          <li>Continue the filter chain</li>
         </ol>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🧱 Your Existing JwtProvider – Explained
+        ⚠️ What Happens if Token is Invalid?
       </h3>
       <div className="blue-card-section">
+        This part of your code handles invalid JWTs:
         <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
-public class JwtProvider {
-
-    private static SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
-
-    public String generateToken(Authentication auth) {
-        Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-        String roles = populateAuthorities(authorities);
-
-        String jwt = Jwts.builder()
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + 86400000)) // Token valid for 24h
-                .claim("email", auth.getName())         // Add username/email
-                .claim("authorities", roles)            // Add roles
-                .signWith(key)                          // Sign using secret key
-                .compact();
-
-        return jwt;
-    }
-
-    private String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        Set<String> auth = new HashSet<>();
-        for (GrantedAuthority ga : authorities) {
-            auth.add(ga.getAuthority());
-        }
-        return String.join(",", auth);
-    }
+catch (Exception e) {
+    throw new BadCredentialsException("Invalid token: " + e.getMessage());
 }
 `}</pre>
+        Which then gets translated into a <b>401 response</b> by Spring
+        Security.
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🧠 What’s Happening Here?
+        🛡️ SecurityFilterChain Integration
       </h3>
       <div className="blue-card-section">
-        <ul className="topic-checklist" style={{ margin: 0 }}>
-          <li>
-            <span className="blue-inline-code">auth.getName()</span> → gets the
-            username or email of the authenticated user.
-          </li>
-          <li>
-            <span className="blue-inline-code">getAuthorities()</span> → gets
-            the list of user roles (e.g.,{" "}
-            <span className="blue-inline-code">ROLE_ADMIN</span>)
-          </li>
-          <li>
-            <span className="blue-inline-code">.setIssuedAt()</span> and{" "}
-            <span className="blue-inline-code">.setExpiration()</span> → define
-            token validity (usually 24 hours)
-          </li>
-          <li>
-            <span className="blue-inline-code">.claim(...)</span> → adds extra
-            data to the payload.
-          </li>
-          <li>
-            <span className="blue-inline-code">.signWith(key)</span> → signs the
-            token with a <b>secure HMAC SHA key</b>
-          </li>
-        </ul>
-        <div style={{ marginTop: "1rem" }}>
-          The result: a secure, signed token that looks like this:
-          <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-`}</pre>
-        </div>
-      </div>
-
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        📦 Where Is This Token Used?
-      </h3>
-      <div className="blue-card-section">
-        The token is returned to the client in{" "}
-        <span className="blue-inline-code">AuthResponse</span> (as you defined
-        earlier):
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
-return new AuthResponse(jwt);
-`}</pre>
-        Clients must send this token in <b>every request</b> to protected
-        endpoints like this:
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
-`}</pre>
+        You already registered this filter in your config:
+        <pre
+          className="topic-codeblock"
+          style={{ margin: "0.7rem 0" }}
+        >{`.addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)`}</pre>
+        This ensures <b>every request passes through your token validator</b>{" "}
+        before reaching your controller.
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
@@ -285,30 +216,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
       </h3>
       <div className="blue-card-section try-tasks">
         <ol style={{ margin: 0, paddingLeft: "1.2rem" }}>
+          <li>Hit a protected route without a token → should return 401.</li>
+          <li>Hit the same route with an invalid token → should return 401.</li>
           <li>
-            Generate a token using your{" "}
-            <span className="blue-inline-code">JwtProvider</span> after login.
+            Hit it with a valid token → should return 200 OK and include
+            authenticated details.
           </li>
           <li>
-            Return it to the client as part of{" "}
-            <span className="blue-inline-code">AuthResponse</span>.
-          </li>
-          <li>Add a short expiry for testing (e.g., 10 mins).</li>
-          <li>
-            Decode the token on{" "}
-            <a href="https://jwt.io" target="_blank" rel="noopener noreferrer">
-              https://jwt.io
-            </a>{" "}
-            and explore the claims.
-          </li>
-          <li>
-            <b>Bonus:</b> Add a <span className="blue-inline-code">userId</span>{" "}
-            or <span className="blue-inline-code">organizationShortName</span>{" "}
-            as custom claim.
-          </li>
-          <li>
-            <b>Bonus:</b> Set token expiry to 15 minutes and refresh with a
-            refresh token.
+            <b>Bonus:</b> Print the logged-in user with:{" "}
+            <span className="blue-inline-code">
+              SecurityContextHolder.getContext().getAuthentication().getName()
+            </span>
           </li>
         </ol>
       </div>
@@ -318,7 +236,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
         <thead>
           <tr>
             <th>Feature</th>
-            <th>Description</th>
+            <th>Purpose</th>
           </tr>
         </thead>
         <tbody>
@@ -334,4 +252,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
   );
 };
 
-export default Topic7Subtopic5Content;
+export default Topic7Subtopic6Content;

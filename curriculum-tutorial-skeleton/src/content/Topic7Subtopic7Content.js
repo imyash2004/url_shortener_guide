@@ -1,256 +1,197 @@
-import React from "react";
+import React, { useState } from "react";
 import "./CustomSectionStyles.css";
 
-const summaryTable = [
-  ["AuthService", "Business logic for signup & login"],
-  ["AuthenticationManager", "Verifies user credentials securely"],
-  ["PasswordEncoder", "Secures user password with hashing"],
-  ["JwtProvider", "Returns token after successful login"],
-  ["ApiResponse", "Consistent response structure"],
-];
+const Topic7Subtopic8Content = () => {
+  const [showQ1, setShowQ1] = useState(false);
+  const [showQ2, setShowQ2] = useState(false);
+  const [showQ3, setShowQ3] = useState(false);
+  const [showQ4, setShowQ4] = useState(false);
 
-const discussionPrompts = [
-  {
-    q: "What does the AuthenticationManager do?",
-    a: "Verifies the user’s credentials against stored values (using Spring Security under the hood)",
-  },
-  {
-    q: "What happens if the user is not found or password is wrong?",
-    a: "AuthenticationManager throws an exception → your service returns an error response.",
-  },
-  {
-    q: "Why use @Service here?",
-    a: "It’s a business layer component, injectable in controllers.",
-  },
-  {
-    q: "Why is password encoded before saving?",
-    a: "To avoid storing plain text passwords and reduce the impact of data breaches.",
-  },
-];
-
-const responsibilities = [
-  {
-    label: "register()",
-    desc: "Validates uniqueness, hashes password, saves user",
-  },
-  {
-    label: "login()",
-    desc: "Authenticates using AuthenticationManager and returns token",
-  },
-  { label: "ApiResponse", desc: "Unified response format for success/failure" },
-];
-
-const Topic7Subtopic7Content = () => {
-  const [openFAQ, setOpenFAQ] = React.useState(
-    Array(discussionPrompts.length).fill(false)
-  );
-  const toggleFAQ = (idx) => {
-    setOpenFAQ((prev) => prev.map((v, i) => (i === idx ? !v : v)));
-  };
   return (
     <div className="topic-animated-content">
-      <h2 style={{ color: "#1769aa" }}>⚙️ 7.7 – Auth Service Implementation</h2>
+      <h2 style={{ color: "#1769aa" }}>
+        🔓 7.8 – Auth Controller (Login/Register)
+      </h2>
       <hr />
       <div className="yellow-callout">
-        In this section, we’ll create the <b>AuthService</b>, which handles the
-        complete <b>authentication workflow</b>:
-        <ul style={{ margin: "0.7rem 0 0 1.2rem" }}>
-          <li>✅ Signing up users</li>
-          <li>✅ Logging in with password encryption</li>
-          <li>✅ Returning JWT tokens on success</li>
-          <li>✅ Handling invalid credentials</li>
+        In this section, we'll create the <b>AuthController</b>, which:
+        <ul className="topic-checklist">
+          <li>Accepts HTTP POST requests from the client</li>
+          <li>Validates request bodies (DTOs)</li>
+          <li>Delegates to AuthService</li>
+          <li>
+            Returns a structured response (token, success message, or errors)
+          </li>
         </ul>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🎯 Why an Auth Service?
+        🎯 Why an Auth Controller?
       </h3>
       <div className="blue-card-section">
-        The <span className="blue-inline-code">AuthService</span> acts as a
-        bridge between your controller and the security mechanisms. It
-        encapsulates:
-        <ul style={{ margin: "0.7rem 0 0 1.2rem" }}>
-          <li>User validation</li>
-          <li>Password encoding</li>
-          <li>Token generation</li>
-          <li>Error handling</li>
+        Your backend needs <b>entry points</b> for clients like:
+        <ul className="topic-checklist">
+          <li>Web frontend (React, Angular, etc.)</li>
+          <li>Mobile apps</li>
+          <li>API consumers (Postman, curl)</li>
         </ul>
-        <div style={{ marginTop: "1rem" }}>
-          This keeps your controllers thin and logic isolated.
-        </div>
+        The controller defines these entry points using REST endpoints (
+        <code>/api/auth/signup</code>, <code>/api/auth/signin</code>), following
+        best practices for:
+        <ul className="topic-checklist">
+          <li>✅ Route naming</li>
+          <li>✅ Input validation</li>
+          <li>✅ Clean delegation to services</li>
+          <li>✅ Standardized responses</li>
+        </ul>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🧱 AuthService Class – Structure
+        🧱 AuthController Implementation
       </h3>
       <div className="blue-card-section">
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
-@Service
-public class AuthService {
+        <pre className="topic-codeblock">{`@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtProvider jwtProvider;
+    private AuthService authService;
 
     /**
-     * Registers a new user.
+     * Signup endpoint
      */
-    public ApiResponse<String> register(SignUpRequest signUpRequest) {
-        Optional<User> existing = userRepository.findByEmail(signUpRequest.getEmail());
-        if (existing.isPresent()) {
-            return ApiResponse.error("User with this email already exists");
-        }
-
-        User user = new User();
-        user.setName(signUpRequest.getName());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword())); // 🔐 hashed
-        user.setRole("ROLE_USER");
-
-        userRepository.save(user);
-
-        return ApiResponse.success("User registered successfully");
+    @PostMapping("/signup")
+    public ResponseEntity<ApiResponse<String>> registerUser(
+            @Valid @RequestBody SignUpRequest request) {
+        ApiResponse<String> response = authService.register(request);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
     /**
-     * Authenticates a user and returns JWT token.
+     * Login endpoint
      */
-    public ApiResponse<AuthResponse> login(SignInRequest signInRequest) {
-        try {
-            // 🔐 Perform authentication using credentials
-            Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    signInRequest.getEmail(),
-                    signInRequest.getPassword()
-                )
-            );
-
-            // 🪙 Generate JWT
-            String token = jwtProvider.generateToken(auth);
-            return ApiResponse.success(new AuthResponse(token));
-
-        } catch (Exception e) {
-            return ApiResponse.error("Invalid email or password");
-        }
+    @PostMapping("/signin")
+    public ResponseEntity<ApiResponse<AuthResponse>> loginUser(
+            @Valid @RequestBody SignInRequest request) {
+        ApiResponse<AuthResponse> response = authService.login(request);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
     }
-}
-`}</pre>
+}`}</pre>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🔍 Key Responsibilities
+        📦 What Each Endpoint Does
       </h3>
-      <div
-        style={{
-          margin: "1.2rem 0 1.5rem 0",
-          padding: "1.2rem 1.5rem",
-          borderRadius: "10px",
-          background: "#f8fbff",
-          border: "1.5px solid #e3eefd",
-        }}
-      >
-        <ul style={{ margin: 0 }}>
-          <li>
-            <b>register():</b> Validates uniqueness, hashes password, saves user
-          </li>
-          <li>
-            <b>login():</b> Authenticates using{" "}
-            <span className="blue-inline-code">AuthenticationManager</span> and
-            returns token
-          </li>
-          <li>
-            <b>ApiResponse:</b> Unified response format for success/failure
-          </li>
-        </ul>
+      <table className="custom-table">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Path</th>
+            <th>Input DTO</th>
+            <th>Output DTO</th>
+            <th>Function</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>POST</td>
+            <td>
+              <code>/api/auth/signup</code>
+            </td>
+            <td>
+              <code>SignUpRequest</code>
+            </td>
+            <td>
+              <code>ApiResponse&lt;String&gt;</code>
+            </td>
+            <td>Registers a new user</td>
+          </tr>
+          <tr>
+            <td>POST</td>
+            <td>
+              <code>/api/auth/signin</code>
+            </td>
+            <td>
+              <code>SignInRequest</code>
+            </td>
+            <td>
+              <code>ApiResponse&lt;AuthResponse&gt;</code>
+            </td>
+            <td>Authenticates & returns JWT</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>📥 DTOs Recap</h3>
+      <div className="blue-card-section">
+        <p>Here's what your request/response models likely look like:</p>
+
+        <h4>🔸 SignUpRequest</h4>
+        <pre className="topic-codeblock">{`public class SignUpRequest {
+    @NotBlank
+    private String name;
+
+    @Email
+    private String email;
+
+    @Size(min = 6)
+    private String password;
+    // Getters/Setters
+}`}</pre>
+
+        <h4>🔸 SignInRequest</h4>
+        <pre className="topic-codeblock">{`public class SignInRequest {
+    @Email
+    private String email;
+
+    @NotBlank
+    private String password;
+    // Getters/Setters
+}`}</pre>
+
+        <h4>🔸 AuthResponse</h4>
+        <pre className="topic-codeblock">{`public class AuthResponse {
+    private String token;
+    // Constructors, Getters
+}`}</pre>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🔐 Important Details
+        🔄 End-to-End Example
       </h3>
       <div className="blue-card-section">
-        <b>Password Encryption:</b>
-        <pre
-          className="topic-codeblock"
-          style={{ margin: "0.7rem 0" }}
-        >{`passwordEncoder.encode(signUpRequest.getPassword())`}</pre>
-        You're using <b>BCrypt</b>, which is safe, salted, and slow (which is
-        good for security).
-      </div>
-      <div className="blue-card-section">
-        <b>Authentication Manager:</b>
-        <pre
-          className="topic-codeblock"
-          style={{ margin: "0.7rem 0" }}
-        >{`authenticationManager.authenticate(...)`}</pre>
-        This triggers Spring Security's internal validation logic (with{" "}
-        <span className="blue-inline-code">UserDetailsService</span> behind the
-        scenes).
-      </div>
-      <div className="blue-card-section">
-        <b>JWT Token:</b>
-        <pre
-          className="topic-codeblock"
-          style={{ margin: "0.7rem 0" }}
-        >{`jwtProvider.generateToken(auth)`}</pre>
-        After login, the JWT is generated and returned.
-      </div>
-
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        💡 User Repository Helper
-      </h3>
-      <div className="blue-card-section">
-        Make sure your <span className="blue-inline-code">UserRepository</span>{" "}
-        has this method:
-        <pre
-          className="topic-codeblock"
-          style={{ margin: "0.7rem 0" }}
-        >{`Optional<User> findByEmail(String email);`}</pre>
-        This is used during both signup (to check for duplicates) and login
-        (internally via{" "}
-        <span className="blue-inline-code">UserDetailsService</span>).
-      </div>
-
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🔄 Example Workflow
-      </h3>
-      <div className="blue-card-section">
-        <b>Signup:</b>
-        <pre
-          className="topic-codeblock"
-          style={{ margin: "0.7rem 0" }}
-        >{`POST /api/auth/signup`}</pre>
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`{
+        <h4>
+          ✅ Signup Request (POST <code>/api/auth/signup</code>):
+        </h4>
+        <pre className="topic-codeblock">{`{
   "name": "Alice",
   "email": "alice@example.com",
-  "password": "123456"
+  "password": "12345678"
 }`}</pre>
-        <b>Response:</b>
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`{
+
+        <p>
+          <strong>Response:</strong>
+        </p>
+        <pre className="topic-codeblock">{`{
   "status": "success",
   "message": "User registered successfully"
 }`}</pre>
-        <b>Login:</b>
-        <pre
-          className="topic-codeblock"
-          style={{ margin: "0.7rem 0" }}
-        >{`POST /api/auth/signin`}</pre>
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`{
+
+        <h4>
+          ✅ Login Request (POST <code>/api/auth/signin</code>):
+        </h4>
+        <pre className="topic-codeblock">{`{
   "email": "alice@example.com",
-  "password": "123456"
+  "password": "12345678"
 }`}</pre>
-        <b>Response:</b>
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`{
+
+        <p>
+          <strong>Response:</strong>
+        </p>
+        <pre className="topic-codeblock">{`{
   "status": "success",
   "data": {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI..."
+    "token": "eyJhbGciOiJIUzI1NiIsInR..."
   }
 }`}</pre>
       </div>
@@ -259,47 +200,81 @@ public class AuthService {
         🧠 Discussion Section
       </h3>
       <div className="blue-card-section">
-        {discussionPrompts.map((faq, idx) => (
-          <div key={idx} style={{ marginBottom: "1.2rem" }}>
-            <div style={{ marginBottom: "0.5rem" }}>
-              <b>Q{idx + 1}:</b> {faq.q}
-            </div>
-            <button
-              className="reveal-btn"
-              onClick={() => toggleFAQ(idx)}
-              style={{ marginBottom: "0.5rem" }}
-            >
-              {openFAQ[idx] ? "Hide Answer" : "Reveal Answer"}
-            </button>
-            {openFAQ[idx] && <div className="yellow-callout">{faq.a}</div>}
+        <div className="topic-faq">
+          <div className="topic-faq-q">
+            <b>Q1: What is the role of @RequestBody?</b>
           </div>
-        ))}
+          <button className="reveal-btn" onClick={() => setShowQ1(!showQ1)}>
+            {showQ1 ? "Hide Answer" : "Reveal Answer"}
+          </button>
+          {showQ1 && (
+            <div className="topic-faq-a">
+              It maps the incoming JSON body to a Java object (DTO).
+            </div>
+          )}
+
+          <div className="topic-faq-q">
+            <b>Q2: Why use @Valid with DTOs?</b>
+          </div>
+          <button className="reveal-btn" onClick={() => setShowQ2(!showQ2)}>
+            {showQ2 ? "Hide Answer" : "Reveal Answer"}
+          </button>
+          {showQ2 && (
+            <div className="topic-faq-a">
+              Ensures validation annotations (like @NotBlank, @Email) are
+              enforced before calling the service.
+            </div>
+          )}
+
+          <div className="topic-faq-q">
+            <b>Q3: What happens if login credentials are incorrect?</b>
+          </div>
+          <button className="reveal-btn" onClick={() => setShowQ3(!showQ3)}>
+            {showQ3 ? "Hide Answer" : "Reveal Answer"}
+          </button>
+          {showQ3 && (
+            <div className="topic-faq-a">
+              The service returns an error response, typically with 401
+              Unauthorized.
+            </div>
+          )}
+
+          <div className="topic-faq-q">
+            <b>Q4: Why is AuthService injected here?</b>
+          </div>
+          <button className="reveal-btn" onClick={() => setShowQ4(!showQ4)}>
+            {showQ4 ? "Hide Answer" : "Reveal Answer"}
+          </button>
+          {showQ4 && (
+            <div className="topic-faq-a">
+              To follow clean architecture (controller → service → repo).
+            </div>
+          )}
+        </div>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
         🧪 Try It Yourself
       </h3>
-      <div className="blue-card-section try-tasks">
-        <ol style={{ margin: 0, paddingLeft: "1.2rem" }}>
+      <div className="blue-card-section">
+        <p>🚀 Task:</p>
+        <ul className="topic-checklist">
           <li>
-            Implement the <span className="blue-inline-code">AuthService</span>{" "}
-            class.
+            Hit <code>/api/auth/signup</code> and create a new user.
           </li>
           <li>
-            Hook it into your{" "}
-            <span className="blue-inline-code">AuthController</span> (coming
-            next in 7.8).
-          </li>
-          <li>Test via Postman or curl to simulate signup/login.</li>
-          <li>
-            <b>Bonus:</b> Add role selection during signup (
-            <span className="blue-inline-code">ROLE_ADMIN</span>,{" "}
-            <span className="blue-inline-code">ROLE_USER</span>)
+            Use the same credentials with <code>/api/auth/signin</code>.
           </li>
           <li>
-            <b>Bonus:</b> Send response with user's name/email along with JWT.
+            Copy the returned token and try accessing a protected API with it.
           </li>
-        </ol>
+        </ul>
+
+        <p>💡 Bonus:</p>
+        <ul className="topic-checklist">
+          <li>Handle duplicate email during signup</li>
+          <li>Return user info (name/email) along with JWT</li>
+        </ul>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>✅ Summary</h3>
@@ -307,20 +282,44 @@ public class AuthService {
         <thead>
           <tr>
             <th>Feature</th>
-            <th>Description</th>
+            <th>Purpose</th>
           </tr>
         </thead>
         <tbody>
-          {summaryTable.map(([feature, desc], idx) => (
-            <tr key={idx}>
-              <td>{feature}</td>
-              <td>{desc}</td>
-            </tr>
-          ))}
+          <tr>
+            <td>
+              <code>AuthController</code>
+            </td>
+            <td>Exposes signup and login APIs</td>
+          </tr>
+          <tr>
+            <td>
+              <code>POST /signup</code>
+            </td>
+            <td>Registers a new user</td>
+          </tr>
+          <tr>
+            <td>
+              <code>POST /signin</code>
+            </td>
+            <td>Authenticates a user and returns JWT</td>
+          </tr>
+          <tr>
+            <td>
+              <code>@Valid</code>
+            </td>
+            <td>Triggers automatic field-level validation</td>
+          </tr>
+          <tr>
+            <td>
+              <code>ApiResponse&lt;T&gt;</code>
+            </td>
+            <td>Unified format for success/error responses</td>
+          </tr>
         </tbody>
       </table>
     </div>
   );
 };
 
-export default Topic7Subtopic7Content;
+export default Topic7Subtopic8Content;

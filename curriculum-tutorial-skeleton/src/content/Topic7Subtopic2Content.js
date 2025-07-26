@@ -2,43 +2,32 @@ import React from "react";
 import "./CustomSectionStyles.css";
 
 const summaryTable = [
-  [
-    "findByUsername(String)",
-    "Fetch a user based on username (used during authentication)",
-  ],
-  [
-    "existsByUsername(String)",
-    "Check if a username is already taken (for validation)",
-  ],
-  [
-    "extends JpaRepository",
-    "Gives you access to save, delete, findAll, findById, etc.",
-  ],
-];
-
-const summaryTable2 = [
-  ["UserRepository", "Interface to perform DB operations on User entity"],
-  ["findByUsername()", "Key method for authentication"],
-  ["existsByUsername()", "Useful during signup for validations"],
-  ["Spring Data JPA", "Makes repository implementation automatic & clean"],
+  ["AuthRequest", "Holds username & password for login"],
+  ["AuthResponse", "Returns JWT token after successful login"],
+  ["RegisterRequest", "Optional — supports registration fields"],
+  ["Validation", "Ensures only clean and required data flows"],
 ];
 
 const discussionPrompts = [
   {
-    q: "Why use JpaRepository?",
-    a: "It provides built-in methods like save(), findById(), delete(), reducing boilerplate code.",
+    q: "Why shouldn’t we use the User entity directly in controllers?",
+    a: "To avoid exposing sensitive fields and to separate DB model from API structure.",
   },
   {
-    q: "Why do we use Optional<User>?",
-    a: "To avoid NullPointerException and handle cases where the user isn’t found safely.",
+    q: "What is the purpose of AuthResponse?",
+    a: "To return the JWT token after successful login.",
   },
   {
-    q: "What is the purpose of existsByUsername()?",
-    a: "To check if a username is already registered before creating a new account.",
+    q: "Can we include fields like email and role in a registration DTO?",
+    a: "Yes, but sanitize and validate them properly.",
+  },
+  {
+    q: "What annotation ensures a field is not empty in the DTO?",
+    a: "@NotBlank (from javax.validation.constraints)",
   },
 ];
 
-const Topic7Subtopic2Content = () => {
+const Topic7Subtopic3Content = () => {
   const [openFAQ, setOpenFAQ] = React.useState(
     Array(discussionPrompts.length).fill(false)
   );
@@ -47,107 +36,167 @@ const Topic7Subtopic2Content = () => {
   };
   return (
     <div className="topic-animated-content">
-      <h2 style={{ color: "#1769aa" }}>📦 7.2 – User Repository</h2>
+      <h2 style={{ color: "#1769aa" }}>✉️ 7.3 – Authentication DTOs</h2>
       <hr />
       <div className="yellow-callout">
-        <b>🔍 Why Do We Need a User Repository?</b>
-        <div style={{ margin: "0.5rem 0 0 0.2rem" }}>
-          A repository acts as the bridge between your Java code and the
-          database. Rather than writing boilerplate SQL queries, Spring Data JPA
-          allows us to perform CRUD operations with ease, using simple method
-          names.
-        </div>
-        <div style={{ margin: "0.7rem 0 0 1.2rem" }}>
-          Specifically for authentication, we’ll need to:
-          <ul style={{ margin: "0.5rem 0 0 1.2rem" }}>
-            <li>
-              Find a user by their <b>username</b> (for login)
-            </li>
-            <li>
-              Possibly check if a username <b>already exists</b> (during
-              registration)
-            </li>
-            <li>Save new users (on signup)</li>
-          </ul>
-        </div>
-        <div style={{ margin: "0.7rem 0 0 0.2rem" }}>
-          The <b>UserRepository</b> interface will make all of this incredibly
-          easy using Spring Data’s method conventions.
+        In this section, we’ll create <b>DTOs (Data Transfer Objects)</b> for
+        login and registration. DTOs are <b>simple Java classes</b> used to
+        carry data between processes — in this case, between the frontend/client
+        and backend.
+        <br />
+        <br />
+        They help you separate your <b>internal database models</b> from the{" "}
+        <b>external API contract</b>, which keeps your application{" "}
+        <b>clean, secure, and maintainable</b>.
+      </div>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🔍 Why Use DTOs?
+      </h3>
+      <div style={{ marginBottom: "1.5rem", padding: "1rem 1.2rem" }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}
+        >
+          <div
+            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
+          >
+            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
+            <div>
+              <b>Security:</b> You don’t want to expose your full{" "}
+              <span className="blue-inline-code">User</span> entity (especially
+              fields like <span className="blue-inline-code">id</span>,{" "}
+              <span className="blue-inline-code">password</span>,{" "}
+              <span className="blue-inline-code">role</span>, etc.) in API
+              responses.
+            </div>
+          </div>
+          <div
+            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
+          >
+            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
+            <div>
+              <b>Validation:</b> DTOs allow you to add custom validation logic
+              without modifying your core entity.
+            </div>
+          </div>
+          <div
+            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
+          >
+            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
+            <div>
+              <b>Flexibility:</b> You can shape your request/response payloads
+              however you like, independently of your database schema.
+            </div>
+          </div>
+          <div
+            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
+          >
+            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
+            <div>
+              <b>Clean API Contract:</b> DTOs form the bridge between the client
+              and backend, making your API more predictable and stable.
+            </div>
+          </div>
         </div>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🗃️ Creating the UserRepository Interface
+        🧱 Create Request and Response DTOs
       </h3>
       <div className="blue-card-section">
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>
-          {`
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-
-    // Find a user by username (used during login)
-    Optional<User> findByUsername(String username);
-
-    // Optional: Check if a username already exists
-    boolean existsByUsername(String username);
-}
-`}
-        </pre>
+        You typically need <b>two request DTOs</b> (for login and register) and{" "}
+        <b>one response DTO</b> (for token response):
       </div>
 
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🧠 Code Explanation
-      </h3>
-      <table className="custom-table">
-        <thead>
-          <tr>
-            <th>Method</th>
-            <th>Purpose</th>
-          </tr>
-        </thead>
-        <tbody>
-          {summaryTable.map(([method, desc], idx) => (
-            <tr key={idx}>
-              <td>{method}</td>
-              <td>{desc}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="blue-card-section" style={{ marginTop: "1rem" }}>
-        <b>
-          Why <code>Optional&lt;User&gt;</code>?
-        </b>
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>
-          {`
-Optional<User> user = userRepository.findByUsername("vaibhav");
-if (user.isPresent()) {
-    // proceed
-} else {
-    // user not found
+      <div className="blue-card-section" style={{ marginTop: "1.2rem" }}>
+        <b>📝 AuthRequest (for Login/Register)</b>
+        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
+public class AuthRequest {
+
+    @NotBlank(message = "Username is required")
+    private String username;
+
+    @NotBlank(message = "Password is required")
+    private String password;
+
+    // Getters and Setters
 }
-`}
-        </pre>
-        <span style={{ display: "block", margin: "0.7rem 0" }}>
-          Or even better with <code>.orElseThrow()</code>:
-        </span>
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>
-          {`
-User user = userRepository.findByUsername("vaibhav")
-    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-`}
-        </pre>
+`}</pre>
       </div>
 
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        ✨ Advantages of Using Spring Data Repositories
-      </h3>
-      <ul className="topic-checklist">
-        <li>✅ Clean and readable</li>
-        <li>✅ Reduces boilerplate</li>
-        <li>✅ Auto-implemented at runtime by Spring</li>
-        <li>✅ Easy to extend later with custom queries</li>
-      </ul>
+      <div className="blue-card-section" style={{ marginTop: "1.2rem" }}>
+        <b>📨 AuthResponse (for returning JWT Token)</b>
+        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
+public class AuthResponse {
+
+    private String token;
+
+    public AuthResponse(String token) {
+        this.token = token;
+    }
+
+    // Getter
+    public String getToken() {
+        return token;
+    }
+}
+`}</pre>
+      </div>
+
+      <div className="blue-card-section" style={{ marginTop: "1.2rem" }}>
+        <b>🧾 (Optional) RegisterRequest</b>
+        <div style={{ marginBottom: "0.5rem" }}>
+          If you want to support <b>extra fields during registration</b> (e.g.,
+          email, role):
+        </div>
+        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
+public class RegisterRequest {
+
+    @NotBlank
+    private String username;
+
+    @NotBlank
+    private String password;
+
+    private String role = "USER"; // Default role
+
+    // Optional: email, phone, etc.
+
+    // Getters and Setters
+}
+`}</pre>
+      </div>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>✨ Key Notes</h3>
+      <div className="blue-card-section">
+        <ul className="topic-checklist" style={{ margin: 0 }}>
+          <li>
+            All these classes are <b>POJOs (Plain Old Java Objects)</b>.
+          </li>
+          <li>
+            Decorate fields with <b>validation annotations</b> like{" "}
+            <code>@NotBlank</code>, <code>@Size</code>, <code>@Email</code> for
+            better input safety.
+          </li>
+          <li>
+            You can use <b>Lombok</b> annotations like <code>@Data</code>,{" "}
+            <code>@AllArgsConstructor</code>, and{" "}
+            <code>@NoArgsConstructor</code> to reduce boilerplate.
+          </li>
+        </ul>
+        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class AuthRequest {
+    private String username;
+    private String password;
+}
+`}</pre>
+        <div style={{ marginTop: "0.5rem" }}>
+          Just make sure Lombok is in your dependencies.
+        </div>
+      </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
         🧠 Discussion Section
@@ -176,21 +225,23 @@ User user = userRepository.findByUsername("vaibhav")
       <div className="blue-card-section try-tasks">
         <ol style={{ margin: 0, paddingLeft: "1.2rem" }}>
           <li>
-            Create <b>UserRepository</b> interface.
+            Create <b>AuthRequest</b> and <b>AuthResponse</b> DTOs.
           </li>
           <li>
-            Extend <b>JpaRepository&lt;User, Long&gt;</b>.
+            Add validation annotations for fields like <b>username</b> and{" "}
+            <b>password</b>.
           </li>
           <li>
-            Add <b>findByUsername()</b> and <b>existsByUsername()</b> methods.
+            Use these DTOs in your <b>AuthController</b> (which we’ll build in{" "}
+            <b>7.8</b>).
           </li>
           <li>
-            <b>Bonus:</b> Add <b>findAllByRole(String role)</b> to fetch users
-            by role.
+            <b>Bonus:</b> Create a <b>RegisterRequest</b> DTO that supports
+            fields like email, role, and confirmPassword.
           </li>
           <li>
-            <b>Bonus:</b> Add <b>@Transactional(readOnly = true)</b> for
-            read-optimized queries.
+            <b>Bonus:</b> Add a global <b>@ControllerAdvice</b> to handle
+            validation errors nicely.
           </li>
         </ol>
       </div>
@@ -199,14 +250,14 @@ User user = userRepository.findByUsername("vaibhav")
       <table className="custom-table">
         <thead>
           <tr>
-            <th>Feature</th>
+            <th>DTO Class</th>
             <th>Purpose</th>
           </tr>
         </thead>
         <tbody>
-          {summaryTable2.map(([feature, desc], idx) => (
+          {summaryTable.map(([dto, desc], idx) => (
             <tr key={idx}>
-              <td>{feature}</td>
+              <td>{dto}</td>
               <td>{desc}</td>
             </tr>
           ))}
@@ -216,4 +267,4 @@ User user = userRepository.findByUsername("vaibhav")
   );
 };
 
-export default Topic7Subtopic2Content;
+export default Topic7Subtopic3Content;

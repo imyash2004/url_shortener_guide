@@ -2,43 +2,45 @@ import React from "react";
 import "./CustomSectionStyles.css";
 
 const summaryTable = [
-  ["JwtTokenValidator", "Custom filter that validates every token"],
-  ["Authorization header", "Where the JWT is expected from the client"],
-  ["SecurityContext", "Stores authenticated user context"],
-  ["@OncePerRequestFilter", "Ensures one-time filter per request lifecycle"],
-  ["Token Exception", "Automatically triggers 401 if invalid"],
+  ["AuthService", "Business logic for signup & login"],
+  ["AuthenticationManager", "Verifies user credentials securely"],
+  ["PasswordEncoder", "Secures user password with hashing"],
+  ["JwtProvider", "Returns token after successful login"],
+  ["ApiResponse", "Consistent response structure"],
 ];
 
 const discussionPrompts = [
   {
-    q: "Which header contains the JWT token?",
-    a: "Authorization (prefixed with Bearer )",
+    q: "What does the AuthenticationManager do?",
+    a: "Verifies the user’s credentials against stored values (using Spring Security under the hood)",
   },
   {
-    q: "What happens if the JWT is expired?",
-    a: "An exception is thrown, and 401 Unauthorized is returned.",
+    q: "What happens if the user is not found or password is wrong?",
+    a: "AuthenticationManager throws an exception → your service returns an error response.",
   },
   {
-    q: "What does SecurityContextHolder do?",
-    a: "Stores the authenticated user for the current request.",
+    q: "Why use @Service here?",
+    a: "It’s a business layer component, injectable in controllers.",
   },
   {
-    q: "What happens if no token is provided?",
-    a: "Spring treats the request as anonymous and restricts protected endpoints.",
+    q: "Why is password encoded before saving?",
+    a: "To avoid storing plain text passwords and reduce the impact of data breaches.",
   },
 ];
 
-const howItWorksSteps = [
-  "Extract JWT from Authorization header",
-  "Remove the Bearer prefix",
-  "Validate the token using the signing key",
-  "Parse claims: email, authorities",
-  "Create an Authentication object",
-  "Set the authenticated user in Spring's SecurityContext",
-  "Continue the filter chain",
+const responsibilities = [
+  {
+    label: "register()",
+    desc: "Validates uniqueness, hashes password, saves user",
+  },
+  {
+    label: "login()",
+    desc: "Authenticates using AuthenticationManager and returns token",
+  },
+  { label: "ApiResponse", desc: "Unified response format for success/failure" },
 ];
 
-const Topic7Subtopic6Content = () => {
+const Topic7Subtopic7Content = () => {
   const [openFAQ, setOpenFAQ] = React.useState(
     Array(discussionPrompts.length).fill(false)
   );
@@ -47,87 +49,104 @@ const Topic7Subtopic6Content = () => {
   };
   return (
     <div className="topic-animated-content">
-      <h2 style={{ color: "#1769aa" }}>🔐 7.6 – JWT Token Validation</h2>
+      <h2 style={{ color: "#1769aa" }}>⚙️ 7.7 – Auth Service Implementation</h2>
       <hr />
       <div className="yellow-callout">
-        In this section, we’ll build the logic that validates incoming JWTs to
-        allow secure access to protected resources — essentially replicating how{" "}
-        <b>sessions work without a database</b>.
+        In this section, we’ll create the <b>AuthService</b>, which handles the
+        complete <b>authentication workflow</b>:
+        <ul style={{ margin: "0.7rem 0 0 1.2rem" }}>
+          <li>✅ Signing up users</li>
+          <li>✅ Logging in with password encryption</li>
+          <li>✅ Returning JWT tokens on success</li>
+          <li>✅ Handling invalid credentials</li>
+        </ul>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🎯 Why Do We Need JWT Validation?
+        🎯 Why an Auth Service?
       </h3>
       <div className="blue-card-section">
-        When a user sends a request to a protected route, the server must:
-        <ol style={{ margin: 0, paddingLeft: "1.2rem" }}>
-          <li>
-            Check if the <b>JWT exists</b> in the request.
-          </li>
-          <li>
-            Verify the <b>signature</b> of the token.
-          </li>
-          <li>
-            Check if the <b>token is expired</b>.
-          </li>
-          <li>
-            Extract the <b>user identity and roles</b>.
-          </li>
-          <li>
-            Inject that into the <b>SecurityContext</b>, so Spring knows who the
-            user is.
-          </li>
-        </ol>
+        The <span className="blue-inline-code">AuthService</span> acts as a
+        bridge between your controller and the security mechanisms. It
+        encapsulates:
+        <ul style={{ margin: "0.7rem 0 0 1.2rem" }}>
+          <li>User validation</li>
+          <li>Password encoding</li>
+          <li>Token generation</li>
+          <li>Error handling</li>
+        </ul>
         <div style={{ marginTop: "1rem" }}>
-          Without this, <b>every route would be unprotected</b>, and tokens
-          would be meaningless.
+          This keeps your controllers thin and logic isolated.
         </div>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🧱 Your Existing JwtTokenValidator – Explained
+        🧱 AuthService Class – Structure
       </h3>
       <div className="blue-card-section">
         <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
-public class JwtTokenValidator extends OncePerRequestFilter {
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+@Service
+public class AuthService {
 
-        String jwt = request.getHeader(JwtConstant.JWT_HEADER);
+    @Autowired
+    private UserRepository userRepository;
 
-        if (jwt != null && jwt.startsWith("Bearer ")) {
-            jwt = jwt.substring(7);
-            try {
-                SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
-                Claims claims = Jwts.parserBuilder()
-                                    .setSigningKey(key)
-                                    .build()
-                                    .parseClaimsJws(jwt)
-                                    .getBody();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-                String email = String.valueOf(claims.get("email"));
-                String authorities = String.valueOf(claims.get("authorities"));
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-                List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, auths);
+    @Autowired
+    private JwtProvider jwtProvider;
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } catch (Exception e) {
-                throw new BadCredentialsException("Invalid token: " + e.getMessage());
-            }
+    /**
+     * Registers a new user.
+     */
+    public ApiResponse<String> register(SignUpRequest signUpRequest) {
+        Optional<User> existing = userRepository.findByEmail(signUpRequest.getEmail());
+        if (existing.isPresent()) {
+            return ApiResponse.error("User with this email already exists");
         }
 
-        filterChain.doFilter(request, response);
+        User user = new User();
+        user.setName(signUpRequest.getName());
+        user.setEmail(signUpRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword())); // 🔐 hashed
+        user.setRole("ROLE_USER");
+
+        userRepository.save(user);
+
+        return ApiResponse.success("User registered successfully");
+    }
+
+    /**
+     * Authenticates a user and returns JWT token.
+     */
+    public ApiResponse<AuthResponse> login(SignInRequest signInRequest) {
+        try {
+            // 🔐 Perform authentication using credentials
+            Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                    signInRequest.getEmail(),
+                    signInRequest.getPassword()
+                )
+            );
+
+            // 🪙 Generate JWT
+            String token = jwtProvider.generateToken(auth);
+            return ApiResponse.success(new AuthResponse(token));
+
+        } catch (Exception e) {
+            return ApiResponse.error("Invalid email or password");
+        }
     }
 }
 `}</pre>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🔍 How This Works
+        🔍 Key Responsibilities
       </h3>
       <div
         style={{
@@ -138,56 +157,102 @@ public class JwtTokenValidator extends OncePerRequestFilter {
           border: "1.5px solid #e3eefd",
         }}
       >
-        <ol style={{ margin: 0, paddingLeft: "1.2rem" }}>
+        <ul style={{ margin: 0 }}>
           <li>
-            Extract JWT from{" "}
-            <span className="blue-inline-code">Authorization</span> header
+            <b>register():</b> Validates uniqueness, hashes password, saves user
           </li>
           <li>
-            Remove the <span className="blue-inline-code">Bearer</span> prefix
-          </li>
-          <li>Validate the token using the signing key</li>
-          <li>
-            Parse claims: <span className="blue-inline-code">email</span>,{" "}
-            <span className="blue-inline-code">authorities</span>
+            <b>login():</b> Authenticates using{" "}
+            <span className="blue-inline-code">AuthenticationManager</span> and
+            returns token
           </li>
           <li>
-            Create an <span className="blue-inline-code">Authentication</span>{" "}
-            object
+            <b>ApiResponse:</b> Unified response format for success/failure
           </li>
-          <li>
-            Set the authenticated user in Spring's{" "}
-            <span className="blue-inline-code">SecurityContext</span>
-          </li>
-          <li>Continue the filter chain</li>
-        </ol>
+        </ul>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        ⚠️ What Happens if Token is Invalid?
+        🔐 Important Details
       </h3>
       <div className="blue-card-section">
-        This part of your code handles invalid JWTs:
-        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
-catch (Exception e) {
-    throw new BadCredentialsException("Invalid token: " + e.getMessage());
-}
-`}</pre>
-        Which then gets translated into a <b>401 response</b> by Spring
-        Security.
-      </div>
-
-      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🛡️ SecurityFilterChain Integration
-      </h3>
-      <div className="blue-card-section">
-        You already registered this filter in your config:
+        <b>Password Encryption:</b>
         <pre
           className="topic-codeblock"
           style={{ margin: "0.7rem 0" }}
-        >{`.addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)`}</pre>
-        This ensures <b>every request passes through your token validator</b>{" "}
-        before reaching your controller.
+        >{`passwordEncoder.encode(signUpRequest.getPassword())`}</pre>
+        You're using <b>BCrypt</b>, which is safe, salted, and slow (which is
+        good for security).
+      </div>
+      <div className="blue-card-section">
+        <b>Authentication Manager:</b>
+        <pre
+          className="topic-codeblock"
+          style={{ margin: "0.7rem 0" }}
+        >{`authenticationManager.authenticate(...)`}</pre>
+        This triggers Spring Security's internal validation logic (with{" "}
+        <span className="blue-inline-code">UserDetailsService</span> behind the
+        scenes).
+      </div>
+      <div className="blue-card-section">
+        <b>JWT Token:</b>
+        <pre
+          className="topic-codeblock"
+          style={{ margin: "0.7rem 0" }}
+        >{`jwtProvider.generateToken(auth)`}</pre>
+        After login, the JWT is generated and returned.
+      </div>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        💡 User Repository Helper
+      </h3>
+      <div className="blue-card-section">
+        Make sure your <span className="blue-inline-code">UserRepository</span>{" "}
+        has this method:
+        <pre
+          className="topic-codeblock"
+          style={{ margin: "0.7rem 0" }}
+        >{`Optional<User> findByEmail(String email);`}</pre>
+        This is used during both signup (to check for duplicates) and login
+        (internally via{" "}
+        <span className="blue-inline-code">UserDetailsService</span>).
+      </div>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🔄 Example Workflow
+      </h3>
+      <div className="blue-card-section">
+        <b>Signup:</b>
+        <pre
+          className="topic-codeblock"
+          style={{ margin: "0.7rem 0" }}
+        >{`POST /api/auth/signup`}</pre>
+        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`{
+  "name": "Alice",
+  "email": "alice@example.com",
+  "password": "123456"
+}`}</pre>
+        <b>Response:</b>
+        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`{
+  "status": "success",
+  "message": "User registered successfully"
+}`}</pre>
+        <b>Login:</b>
+        <pre
+          className="topic-codeblock"
+          style={{ margin: "0.7rem 0" }}
+        >{`POST /api/auth/signin`}</pre>
+        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`{
+  "email": "alice@example.com",
+  "password": "123456"
+}`}</pre>
+        <b>Response:</b>
+        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`{
+  "status": "success",
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI..."
+  }
+}`}</pre>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
@@ -216,17 +281,23 @@ catch (Exception e) {
       </h3>
       <div className="blue-card-section try-tasks">
         <ol style={{ margin: 0, paddingLeft: "1.2rem" }}>
-          <li>Hit a protected route without a token → should return 401.</li>
-          <li>Hit the same route with an invalid token → should return 401.</li>
           <li>
-            Hit it with a valid token → should return 200 OK and include
-            authenticated details.
+            Implement the <span className="blue-inline-code">AuthService</span>{" "}
+            class.
           </li>
           <li>
-            <b>Bonus:</b> Print the logged-in user with:{" "}
-            <span className="blue-inline-code">
-              SecurityContextHolder.getContext().getAuthentication().getName()
-            </span>
+            Hook it into your{" "}
+            <span className="blue-inline-code">AuthController</span> (coming
+            next in 7.8).
+          </li>
+          <li>Test via Postman or curl to simulate signup/login.</li>
+          <li>
+            <b>Bonus:</b> Add role selection during signup (
+            <span className="blue-inline-code">ROLE_ADMIN</span>,{" "}
+            <span className="blue-inline-code">ROLE_USER</span>)
+          </li>
+          <li>
+            <b>Bonus:</b> Send response with user's name/email along with JWT.
           </li>
         </ol>
       </div>
@@ -236,7 +307,7 @@ catch (Exception e) {
         <thead>
           <tr>
             <th>Feature</th>
-            <th>Purpose</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
@@ -252,4 +323,4 @@ catch (Exception e) {
   );
 };
 
-export default Topic7Subtopic6Content;
+export default Topic7Subtopic7Content;

@@ -2,53 +2,52 @@ import React from "react";
 import "./CustomSectionStyles.css";
 
 const summaryTable = [
-  ["BCryptPasswordEncoder", "Secure password hashing tool"],
-  ["encode()", "Hashes the password before saving it"],
-  ["matches()", "Validates raw input against the stored hash"],
-  ["Adaptive Hashing", "Becomes slower with increased strength value"],
-  ["Spring Integration", "Easily managed as a Spring @Bean"],
-];
-
-const bestPractices = [
-  ["Always hash before storing", "Never save raw passwords"],
-  [
-    "Use BCryptPasswordEncoder",
-    "Industry-standard, secure, salted, and adaptive",
-  ],
-  [
-    "Never manually compare passwords",
-    "Use passwordEncoder.matches() for verification",
-  ],
-  [
-    "Never log passwords (even hashed)",
-    "Logging credentials is a huge security flaw",
-  ],
-  [
-    "Use a bean instead of new instance",
-    "Lets Spring inject and manage configuration",
-  ],
+  ["JWT Token", "Secure, self-contained token for authentication"],
+  ["JwtProvider", "Class that builds and signs the token"],
+  ["generateToken()", "Adds email and roles to token payload"],
+  ["Signature", "Ensures token is not forged"],
+  ["Expiration", "Forces clients to re-authenticate after timeout"],
 ];
 
 const discussionPrompts = [
   {
-    q: "Why is BCrypt better than MD5 or SHA-256?",
-    a: "BCrypt is salted, slow, and adaptive — perfect for password hashing. MD5/SHA are fast and insecure for passwords.",
+    q: "What information is stored inside a JWT?",
+    a: "Claims like email, roles, issued time, and expiration.",
   },
   {
-    q: "What happens if you save a password without encoding it?",
-    a: "It's stored in plain text and can be stolen easily.",
+    q: "Why is the JWT signed?",
+    a: "To ensure it hasn't been tampered with and to validate authenticity.",
   },
   {
-    q: "How do you compare a raw password with a hashed one?",
-    a: "Use passwordEncoder.matches(raw, hashed)",
+    q: "Where should JWT be stored on the client side?",
+    a: "Usually in memory, localStorage, or secure HTTP-only cookies.",
   },
   {
-    q: "What annotation is used to make PasswordEncoder injectable across the app?",
-    a: "@Bean inside a @Configuration class",
+    q: "How does the server validate a token later?",
+    a: "It parses and verifies the signature using the same secret key.",
   },
 ];
 
-const Topic7Subtopic4Content = () => {
+const jwtChecklist = [
+  {
+    label: "No need to store sessions in DB",
+  },
+  {
+    label: "Works perfectly for RESTful APIs",
+  },
+  {
+    label: "Tokens are ",
+    strong: "self-contained",
+    suffix: " (contain all needed info)",
+  },
+  {
+    label: "They can be ",
+    strong: "verified anywhere",
+    suffix: ", including microservices",
+  },
+];
+
+const Topic7Subtopic5Content = () => {
   const [openFAQ, setOpenFAQ] = React.useState(
     Array(discussionPrompts.length).fill(false)
   );
@@ -57,115 +56,208 @@ const Topic7Subtopic4Content = () => {
   };
   return (
     <div className="topic-animated-content">
-      <h2 style={{ color: "#1769aa" }}>🔒 7.4 – Password Encryption</h2>
+      <h2 style={{ color: "#1769aa" }}>🔐 7.5 – JWT Token Generation</h2>
       <hr />
       <div className="yellow-callout">
-        In this section, we’ll learn how to <b>securely store user passwords</b>{" "}
-        using the <b>BCrypt hashing algorithm</b> — ensuring even if your
-        database is compromised, raw passwords are never exposed.
+        In this section, we’ll understand what <b>JWT (JSON Web Tokens)</b> are,
+        why they are crucial for building scalable APIs, and how to generate
+        them securely using Spring Boot. We'll also walk through your existing{" "}
+        <span className="blue-inline-code">JwtProvider</span> class in a very
+        descriptive and interactive way.
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🔍 Why Encrypt Passwords?
+        🎯 What is a JWT?
       </h3>
       <div className="blue-card-section">
-        <b>Never store passwords in plain text.</b>
-        <br />
-        If a hacker gets access to your database and passwords aren’t encrypted,
-        every user’s account — potentially across multiple platforms — is
-        compromised.
+        A <b>JWT (JSON Web Token)</b> is a compact, URL-safe token used to{" "}
+        <b>securely transmit information</b> between parties. It’s digitally
+        signed so it can be verified but <b>not tampered with</b>.
       </div>
-      <ul className="topic-checklist">
-        <li>✔️ Prevents raw password leaks</li>
-        <li>✔️ Adds computational cost (slows down brute force attacks)</li>
-        <li>
-          ✔️ BCrypt includes a <b>salt</b> internally (extra randomness)
-        </li>
-      </ul>
       <div className="blue-card-section">
-        BCrypt is a widely trusted and <b>adaptive</b> hashing algorithm —
-        meaning it can be made slower over time as computers get faster.
+        <b>JWT Structure (3 parts, separated by dots):</b>
+        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
+xxxxx.yyyyy.zzzzz
+Header.Payload.Signature
+`}</pre>
+        <table className="custom-table">
+          <thead>
+            <tr>
+              <th>Part</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Header</td>
+              <td>Algorithm & token type (e.g., HS256, JWT)</td>
+            </tr>
+            <tr>
+              <td>Payload</td>
+              <td>Claims (data like username, roles)</td>
+            </tr>
+            <tr>
+              <td>Signature</td>
+              <td>HMAC-SHA256 signature using secret key</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>🧠 Why Use JWT?</h3>
+      <div
+        style={{
+          margin: "1.2rem 0 1.5rem 0",
+          padding: "1.2rem 1.5rem",
+          borderRadius: "10px",
+          background: "#f8fbff",
+          border: "1.5px solid #e3eefd",
+        }}
+      >
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}
+        >
+          <div
+            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
+          >
+            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
+            <div>No need to store sessions in DB</div>
+          </div>
+          <div
+            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
+          >
+            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
+            <div>Works perfectly for RESTful APIs</div>
+          </div>
+          <div
+            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
+          >
+            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
+            <div>
+              Tokens are <b>self-contained</b> (contain all needed info)
+            </div>
+          </div>
+          <div
+            style={{ display: "flex", alignItems: "flex-start", gap: "0.7rem" }}
+          >
+            <span style={{ fontSize: "1.4em", lineHeight: 1.1 }}>✅</span>
+            <div>
+              They can be <b>verified anywhere</b>, including microservices
+            </div>
+          </div>
+        </div>
       </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🧱 Using BCryptPasswordEncoder in Spring Boot
+        🛠️ How JWT Token Generation Works
       </h3>
       <div className="blue-card-section">
-        Spring Security makes it <b>super easy</b> to hash and validate
-        passwords using <code>BCryptPasswordEncoder</code>.
+        <ol style={{ margin: 0, paddingLeft: "1.2rem" }}>
+          <li>User logs in with credentials.</li>
+          <li>
+            If valid, backend generates a JWT using:
+            <ul style={{ margin: 0, paddingLeft: "1.2rem" }}>
+              <li>User’s email/username</li>
+              <li>Roles/authorities</li>
+              <li>Expiration time</li>
+            </ul>
+          </li>
+          <li>The signed token is returned in the response.</li>
+          <li>The client stores it (usually in localStorage or memory).</li>
+          <li>
+            On future requests, client sends the token via the{" "}
+            <span className="blue-inline-code">Authorization</span> header.
+          </li>
+        </ol>
       </div>
-      <h4 style={{ marginTop: "1.2rem", color: "#1769aa" }}>
-        Step 1️⃣ – Create a Bean
-      </h4>
-      <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>
-        {`
-@Configuration
-public class PasswordConfig {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+      <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
+        🧱 Your Existing JwtProvider – Explained
+      </h3>
+      <div className="blue-card-section">
+        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
+public class JwtProvider {
+
+    private static SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+
+    public String generateToken(Authentication auth) {
+        Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+        String roles = populateAuthorities(authorities);
+
+        String jwt = Jwts.builder()
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + 86400000)) // Token valid for 24h
+                .claim("email", auth.getName())         // Add username/email
+                .claim("authorities", roles)            // Add roles
+                .signWith(key)                          // Sign using secret key
+                .compact();
+
+        return jwt;
+    }
+
+    private String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        Set<String> auth = new HashSet<>();
+        for (GrantedAuthority ga : authorities) {
+            auth.add(ga.getAuthority());
+        }
+        return String.join(",", auth);
     }
 }
-`}
-      </pre>
-      <h4 style={{ marginTop: "1.2rem", color: "#1769aa" }}>
-        Step 2️⃣ – Encode Password Before Saving
-      </h4>
-      <div className="blue-card-section">
-        In your Auth Service (during registration):
+`}</pre>
       </div>
-      <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>
-        {`
-@Autowired
-private PasswordEncoder passwordEncoder;
-
-public void registerUser(RegisterRequest request) {
-    User user = new User();
-    user.setUsername(request.getUsername());
-    
-    // Hash the password before saving
-    user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-    userRepository.save(user);
-}
-`}
-      </pre>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        🔁 Validating Password During Login
+        🧠 What’s Happening Here?
       </h3>
-      <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>
-        {`
-User user = userRepository.findByUsername(request.getUsername())
-    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-// Match raw input with hashed password
-if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-    throw new BadCredentialsException("Invalid credentials");
-}
-`}
-      </pre>
+      <div className="blue-card-section">
+        <ul className="topic-checklist" style={{ margin: 0 }}>
+          <li>
+            <span className="blue-inline-code">auth.getName()</span> → gets the
+            username or email of the authenticated user.
+          </li>
+          <li>
+            <span className="blue-inline-code">getAuthorities()</span> → gets
+            the list of user roles (e.g.,{" "}
+            <span className="blue-inline-code">ROLE_ADMIN</span>)
+          </li>
+          <li>
+            <span className="blue-inline-code">.setIssuedAt()</span> and{" "}
+            <span className="blue-inline-code">.setExpiration()</span> → define
+            token validity (usually 24 hours)
+          </li>
+          <li>
+            <span className="blue-inline-code">.claim(...)</span> → adds extra
+            data to the payload.
+          </li>
+          <li>
+            <span className="blue-inline-code">.signWith(key)</span> → signs the
+            token with a <b>secure HMAC SHA key</b>
+          </li>
+        </ul>
+        <div style={{ marginTop: "1rem" }}>
+          The result: a secure, signed token that looks like this:
+          <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+`}</pre>
+        </div>
+      </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
-        💡 Best Practices
+        📦 Where Is This Token Used?
       </h3>
-      <table className="custom-table">
-        <thead>
-          <tr>
-            <th>Best Practice</th>
-            <th>Why It Matters</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bestPractices.map(([practice, why], idx) => (
-            <tr key={idx}>
-              <td>{practice}</td>
-              <td>{why}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="blue-card-section">
+        The token is returned to the client in{" "}
+        <span className="blue-inline-code">AuthResponse</span> (as you defined
+        earlier):
+        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
+return new AuthResponse(jwt);
+`}</pre>
+        Clients must send this token in <b>every request</b> to protected
+        endpoints like this:
+        <pre className="topic-codeblock" style={{ margin: "0.7rem 0" }}>{`
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
+`}</pre>
+      </div>
 
       <h3 style={{ marginTop: "1.5rem", color: "#1769aa" }}>
         🧠 Discussion Section
@@ -194,25 +286,29 @@ if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
       <div className="blue-card-section try-tasks">
         <ol style={{ margin: 0, paddingLeft: "1.2rem" }}>
           <li>
-            Add <b>BCryptPasswordEncoder</b> bean to your config
+            Generate a token using your{" "}
+            <span className="blue-inline-code">JwtProvider</span> after login.
           </li>
           <li>
-            Use <b>.encode()</b> while registering the user
+            Return it to the client as part of{" "}
+            <span className="blue-inline-code">AuthResponse</span>.
+          </li>
+          <li>Add a short expiry for testing (e.g., 10 mins).</li>
+          <li>
+            Decode the token on{" "}
+            <a href="https://jwt.io" target="_blank" rel="noopener noreferrer">
+              https://jwt.io
+            </a>{" "}
+            and explore the claims.
           </li>
           <li>
-            Use <b>.matches()</b> while logging in
+            <b>Bonus:</b> Add a <span className="blue-inline-code">userId</span>{" "}
+            or <span className="blue-inline-code">organizationShortName</span>{" "}
+            as custom claim.
           </li>
           <li>
-            Verify in DB: passwords should look like <code>$2a$10$qJk...</code>{" "}
-            instead of plain strings
-          </li>
-          <li>
-            <b>Bonus:</b> Try increasing BCrypt strength:{" "}
-            <code>new BCryptPasswordEncoder(12)</code> (default is 10)
-          </li>
-          <li>
-            <b>Bonus:</b> Log the time taken to hash vs validate — see how
-            BCrypt slows brute force
+            <b>Bonus:</b> Set token expiry to 15 minutes and refresh with a
+            refresh token.
           </li>
         </ol>
       </div>
@@ -238,4 +334,4 @@ if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
   );
 };
 
-export default Topic7Subtopic4Content;
+export default Topic7Subtopic5Content;
